@@ -441,7 +441,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be76e5f14cfee674cb30b491fb72b09b, type: 3}
   m_Name: 
@@ -713,6 +713,8 @@ MonoBehaviour:
   starPrefab: {fileID: 1870646450491680362, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
     type: 3}
   distance: 1
+  coolDown: 0.5
+  launchStrength: 5
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0
