@@ -12,11 +12,16 @@ public class ObjectSpawn : MonoBehaviour
 
     public float launchStrength = 2.0f;
 
+    public bool autoAim = false;
+
+    public Transform enemyPos;
+
     private Transform currentChild;
     private float angle = 0.0f;
     private Vector3 displaceAngleVector;
 
     private float coolDownTimer = 0.0f;
+
 
 
     // Start is called before the first frame update
@@ -38,19 +43,36 @@ public class ObjectSpawn : MonoBehaviour
         }
         else
         {
-            float x = Input.GetAxis("ControllerVertical");
-            float y = Input.GetAxis("ControllerHorizontal");
-            if (x != 0.0f || y != 0.0f)
+
+            if (autoAim)
             {
-                angle = Mathf.Atan2(y, x);
-                Debug.Log(angle);
-                
+
+                Vector3 heading = enemyPos.position - transform.position;
+
+                angle = Mathf.Atan2(heading.normalized.x, heading.normalized.y);
+
                 displaceAngleVector.x = distance * Mathf.Sin(angle);
-                displaceAngleVector.y = distance * -Mathf.Cos(angle);
+                displaceAngleVector.y = distance * Mathf.Cos(angle);
 
                 currentChild.transform.position = transform.position + displaceAngleVector;
             }
-            if(coolDownTimer >= coolDown)
+            else
+            {
+                float x = Input.GetAxis("ControllerVertical");
+                float y = Input.GetAxis("ControllerHorizontal");
+
+                if (x != 0.0f || y != 0.0f)
+                {
+                    angle = Mathf.Atan2(y, x);
+
+                    displaceAngleVector.x = distance * Mathf.Sin(angle);
+                    displaceAngleVector.y = distance * -Mathf.Cos(angle);
+
+                    currentChild.transform.position = transform.position + displaceAngleVector;
+                }
+            }
+
+            if (coolDownTimer >= coolDown)
             {
                 if (Input.GetButton("Attack1"))
                 {
@@ -61,7 +83,6 @@ public class ObjectSpawn : MonoBehaviour
                     currentChild.GetComponent<Rigidbody>().velocity = heading * launchStrength;
                 }
             }
-            
 
             coolDownTimer += Time.deltaTime;
         }
