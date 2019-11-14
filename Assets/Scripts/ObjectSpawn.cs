@@ -88,4 +88,9 @@ public class ObjectSpawn : MonoBehaviour
         }
         
     }
+
+    public void AbleAutoAim()
+    {
+        autoAim = !autoAim;
+    }
 }
