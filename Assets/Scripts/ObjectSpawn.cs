@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Experimental.VFX;
 
 public class ObjectSpawn : MonoBehaviour
 {
@@ -60,6 +61,7 @@ public class ObjectSpawn : MonoBehaviour
             {
                 float x = Input.GetAxis("ControllerVertical");
                 float y = Input.GetAxis("ControllerHorizontal");
+                
 
                 if (x != 0.0f || y != 0.0f)
                 {
@@ -76,14 +78,9 @@ public class ObjectSpawn : MonoBehaviour
             {
                 if (Input.GetButton("Attack1"))
                 {
-                    currentChild.GetComponent<TrailRenderer>().enabled = true;
-                    coolDownTimer = 0.0f;
-                    currentChild.SetParent(null);
-                    Vector3 heading = currentChild.transform.position - transform.position;
-                    currentChild.GetComponent<Rigidbody>().velocity = heading * launchStrength;
+                    Fire();
                 }
             }
-
             coolDownTimer += Time.deltaTime;
         }
         
@@ -93,4 +90,19 @@ public class ObjectSpawn : MonoBehaviour
     {
         autoAim = !autoAim;
     }
+
+    private void Fire()
+    {
+
+        coolDownTimer = 0.0f;
+        currentChild.SetParent(null);
+        Vector3 heading = currentChild.transform.position - transform.position;
+        currentChild.GetComponent<Rigidbody>().velocity = heading * launchStrength;
+
+        Destroy(currentChild.gameObject, 3.0f);
+
+        currentChild.GetComponentInChildren<VisualEffect>().enabled = true;
+
+    }
+
 }
