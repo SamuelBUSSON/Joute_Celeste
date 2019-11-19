@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs_InvertColor
+  m_Shader: {fileID: -6465566751694194690, guid: 3ac3f5f8f9a5ab148b8a4318174443b2,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - Boolean_891F6C50: 1
+    - Boolean_E02C9DD0: 1
+    - Vector1_3693A02C: 1
+    - Vector1_47B3D5E7: -299.38
+    - Vector1_BA838A1B: 1
+    - Vector1_E3AD60CD: 1
+    - Vector1_FE2CC56E: 1
+    m_Colors:
+    - Color_23D8D19A: {r: 0, g: 3.592157, b: 4, a: 0}
+    - Vector2_220DD42E: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - Vector4_35B2D2BB: {r: 0, g: 0, b: 0, a: 0}
+    - Vector4_3D4BDC0B: {r: 0, g: 0, b: 0, a: 0}
+    - Vector4_DF2E532: {r: 0, g: 0, b: 0, a: 0}

@@ -7,9 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_ToonShader 1
-  m_Shader: {fileID: -6465566751694194690, guid: e25a7080f58cafe49874406956382c17,
-    type: 3}
+  m_Name: Shader Graphs_SunShader
+  m_Shader: {fileID: 4800000, guid: 0cb25ff17a24b024786adfebc0198bd1, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,14 +19,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_74763409:
+    - Texture2D_3FB6134E:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_52AA2EDE:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_10835396: 0
-    - Vector1_3C0F9C9F: 0
-    - Vector1_6D82016B: 4
-    m_Colors:
-    - Color_40B5A46D: {r: 1, g: 0, b: 0, a: 1}
-    - Color_6A2983C1: {r: 1, g: 1, b: 1, a: 0}
+    - Vector1_7621EBA5: 2
+    m_Colors: []
