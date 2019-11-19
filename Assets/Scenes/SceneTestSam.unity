@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.043387376, g: 0.044548247, b: 0.05929023, a: 1}
+  m_IndirectSpecularColor: {r: 0.28502667, g: 0.37139323, b: 0.49600998, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -195,7 +195,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
@@ -301,7 +301,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
@@ -552,8 +552,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99619370d042e4e408383ec67464baea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   paths:
   - {fileID: 654648018}
   - {fileID: 1256515088}
@@ -700,8 +700,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 380a21233f72ce1458a8b91d1c66d5dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!58 &315404033
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -793,7 +793,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 35203675, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
       propertyPath: m_UseAutoMass
@@ -832,8 +832,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   sharedProfile: {fileID: 11400000, guid: 680922c45b9bfe14085ea8a49e7d23dd, type: 2}
   isGlobal: 1
   blendDistance: 24.58
@@ -1064,7 +1064,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
@@ -1229,7 +1229,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
@@ -1308,7 +1308,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 35203675, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
       propertyPath: m_UseAutoMass
@@ -1487,7 +1487,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
@@ -1593,7 +1593,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
@@ -1791,7 +1791,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
@@ -1823,8 +1823,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -1842,8 +1842,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
@@ -1992,8 +1992,8 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be76e5f14cfee674cb30b491fb72b09b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   boost: 3.5
   positionLerpTime: 0.2
   mouseSensitivityCurve:
@@ -2089,8 +2089,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   volumeTrigger: {fileID: 1687258585}
   volumeLayer:
     serializedVersion: 2
@@ -2149,8 +2149,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
@@ -2234,7 +2234,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 35203675, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
       propertyPath: m_UseAutoMass
@@ -2351,8 +2351,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40e1c0d19a2fa01459bf7adbae9e5caa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   speed: 0.2
 --- !u!114 &1874435984
 MonoBehaviour:
@@ -2364,8 +2364,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70c2834e4dedc544694a17b1e2d38af0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   starPrefab: {fileID: 1870646450491680362, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
     type: 3}
   distance: 1
@@ -2447,7 +2447,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 35203675, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
       propertyPath: m_UseAutoMass
@@ -2534,7 +2534,7 @@ PrefabInstance:
     - target: {fileID: 6340000135324544840, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d3d7607acac0cb4eb343ee1e9bbaf12, type: 3}
@@ -2669,11 +2669,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Materials.Array.data[0]
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Materials.Array.data[1]
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Enabled
