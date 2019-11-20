@@ -2,15 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 
 public class PlayerZone : MonoBehaviour
 {
+
+    public float distanceToCatch = 1.0f;
+
 
     private Transform player;
     private ObjectHandler playerObjectHandler;
 
     private List<Transform> objectInZone;
     private Transform nearestElement;
+
+    private PlayerInput input;
+
+    private void Awake()
+    {
+        input = GetComponentInParent<PlayerInput>();
+
+        input.actions.Enable();
+
+        input.currentActionMap["CaughtObject"].performed += context => OnCaughtObject(context);
+
+    }
+
 
 
     // Start is called before the first frame update
@@ -21,25 +38,33 @@ public class PlayerZone : MonoBehaviour
         player = GetComponentInParent<Displacement>().transform;
         playerObjectHandler = player.GetComponent<ObjectHandler>();
 
-
     }
 
     // Update is called once per frame
     void Update()
     {
         GetNearestElement();
-        if (Input.GetKeyDown(KeyCode.Q))
+
+        if(nearestElement && Vector2.Distance(nearestElement.position, transform.position) <= distanceToCatch)
         {
             CaughtObject();
         }
     }
 
-    private void CaughtObject()
+    private void OnCaughtObject(InputAction.CallbackContext obj)
     {
-        ChangeNearestElementColor(false);
-        playerObjectHandler.SetObjectHandled(nearestElement);
-        nearestElement = null;
-        objectInZone.RemoveAt(0);
+        CaughtObject();
+    }
+
+    public void CaughtObject()
+    {
+        if (!playerObjectHandler.GetObjectHandled())
+        {
+            ChangeNearestElementColor(false);
+            playerObjectHandler.SetObjectHandled(nearestElement);
+            nearestElement = null;
+            objectInZone.RemoveAt(0);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -55,7 +80,7 @@ public class PlayerZone : MonoBehaviour
         if (other.gameObject.layer == 9)
         {
             objectInZone.Remove(other.transform);
-            if(other.transform == nearestElement.transform)
+            if(other.transform == nearestElement?.transform)
             {
                 ChangeNearestElementColor(false);
             }

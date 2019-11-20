@@ -8,7 +8,6 @@ public class Displacement : MonoBehaviour
 
     public float speed = 0.1f;
 
-
     private PlayerInput input;
 
     private Vector3 movement;

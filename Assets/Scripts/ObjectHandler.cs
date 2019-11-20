@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Experimental.VFX;
+using UnityEngine.InputSystem;
 
 public class ObjectHandler : MonoBehaviour
 {
-    public GameObject starPrefab;
 
     public float distance = 1.0f;
     public float coolDown = 0.2f;
@@ -21,7 +21,24 @@ public class ObjectHandler : MonoBehaviour
 
     private float coolDownTimer = 0.0f;
 
+    private PlayerInput input;
 
+    private bool autoAim = false;
+
+
+    private void Awake()
+    {
+        input = GetComponent<PlayerInput>();
+
+        input.actions.Enable();
+
+        input.currentActionMap["Fire"].performed += context => OnFire(context);
+
+        input.currentActionMap["Aim"].performed += context => OnAim(context);
+        input.currentActionMap["Aim"].canceled += context => OnAutoAim(context);       
+
+
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -29,74 +46,89 @@ public class ObjectHandler : MonoBehaviour
         displaceAngleVector = new Vector3();
     }
 
+
     // Update is called once per frame
     void Update()
     {
+        if (handledObject && autoAim)
+        {
+            Aim(Vector2.zero, true);
+        }
 
+        coolDownTimer += Time.deltaTime;       
+    }
+
+    private void LateUpdate()
+    {
         if (handledObject)
         {
-            Aim();
-
-            if (Input.GetButton("Attack1"))
-            {
-                Fire();
-            }
+            handledObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         }
     }
+
+    private void OnFire(InputAction.CallbackContext obj)
+    {
+        Fire();
+    }
+
+    private void OnAim(InputAction.CallbackContext obj)
+    {
+        autoAim = false;
+        if (handledObject)
+        {
+            Aim(obj.ReadValue<Vector2>(), false);
+        }
+    }
+
+    private void OnAutoAim(InputAction.CallbackContext obj)
+    {
+        autoAim = true;
+    }
+
+
 
     private void Fire()
     {
-        if (coolDownTimer >= coolDown)
+        if (handledObject)
         {
-
-            coolDownTimer = 0.0f;
-            handledObject.SetParent(null);
-            Vector3 heading = handledObject.transform.position - transform.position;
-            handledObject.GetComponent<Rigidbody2D>().velocity = heading * launchStrength;
-
-            Destroy(handledObject.gameObject, 3.0f);
-
-            handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
-
-            handledObject = null;
-        }
-        coolDownTimer += Time.deltaTime;
-
-    }
-
-    private void Aim()
-    {
-        float x = Input.GetAxis("ControllerVertical");
-        float y = Input.GetAxis("ControllerHorizontal");
-
-        if (x <= 0.1f && y <= 0.1f)
-        {
-            Vector3 heading = enemyPos.position - transform.position;
-
-            angle = Mathf.Atan2(heading.normalized.x, heading.normalized.y);
-
-            displaceAngleVector.x = distance * Mathf.Sin(angle);
-            displaceAngleVector.y = distance * Mathf.Cos(angle);
-
-            handledObject.transform.position = transform.position + displaceAngleVector;
-        }
-        else
-        {
-            if (x != 0.0f || y != 0.0f)
+            if (coolDownTimer >= coolDown)
             {
-                angle = Mathf.Atan2(y, x);
+                coolDownTimer = 0.0f;
+                handledObject.SetParent(null);
+                Vector3 heading = handledObject.transform.position - transform.position;
+                handledObject.GetComponent<Rigidbody2D>().velocity = heading * launchStrength;
 
-                displaceAngleVector.x = distance * Mathf.Sin(angle);
-                displaceAngleVector.y = distance * -Mathf.Cos(angle);
+                Destroy(handledObject.gameObject, 3.0f);
 
-                handledObject.transform.position = transform.position + displaceAngleVector;
+                handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
+
+                handledObject = null;
             }
         }
+    }
+
+    private void Aim(Vector2 aimDirection, bool autoAim)
+    {
+
+        Vector3 heading = enemyPos.position - transform.position;
+        float x = aimDirection.x;
+        float y = aimDirection.y;
+
+        angle = autoAim ? Mathf.Atan2(heading.normalized.x, heading.normalized.y) : Mathf.Atan2(x, y);
+
+        displaceAngleVector.x = distance * Mathf.Sin(angle);
+        displaceAngleVector.y = distance * Mathf.Cos(angle);
+
+        handledObject.transform.position = transform.position + displaceAngleVector;            
+        
     }
 
     public void SetObjectHandled(Transform objectToThrow)
     {
         handledObject = objectToThrow;
+
+        handledObject.gameObject.layer = 10;     
+
         handledObject.SetParent(transform);
     }
 
@@ -104,5 +136,6 @@ public class ObjectHandler : MonoBehaviour
     {
         return handledObject;
     }
+
 
 }
