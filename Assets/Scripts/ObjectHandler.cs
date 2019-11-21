@@ -125,11 +125,13 @@ public class ObjectHandler : MonoBehaviour
 
     public void SetObjectHandled(Transform objectToThrow)
     {
-        handledObject = objectToThrow;
+            handledObject = objectToThrow;
 
-        handledObject.gameObject.layer = 10;     
+            handledObject.gameObject.layer = 10;     
 
-        handledObject.SetParent(transform);
+            handledObject.SetParent(transform);
+
+            Aim(Vector2.zero, true );
     }
 
     public Transform GetObjectHandled()

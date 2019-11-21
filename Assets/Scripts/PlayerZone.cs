@@ -6,9 +6,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerZone : MonoBehaviour
 {
+    [Header("Aim Triangle")]
+    public bool freeLook = false;
+    public Transform triangleAim;
+    public int slicesCount = 8;
 
-    public float distanceToCatch = 1.0f;
-
+    [Header("Zone Catch")]
+    public float distanceToCatch = 1.0f; 
 
     private Transform player;
     private ObjectHandler playerObjectHandler;
@@ -18,6 +22,10 @@ public class PlayerZone : MonoBehaviour
 
     private PlayerInput input;
 
+    private bool isAiming = false;
+    private bool canCatch = true;
+    
+
     private void Awake()
     {
         input = GetComponentInParent<PlayerInput>();
@@ -25,6 +33,10 @@ public class PlayerZone : MonoBehaviour
         input.actions.Enable();
 
         input.currentActionMap["CaughtObject"].performed += context => OnCaughtObject(context);
+
+        input.currentActionMap["Aim"].performed += context => OnAim(context);
+        input.currentActionMap["Aim"].canceled += context => OnAimCanceled(context);
+
 
     }
 
@@ -37,34 +49,104 @@ public class PlayerZone : MonoBehaviour
 
         player = GetComponentInParent<Displacement>().transform;
         playerObjectHandler = player.GetComponent<ObjectHandler>();
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        GetNearestElement();
+         GetNearestElement();         
 
         if(nearestElement && Vector2.Distance(nearestElement.position, transform.position) <= distanceToCatch)
         {
-            CaughtObject();
+            CaughtObject(nearestElement);
         }
     }
 
     private void OnCaughtObject(InputAction.CallbackContext obj)
     {
-        CaughtObject();
+        if (isAiming)
+        {
+            Transform nearestElem = GetComponentInChildren<PlayerZoneAim>().GetNearestObjectInZone();
+            if (nearestElem)
+            {
+                CaughtObject(nearestElem);
+            }
+        }
+        else
+        {
+            CaughtObject(nearestElement);
+        }
     }
 
-    public void CaughtObject()
+    public void CaughtObject(Transform element)
+    {        
+        if (!playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch)
+        {
+            canCatch = false;
+            ChangeNearestElementColor(false);
+            Vector3 heading = element.transform.position - transform.position;
+
+            AimCanceled();
+
+            CaughtEffect(element);
+
+            //nearestElement.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));            
+        }
+    }
+
+    private void CaughtEffect(Transform element)
+    {
+        canCatch = true;
+        playerObjectHandler.SetObjectHandled(element);
+        objectInZone.Remove(element);
+        nearestElement = element == nearestElement ? null : nearestElement ;
+    }
+
+    private void OnAim(InputAction.CallbackContext obj)
     {
         if (!playerObjectHandler.GetObjectHandled())
         {
-            ChangeNearestElementColor(false);
-            playerObjectHandler.SetObjectHandled(nearestElement);
-            nearestElement = null;
-            objectInZone.RemoveAt(0);
+            isAiming = true;
+            Aim(obj.ReadValue<Vector2>());
         }
+
+    }
+
+    public void Aim(Vector2 v)
+    {
+        triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = true;
+
+        int angle = Mathf.RoundToInt( Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg);        
+
+        if (!freeLook)
+        {
+            if(angle > -160 && angle < 160)
+            {
+                if (angle % slicesCount != 0)
+                {
+                    angle -= angle % slicesCount;
+                }
+            }
+            else
+            {
+                angle = -180;
+            }
+        }
+
+        triangleAim.transform.DORotate(new Vector3(0, 0, angle), 0.1f);
+    }
+
+    public void OnAimCanceled(InputAction.CallbackContext obj)
+    {
+        AimCanceled();
+       
+    }
+
+    private void AimCanceled()
+    {
+        isAiming = false;
+        triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
