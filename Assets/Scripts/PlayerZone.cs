@@ -87,11 +87,9 @@ public class PlayerZone : MonoBehaviour
             ChangeNearestElementColor(false);
             Vector3 heading = element.transform.position - transform.position;
 
-            AimCanceled();
+            AimCanceled();            
 
-            CaughtEffect(element);
-
-            //nearestElement.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));            
+            element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));            
         }
     }
 
@@ -109,6 +107,10 @@ public class PlayerZone : MonoBehaviour
         {
             isAiming = true;
             Aim(obj.ReadValue<Vector2>());
+        }
+        else
+        {
+            AimCanceled();
         }
 
     }
