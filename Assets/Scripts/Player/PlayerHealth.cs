@@ -25,6 +25,14 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         playerIndex = GameManager.Instance.playerIndex;
+
+        gameObject.tag = "Player" + playerIndex;
+        if(playerIndex == 1)
+        {
+            GameObject p0 = GameObject.FindGameObjectWithTag("Player0");
+            p0.GetComponent<ObjectHandler>().SetEnemyPos(transform);
+            GetComponent<ObjectHandler>().SetEnemyPos(p0.transform);
+        }
         
         healthSlider = playerIndex == 0
             ? GameManager.Instance.PlayerSliderHealth1
@@ -64,5 +72,10 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         //TODO
+    }
+
+    private int GetPlayerIndex()
+    {
+        return playerIndex;
     }
 }

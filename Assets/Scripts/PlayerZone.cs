@@ -161,7 +161,7 @@ public class PlayerZone : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.layer == 9)
+        if (other.CompareTag("Projectile"))
         {
             objectInZone.Remove(other.transform);
             if(other.transform == nearestElement?.transform)

@@ -98,9 +98,10 @@ public class ObjectHandler : MonoBehaviour
                 Vector3 heading = handledObject.transform.position - transform.position;
                 handledObject.GetComponent<Rigidbody2D>().velocity = heading * launchStrength;
 
-                Destroy(handledObject.gameObject, 3.0f);
+               // Destroy(handledObject.gameObject, 3.0f);
 
                 handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
+                handledObject.GetComponent<Projectile>().isLaunched = true;
 
                 handledObject = null;
             }
@@ -109,17 +110,20 @@ public class ObjectHandler : MonoBehaviour
 
     private void Aim(Vector2 aimDirection, bool autoAim)
     {
+        if (enemyPos)
+        {
+            Vector3 heading = enemyPos.position - transform.position;
+            float x = aimDirection.x;
+            float y = aimDirection.y;
 
-        Vector3 heading = enemyPos.position - transform.position;
-        float x = aimDirection.x;
-        float y = aimDirection.y;
+            angle = autoAim ? Mathf.Atan2(heading.normalized.x, heading.normalized.y) : Mathf.Atan2(x, y);
 
-        angle = autoAim ? Mathf.Atan2(heading.normalized.x, heading.normalized.y) : Mathf.Atan2(x, y);
+            displaceAngleVector.x = distance * Mathf.Sin(angle);
+            displaceAngleVector.y = distance * Mathf.Cos(angle);
 
-        displaceAngleVector.x = distance * Mathf.Sin(angle);
-        displaceAngleVector.y = distance * Mathf.Cos(angle);
-
-        handledObject.transform.position = transform.position + displaceAngleVector;            
+            handledObject.transform.position = transform.position + displaceAngleVector;
+        }
+      
         
     }
 
@@ -137,6 +141,11 @@ public class ObjectHandler : MonoBehaviour
     public Transform GetObjectHandled()
     {
         return handledObject;
+    }
+
+    public void SetEnemyPos(Transform t)
+    {
+        enemyPos = t;
     }
 
 
