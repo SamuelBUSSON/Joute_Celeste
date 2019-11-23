@@ -15,8 +15,9 @@ GameObject:
   - component: {fileID: 4186474034313119857}
   - component: {fileID: 4186474034313119856}
   - component: {fileID: -6859257128196227942}
+  - component: {fileID: -3090725156268763367}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: PlayerFab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,4 +149,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba35f50407329d4b9d52bc6139a378f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thresholds: []
   Health: 5
+--- !u!114 &-3090725156268763367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4186474034313119863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32b818f19a19aa4893aa6314cb61b18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  starPrefab: {fileID: 1870646450491680362, guid: 6406f3ddb3fc32144874844bbe918559,
+    type: 3}
+  distance: 1
+  coolDown: 0.2
+  launchStrength: 2
+  autoAim: 0
+  enemyPos: {fileID: 0}

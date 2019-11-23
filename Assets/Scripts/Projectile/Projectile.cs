@@ -18,6 +18,8 @@ public class Projectile : MonoBehaviour
     public int playerIndex;
     public int damage;
 
+    [NonSerialized] public bool isLaunched;
+
     private void Awake()
     {
     }
@@ -32,7 +34,7 @@ public class Projectile : MonoBehaviour
     {
         Projectile proj = other.transform.GetComponent<Projectile>();
 
-        if (proj)
+        if (proj && proj.isLaunched)
         {
             if(proj.type > type)
                 Destroy(gameObject); //TODO: add the kaboom
@@ -57,8 +59,6 @@ public class Projectile : MonoBehaviour
             {
                 player.TakeDamage(damage);
             }
-            
-           
         }
     }
 }
