@@ -49,6 +49,14 @@ public class @InputController : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""734d64d0-4a9d-4f6f-ba99-06313b05dde5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -172,6 +180,17 @@ public class @InputController : IInputActionCollection, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f840c5d-eb6c-4be5-90b0-f55abb108018"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -184,6 +203,7 @@ public class @InputController : IInputActionCollection, IDisposable
         m_Character_Fire = m_Character.FindAction("Fire", throwIfNotFound: true);
         m_Character_CaughtObject = m_Character.FindAction("CaughtObject", throwIfNotFound: true);
         m_Character_Aim = m_Character.FindAction("Aim", throwIfNotFound: true);
+        m_Character_Dash = m_Character.FindAction("Dash", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -237,6 +257,7 @@ public class @InputController : IInputActionCollection, IDisposable
     private readonly InputAction m_Character_Fire;
     private readonly InputAction m_Character_CaughtObject;
     private readonly InputAction m_Character_Aim;
+    private readonly InputAction m_Character_Dash;
     public struct CharacterActions
     {
         private @InputController m_Wrapper;
@@ -245,6 +266,7 @@ public class @InputController : IInputActionCollection, IDisposable
         public InputAction @Fire => m_Wrapper.m_Character_Fire;
         public InputAction @CaughtObject => m_Wrapper.m_Character_CaughtObject;
         public InputAction @Aim => m_Wrapper.m_Character_Aim;
+        public InputAction @Dash => m_Wrapper.m_Character_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -266,6 +288,9 @@ public class @InputController : IInputActionCollection, IDisposable
                 @Aim.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnAim;
+                @Dash.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnDash;
+                @Dash.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnDash;
+                @Dash.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnDash;
             }
             m_Wrapper.m_CharacterActionsCallbackInterface = instance;
             if (instance != null)
@@ -282,6 +307,9 @@ public class @InputController : IInputActionCollection, IDisposable
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @Dash.started += instance.OnDash;
+                @Dash.performed += instance.OnDash;
+                @Dash.canceled += instance.OnDash;
             }
         }
     }
@@ -292,5 +320,6 @@ public class @InputController : IInputActionCollection, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnCaughtObject(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
     }
 }
