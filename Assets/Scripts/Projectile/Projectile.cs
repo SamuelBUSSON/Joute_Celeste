@@ -14,6 +14,7 @@ public enum EProjectileType
 public class Projectile : MonoBehaviour
 {
     public EProjectileType type;
+    [NonSerialized]
     public int playerIndex;
     public int damage;
 

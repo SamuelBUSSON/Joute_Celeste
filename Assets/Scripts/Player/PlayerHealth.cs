@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -16,10 +17,21 @@ public class PlayerHealth : MonoBehaviour
     public int Health;
 
     private int indexThreshold;
+
+    private Slider healthSlider;
+
+    private int playerIndex;
     // Start is called before the first frame update
     void Start()
     {
+        playerIndex = GameManager.Instance.playerIndex;
         
+        healthSlider = playerIndex == 0
+            ? GameManager.Instance.PlayerSliderHealth1
+            : GameManager.Instance.PlayerSliderHealth2;
+
+        healthSlider.maxValue = Health;
+        healthSlider.value = Health;
     }
 
     // Update is called once per frame
@@ -31,12 +43,16 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         Health -= amount;
+        healthSlider.value = Health;
 
         if (Health >= 0)
         {
             if (thresholds[indexThreshold].health >= Health)
             {
-                
+                if (++indexThreshold < thresholds.Count)
+                {
+                    //TODO: change range or whatnot
+                }
             }
         }
         else
