@@ -17,7 +17,7 @@ public class ObjectSpawn : MonoBehaviour
 
     public Transform enemyPos;
 
-    private Transform currentChild;
+    private Transform handledObject;
     private float angle = 0.0f;
     private Vector3 displaceAngleVector;
 
@@ -36,11 +36,11 @@ public class ObjectSpawn : MonoBehaviour
     {
         if(transform.childCount != 1)
         {
-            currentChild = Instantiate(starPrefab, transform.position, Quaternion.identity).transform;
+            handledObject = Instantiate(starPrefab, transform.position, Quaternion.identity).transform;
 
-            currentChild.SetParent(transform);
+            handledObject.SetParent(transform);
 
-            currentChild.transform.position = transform.position + displaceAngleVector;
+            handledObject.transform.position = transform.position + displaceAngleVector;
         }
         else
         {
@@ -55,7 +55,7 @@ public class ObjectSpawn : MonoBehaviour
                 displaceAngleVector.x = distance * Mathf.Sin(angle);
                 displaceAngleVector.y = distance * Mathf.Cos(angle);
 
-                currentChild.transform.position = transform.position + displaceAngleVector;
+                handledObject.transform.position = transform.position + displaceAngleVector;
             }
             else
             {
@@ -70,7 +70,7 @@ public class ObjectSpawn : MonoBehaviour
                     displaceAngleVector.x = distance * Mathf.Sin(angle);
                     displaceAngleVector.y = distance * -Mathf.Cos(angle);
 
-                    currentChild.transform.position = transform.position + displaceAngleVector;
+                    handledObject.transform.position = transform.position + displaceAngleVector;
                 }
             }
 
@@ -95,13 +95,13 @@ public class ObjectSpawn : MonoBehaviour
     {
 
         coolDownTimer = 0.0f;
-        currentChild.SetParent(null);
-        Vector3 heading = currentChild.transform.position - transform.position;
-        currentChild.GetComponent<Rigidbody>().velocity = heading * launchStrength;
+        handledObject.SetParent(null);
+        Vector3 heading = handledObject.transform.position - transform.position;
+        handledObject.GetComponent<Rigidbody>().velocity = heading * launchStrength;
 
-        Destroy(currentChild.gameObject, 3.0f);
+        Destroy(handledObject.gameObject, 3.0f);
 
-        currentChild.GetComponentInChildren<VisualEffect>().enabled = true;
+        handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
 
     }
 
