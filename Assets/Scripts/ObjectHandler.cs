@@ -35,7 +35,9 @@ public class ObjectHandler : MonoBehaviour
         input.currentActionMap["Fire"].performed += context => OnFire(context);
 
         input.currentActionMap["Aim"].performed += context => OnAim(context);
-        input.currentActionMap["Aim"].canceled += context => OnAutoAim(context);       
+        input.currentActionMap["Aim"].canceled += context => OnAutoAim(context);
+
+        enemyPos = transform;
 
 
     }
