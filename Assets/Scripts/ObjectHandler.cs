@@ -52,10 +52,16 @@ public class ObjectHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (handledObject && autoAim)
+        if (handledObject)
         {
-            Aim(Vector2.zero, true);
+            if (autoAim)
+            {
+                Aim(Vector2.zero, true);
+            }
+            handledObject.transform.position = transform.position + displaceAngleVector;
+
         }
+
 
         coolDownTimer += Time.deltaTime;       
     }
@@ -112,21 +118,16 @@ public class ObjectHandler : MonoBehaviour
 
     private void Aim(Vector2 aimDirection, bool autoAim)
     {
-        if (enemyPos)
-        {
-            Vector3 heading = enemyPos.position - transform.position;
+            Vector3 heading = enemyPos ? enemyPos.position - transform.position : Vector3.zero;
+
             float x = aimDirection.x;
             float y = aimDirection.y;
 
             angle = autoAim ? Mathf.Atan2(heading.normalized.x, heading.normalized.y) : Mathf.Atan2(x, y);
 
             displaceAngleVector.x = distance * Mathf.Sin(angle);
-            displaceAngleVector.y = distance * Mathf.Cos(angle);
+            displaceAngleVector.y = distance * Mathf.Cos(angle);            
 
-            handledObject.transform.position = transform.position + displaceAngleVector;
-        }
-      
-        
     }
 
     public void SetObjectHandled(Transform objectToThrow)
