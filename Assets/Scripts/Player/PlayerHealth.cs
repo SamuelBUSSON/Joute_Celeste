@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityTemplateProjects.Player;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -20,21 +22,24 @@ public class PlayerHealth : MonoBehaviour
 
     private Slider healthSlider;
 
-    private int playerIndex;
+    private PlayerController playerController;
+
+    private void Awake()
+    {
+        playerController = GetComponent<PlayerController>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        playerIndex = GameManager.Instance.playerIndex;
-
-        gameObject.tag = "Player" + playerIndex;
-        if(playerIndex == 1)
+        if(playerController.playerIndex == 1)
         {
-            GameObject p0 = GameObject.FindGameObjectWithTag("Player0");
+            GameObject p0 = GameManager.Instance.player2.gameObject;
             p0.GetComponent<ObjectHandler>().SetEnemyPos(transform);
             GetComponent<ObjectHandler>().SetEnemyPos(p0.transform);
         }
         
-        healthSlider = playerIndex == 0
+        healthSlider = playerController.playerIndex == 0
             ? GameManager.Instance.PlayerSliderHealth1
             : GameManager.Instance.PlayerSliderHealth2;
 
@@ -72,10 +77,5 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         //TODO
-    }
-
-    private int GetPlayerIndex()
-    {
-        return playerIndex;
     }
 }

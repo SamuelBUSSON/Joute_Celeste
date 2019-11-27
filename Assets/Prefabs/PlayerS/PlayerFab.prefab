@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -6859257128196227942}
   - component: {fileID: 394736334915763974}
   - component: {fileID: 1044212888298962523}
+  - component: {fileID: 737535186704600679}
   m_Layer: 0
   m_Name: PlayerFab
   m_TagString: Untagged
@@ -203,6 +204,19 @@ MonoBehaviour:
   coolDown: 0.2
   launchStrength: 5
   enemyPos: {fileID: 0}
+--- !u!114 &737535186704600679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4186474034313119863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45549462a7f64fa7a1944938dba0f56b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
 --- !u!1001 &6268206406274292696
 PrefabInstance:
   m_ObjectHideFlags: 0
