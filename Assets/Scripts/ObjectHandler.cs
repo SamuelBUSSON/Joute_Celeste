@@ -104,9 +104,7 @@ public class ObjectHandler : MonoBehaviour
                 coolDownTimer = 0.0f;
                 handledObject.SetParent(null);
                 Vector3 heading = handledObject.transform.position - transform.position;
-                handledObject.GetComponent<Rigidbody2D>().velocity = heading * launchStrength;
-
-               // Destroy(handledObject.gameObject, 3.0f);
+                handledObject.GetComponent<Rigidbody2D>().velocity = heading * launchStrength;                
 
                 handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
                 handledObject.GetComponent<Projectile>().isLaunched = true;

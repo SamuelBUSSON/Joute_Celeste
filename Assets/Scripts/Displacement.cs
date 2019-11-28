@@ -14,13 +14,14 @@ public class Displacement : MonoBehaviour
     public float dashStrength = 20.0f;
     public float timeToReachDashPosition = 0.3f;
     public AnimationCurve ease;
+    public float slowStrength = 3.0f;
 
     private Rigidbody2D rigidbody2d;
 
     private PlayerInput input;
 
     private Vector3 movement;
-    private bool dashTest;
+    private bool isDashing;
 
     // Start is called before the first frame update
     void Awake()
@@ -32,13 +33,11 @@ public class Displacement : MonoBehaviour
         input.currentActionMap["Movement"].canceled += context => OnMovement(context);
 
         input.currentActionMap["Dash"].started += context => OnDash(context);
-        input.currentActionMap["Dash"].canceled += context => OnDashCanceled();
     }
 
     private void Start()
     {
-        rigidbody2d = GetComponent<Rigidbody2D>();
-        
+        rigidbody2d = GetComponent<Rigidbody2D>();        
     }
 
     private void OnMovement(InputAction.CallbackContext obj)
@@ -55,7 +54,7 @@ public class Displacement : MonoBehaviour
 
     private void Move()
     {
-        if (!dashTest)
+        if (!isDashing)
         {
             Vector2 targetVelocity = movement;
             targetVelocity = transform.TransformDirection(targetVelocity);
@@ -64,14 +63,11 @@ public class Displacement : MonoBehaviour
             Vector2 velocity = rigidbody2d.velocity;
             Vector2 velocityChange = (targetVelocity - velocity);
 
-
             velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
             velocityChange.y = Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);
 
-
             rigidbody2d.AddForce(velocityChange, ForceMode2D.Impulse);
         }
-
     }
 
     private void OnDash(InputAction.CallbackContext obj)
@@ -79,21 +75,28 @@ public class Displacement : MonoBehaviour
         Dash();
     }
 
-    private void OnDashCanceled()
+    private void DashCanceled()
     {
-       // dashTest = false;
+           GetComponentInChildren<PlayerZone>().ChangeSpeedObjectInZone(false);
+           isDashing = false;        
     }
 
     private void Dash()
     {
-        if (!dashTest)
+        if (!isDashing)
         {
             if(movement.x != 0 || movement.y != 0)
             {
-                dashTest = true;
-                rigidbody2d.DOMove(transform.position + movement * dashStrength, timeToReachDashPosition).OnComplete(() => dashTest = false).SetEase(ease);
+                isDashing = true;
+                GetComponentInChildren<PlayerZone>().ChangeSpeedObjectInZone(true);                
+                rigidbody2d.DOMove(transform.position + movement * dashStrength, timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(ease);
 
             }
         }
+    }
+
+    public bool IsDashing()
+    {
+        return isDashing;
     }
 }
