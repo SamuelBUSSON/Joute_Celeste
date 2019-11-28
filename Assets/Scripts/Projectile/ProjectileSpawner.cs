@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -28,8 +26,14 @@ public class ProjectileSpawner : MonoBehaviour
         while (true)
         {
             if (probability <= Random.value && maxSpawned > transform.childCount)
-                Instantiate(prefabToSpawn, transform.position + (Random.insideUnitSphere * radius), Quaternion.identity,
+            {
+                Vector2 position = (Random.insideUnitCircle * radius);
+                var proj = Instantiate(prefabToSpawn, transform.position + new Vector3(position.x, position.y, 0),
+                    Quaternion.identity,
                     transform);
+                proj.GetComponent<Rigidbody2D>().velocity = 0.1f * new Vector2(Random.value, Random.value);
+            }
+                
             
             yield return new WaitForSeconds(cooldown);
         }

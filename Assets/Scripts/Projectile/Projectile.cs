@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityTemplateProjects.Player;
 
 public enum EProjectileType
 {
@@ -19,16 +20,6 @@ public class Projectile : MonoBehaviour
     public int damage;
 
     [NonSerialized] public bool isLaunched;
-
-    private void Awake()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -55,7 +46,7 @@ public class Projectile : MonoBehaviour
             PlayerHealth player = other.transform.GetComponent<PlayerHealth>();
 
             //TODO: check if it's the creator
-            if (player)
+            if (player && player.GetComponent<PlayerController>().playerIndex != playerIndex)
             {
                 player.TakeDamage(damage);
             }
