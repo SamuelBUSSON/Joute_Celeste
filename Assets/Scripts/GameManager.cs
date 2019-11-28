@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerJoin(PlayerInput obj)
     {
-        print("yes");
         if (playerIndex == -1)
             player1 = obj.GetComponent<PlayerController>();
         else
