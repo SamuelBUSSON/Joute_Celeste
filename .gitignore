@@ -9,6 +9,11 @@ Assets/AssetStoreTools*
 .idea/
 Assets/Plugins/Editor/JetBrains*
 
+# Wwisse 
+Assets/Joute_Celeste_Wwise*
+Assets/Joute_Celeste_Wwise/*
+Assets/Joute_Celeste_Wwise/
+
 # Visual Studio cache directory
 .vs/
 
