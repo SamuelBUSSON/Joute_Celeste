@@ -12,14 +12,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b37b6780dcc3c644b7c8f0cf543f7a3, type: 3}
   m_Name: AkWwiseProjectData
   m_EditorClassIdentifier: 
-  AcousticTextureWwu: []
-  AuxBusWwu: []
-  BankWwu: []
-  EventWwu: []
-  RtpcWwu: []
-  StateWwu: []
-  SwitchWwu: []
-  TriggerWwu: []
+  AcousticTextureWwu:
+  - PhysicalPath: Virtual Acoustics\Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: f848a29f459e6b4ca15c4f9353c2a093
+    GuidInternal: 
+    m_lastTime: -8586266410581663730
+    List: []
+  AuxBusWwu:
+  - PhysicalPath: Master-Mixer Hierarchy\Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 70d435ca72ca6e41b246765c1d54a22e
+    GuidInternal: 
+    m_lastTime: -8586266410581753446
+    List: []
+  BankWwu:
+  - PhysicalPath: SoundBanks\Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: c6cd3763c853e24ea71a91b0a910db14
+    GuidInternal: 
+    m_lastTime: -8586266410581693665
+    List: []
+  EventWwu:
+  - PhysicalPath: Events\Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 85c70c112d9cd24db1d571786aa37287
+    GuidInternal: 
+    m_lastTime: -8586266410581793577
+    List: []
+  RtpcWwu:
+  - PhysicalPath: Game Parameters\Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: cc6b5c67ae086c4e9edf2764fa1546f3
+    GuidInternal: 
+    m_lastTime: -8586266410581783581
+    List: []
+  StateWwu:
+  - PhysicalPath: States\Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 50134ee312ad0f4798a1722dec900d83
+    GuidInternal: 
+    m_lastTime: -8586266410581683686
+    List: []
+  SwitchWwu:
+  - PhysicalPath: Switches\Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: ff3152ed6906ca408957b687283baff5
+    GuidInternal: 
+    m_lastTime: -8586266410581673716
+    List: []
+  TriggerWwu:
+  - PhysicalPath: Triggers\Default Work Unit.wwu
+    ParentPhysicalPath: 
+    guid: 09050051372ad44ebf7ea5b9b6d9db48
+    GuidInternal: 
+    m_lastTime: -8586266410581663730
+    List: []
   ExpandedItems: []
   autoPopulateEnabled: 1
   CurrentPluginConfig: 
