@@ -16,7 +16,7 @@ public class PlayerHealth : MonoBehaviour
 
     public List<SHealthThreshold> thresholds;
     
-    public int Health;
+    public float Health;
 
     private int indexThreshold;
 
@@ -53,7 +53,7 @@ public class PlayerHealth : MonoBehaviour
         
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(float amount)
     {
         Health -= amount;
         healthSlider.value = Health;

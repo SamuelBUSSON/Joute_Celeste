@@ -36,10 +36,45 @@ public class ObjectHandler : MonoBehaviour
 
         input.currentActionMap["Aim"].performed += context => OnAim(context);
         input.currentActionMap["Aim"].canceled += context => OnAutoAim(context);
+        
+        input.currentActionMap["HoldLv1"].performed += OnHoldLv1;
+        input.currentActionMap["HoldLv2"].performed += OnHoldLv2;
 
         enemyPos = transform;
 
 
+    }
+
+    private void OnHoldLv2(InputAction.CallbackContext obj)
+    {
+        print("HoldLv2");
+        
+        if (handledObject)
+        {
+            Projectile proj = handledObject.GetComponent<Projectile>();
+
+            if (proj.type != EProjectileType.PLANET)
+            {
+                proj.currentDamage = proj.damageLv2 * proj.startingDamage;
+                proj.speed = proj.speedLv2;
+            }
+        }
+    }
+
+    private void OnHoldLv1(InputAction.CallbackContext obj)
+    {
+        print("HoldLv1");
+
+        if (handledObject)
+        {
+            Projectile proj = handledObject.GetComponent<Projectile>();
+
+            if (proj.type != EProjectileType.PLANET)
+            {
+                proj.currentDamage = proj.damageLv1 * proj.startingDamage;
+                proj.speed = proj.speedLv1;
+            }
+        }
     }
 
     // Start is called before the first frame update

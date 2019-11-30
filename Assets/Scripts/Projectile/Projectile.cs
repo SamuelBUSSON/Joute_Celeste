@@ -14,10 +14,26 @@ public enum EProjectileType
 
 public class Projectile : MonoBehaviour
 {
+
+    
     public EProjectileType type;
     [NonSerialized]
     public int playerIndex;
-    public int damage;
+    public float startingDamage;
+
+    [NonSerialized]
+    public float currentDamage;
+
+    [NonSerialized]
+    public float speed = 1f;
+
+
+    public float speedLv1;
+    public float damageLv1;
+    
+    public float speedLv2;
+    public float damageLv2;
+    
 
     [NonSerialized] public bool isLaunched;
 
@@ -28,17 +44,15 @@ public class Projectile : MonoBehaviour
         if (proj && proj.isLaunched)
         {
             if(proj.type > type)
-                Destroy(gameObject); //TODO: add the kaboom
+               Die();
             else if(proj.type < type)
             {
-                //TODO: add the kaboom
-                Destroy(proj.gameObject);
+                proj.Die();
             }
             else
             {
-                //TODO: add the kaboom
-                Destroy(proj.gameObject);
-                Destroy(gameObject);
+                proj.Die();
+                Die();
             }
         }
         else
@@ -48,8 +62,15 @@ public class Projectile : MonoBehaviour
             //TODO: check if it's the creator
             if (player && player.GetComponent<PlayerController>().playerIndex != playerIndex)
             {
-                player.TakeDamage(damage);
+                player.TakeDamage(currentDamage);
+                Die();
             }
         }
+    }
+
+    public void Die()
+    {
+        //TODO: add kaboom
+        Destroy(gameObject);
     }
 }
