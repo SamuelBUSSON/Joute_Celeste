@@ -25,6 +25,8 @@ public class ObjectHandler : MonoBehaviour
 
     private bool autoAim = false;
 
+    private Displacement playerMovement;
+
 
     private void Awake()
     {
@@ -46,6 +48,8 @@ public class ObjectHandler : MonoBehaviour
     void Start()
     {
         displaceAngleVector = new Vector3();
+
+        playerMovement = GetComponent<Displacement>();
     }
 
 
@@ -76,7 +80,10 @@ public class ObjectHandler : MonoBehaviour
 
     private void OnFire(InputAction.CallbackContext obj)
     {
-        Fire();
+        if (!playerMovement.IsDashing())
+        {
+            Fire();
+        }
     }
 
     private void OnAim(InputAction.CallbackContext obj)

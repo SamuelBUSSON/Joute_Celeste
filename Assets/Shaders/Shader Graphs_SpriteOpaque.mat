@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TestMat
-  m_Shader: {fileID: -6465566751694194690, guid: 4296ae513837e2742865f664c14316d6,
+  m_Name: Shader Graphs_SpriteOpaque
+  m_Shader: {fileID: -6465566751694194690, guid: 30995b6852930664babf0bfafa52b36a,
     type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -19,8 +19,14 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
-    m_Floats:
-    - Vector1_5DDDB8B9: 0.92
-    - Vector1_C46BD80C: 30.03
+    m_TexEnvs:
+    - Texture2D_C7015B80:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
     m_Colors: []

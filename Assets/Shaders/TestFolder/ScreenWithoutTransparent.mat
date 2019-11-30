@@ -7,26 +7,39 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_SunShader
-  m_Shader: {fileID: 4800000, guid: 0cb25ff17a24b024786adfebc0198bd1, type: 3}
+  m_Name: ScreenWithoutTransparent
+  m_Shader: {fileID: -6465566751694194690, guid: 3ac3f5f8f9a5ab148b8a4318174443b2,
+    type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2700
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_3FB6134E:
+    - _DistortTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - Texture2D_52AA2EDE:
+    - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_7621EBA5: 2
-    m_Colors: []
+    - Boolean_891F6C50: 0
+    - Boolean_E02C9DD0: 0
+    - Vector1_47B3D5E7: 0.05
+    - Vector1_5DDDB8B9: 0.92
+    - Vector1_BA838A1B: 1
+    - Vector1_C46BD80C: 30.03
+    - Vector1_FE2CC56E: 1
+    - _Glossiness: 0.5
+    - _Metallic: 0
+    - _Refraction: 1
+    m_Colors:
+    - Vector2_220DD42E: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - Vector4_35B2D2BB: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
@@ -10,11 +11,23 @@ public class Displacement : MonoBehaviour
     public float speed = 0.1f;
     public float maxVelocityChange = 10.0f;
 
-    [Header("Dash")]
-    public float dashStrength = 20.0f;
-    public float timeToReachDashPosition = 0.3f;
-    public AnimationCurve ease;
+    [Header("Dash")]   
+    public C_Dash[] dashs;
+    [Tooltip("The time you have to do the next dash")]
+    public float dashCoolDown = 1.0f;
+
+    [Header("Dash Stun")]
+    public float stunTime = 2.0f;
+    public float onStunSpeedDivide = 5.0f;
+
+    [Header("Zone Slow")]
     public float slowStrength = 3.0f;
+
+
+    private float dashCoolDownTimer = 0.0f;
+    private float stunTimer = 0.0f;
+    private int currentDash = 0;
+    private bool isStun = false;    
 
     private Rigidbody2D rigidbody2d;
 
@@ -49,7 +62,25 @@ public class Displacement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(currentDash);
+
         Move();
+
+        DashTimer();
+    }
+
+    private void DashTimer()
+    {
+        if(currentDash > 0)
+        {
+            dashCoolDownTimer += Time.deltaTime;
+
+            if (dashCoolDownTimer > dashCoolDown)
+            {
+                currentDash = 0;
+                dashCoolDownTimer = 0.0f;
+            }
+        }
     }
 
     private void Move()
@@ -58,7 +89,7 @@ public class Displacement : MonoBehaviour
         {
             Vector2 targetVelocity = movement;
             targetVelocity = transform.TransformDirection(targetVelocity);
-            targetVelocity *= speed;
+            targetVelocity *=  isStun ? speed/onStunSpeedDivide : speed ;
 
             Vector2 velocity = rigidbody2d.velocity;
             Vector2 velocityChange = (targetVelocity - velocity);
@@ -68,11 +99,25 @@ public class Displacement : MonoBehaviour
 
             rigidbody2d.AddForce(velocityChange, ForceMode2D.Impulse);
         }
+
+        if (isStun)
+        {
+            stunTimer += Time.deltaTime;
+            if(stunTimer >= stunTime)
+            {
+                stunTimer = 0.0f;
+                isStun = false;
+            }
+        }
+        
     }
 
     private void OnDash(InputAction.CallbackContext obj)
     {
-        Dash();
+        if (!isStun)
+        {
+            Dash();
+        }
     }
 
     private void DashCanceled()
@@ -89,8 +134,15 @@ public class Displacement : MonoBehaviour
             {
                 isDashing = true;
                 GetComponentInChildren<PlayerZone>().ChangeSpeedObjectInZone(true);                
-                rigidbody2d.DOMove(transform.position + movement * dashStrength, timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(ease);
+                rigidbody2d.DOMove(transform.position + movement * dashs[currentDash].dashStrength, dashs[currentDash].timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(dashs[currentDash].easeDash);
 
+                dashCoolDownTimer = 0.0f;
+                ++currentDash;
+                if(currentDash == dashs.Length)
+                {
+                    isStun = true;
+                    currentDash = 0;
+                }
             }
         }
     }
@@ -98,5 +150,19 @@ public class Displacement : MonoBehaviour
     public bool IsDashing()
     {
         return isDashing;
+    }
+
+    public bool IsStun()
+    {
+        return isStun;
+    }
+
+
+    [Serializable]
+    public class C_Dash
+    {
+        public AnimationCurve easeDash;
+        public float dashStrength;
+        public float timeToReachDashPosition;
     }
 }
