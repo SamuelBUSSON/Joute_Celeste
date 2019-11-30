@@ -32,7 +32,7 @@ public class ObjectHandler : MonoBehaviour
 
         input.actions.Enable();
 
-        input.currentActionMap["Fire"].performed += context => OnFire(context);
+        input.currentActionMap["Fire"].canceled += context => OnFire(context);
 
         input.currentActionMap["Aim"].performed += context => OnAim(context);
         input.currentActionMap["Aim"].canceled += context => OnAutoAim(context);
@@ -55,8 +55,7 @@ public class ObjectHandler : MonoBehaviour
 
             if (proj.type != EProjectileType.PLANET)
             {
-                proj.currentDamage = proj.damageLv2 * proj.startingDamage;
-                proj.speed = proj.speedLv2;
+                proj.SetThresholdLevel(1);
             }
         }
     }
@@ -71,8 +70,7 @@ public class ObjectHandler : MonoBehaviour
 
             if (proj.type != EProjectileType.PLANET)
             {
-                proj.currentDamage = proj.damageLv1 * proj.startingDamage;
-                proj.speed = proj.speedLv1;
+                proj.SetThresholdLevel(0);
             }
         }
     }
@@ -138,13 +136,17 @@ public class ObjectHandler : MonoBehaviour
             {
                 coolDownTimer = 0.0f;
                 handledObject.SetParent(null);
+
+                Projectile projectile = handledObject.GetComponent<Projectile>();
+                projectile.isLaunched = true;
+
                 Vector3 heading = handledObject.transform.position - transform.position;
-                handledObject.GetComponent<Rigidbody2D>().velocity = heading * launchStrength;
+                handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
 
                // Destroy(handledObject.gameObject, 3.0f);
 
                 handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
-                handledObject.GetComponent<Projectile>().isLaunched = true;
+                
 
                 handledObject = null;
             }

@@ -14,7 +14,12 @@ public enum EProjectileType
 
 public class Projectile : MonoBehaviour
 {
-
+    [Serializable]
+    public struct SThresholdLevel
+    {
+        public float speed;
+        public float damage;
+    }
     
     public EProjectileType type;
     [NonSerialized]
@@ -26,14 +31,11 @@ public class Projectile : MonoBehaviour
 
     [NonSerialized]
     public float speed = 1f;
-
-
-    public float speedLv1;
-    public float damageLv1;
     
-    public float speedLv2;
-    public float damageLv2;
-    
+    [NonSerialized]
+    public int thresholdIndex = -1;
+
+    public List<SThresholdLevel> thresholdLevels;
 
     [NonSerialized] public bool isLaunched;
 
@@ -49,10 +51,13 @@ public class Projectile : MonoBehaviour
             {
                 proj.Die();
             }
-            else
+            else if(proj.thresholdIndex > thresholdIndex)
+            {
+                Die();
+            }
+            else if(proj.thresholdIndex < thresholdIndex)
             {
                 proj.Die();
-                Die();
             }
         }
         else
@@ -66,6 +71,14 @@ public class Projectile : MonoBehaviour
                 Die();
             }
         }
+    }
+
+    public void SetThresholdLevel(int level)
+    {
+        thresholdIndex = level;
+
+        speed = thresholdLevels[thresholdIndex].speed;
+        currentDamage = startingDamage * thresholdLevels[thresholdIndex].damage;
     }
 
     public void Die()
