@@ -48,14 +48,7 @@ public class GameManager : MonoBehaviour
         else
         {
             player2 = obj.GetComponent<PlayerController>();
-
-            ActivateCamera();
         }
         playerIndex++;
-    }
-
-    private void ActivateCamera()
-    {
-        
     }
 }
