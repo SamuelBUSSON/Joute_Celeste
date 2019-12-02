@@ -29,6 +29,10 @@ public class PlayerHealth : MonoBehaviour
         playerController = GetComponent<PlayerController>();
     }
 
+    private int playerIndex;
+
+    private Displacement playerMovement;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +49,8 @@ public class PlayerHealth : MonoBehaviour
 
         healthSlider.maxValue = Health;
         healthSlider.value = Health;
+
+        playerMovement = GetComponent<Displacement>();
     }
 
     // Update is called once per frame
@@ -55,22 +61,25 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        Health -= amount;
-        healthSlider.value = Health;
-
-        if (Health >= 0)
+        if (playerMovement.IsDashing())
         {
-            if (thresholds[indexThreshold].health >= Health)
+            Health -= amount;
+            healthSlider.value = Health;
+
+            if (Health >= 0)
             {
-                if (++indexThreshold < thresholds.Count)
+                if (thresholds[indexThreshold].health >= Health)
                 {
-                    //TODO: change range or whatnot
+                    if (++indexThreshold < thresholds.Count)
+                    {
+                        //TODO: change range or whatnot
+                    }
                 }
             }
-        }
-        else
-        {
-            Die();
+            else
+            {
+                Die();
+            }
         }
     }
 
