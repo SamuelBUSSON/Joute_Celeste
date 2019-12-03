@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2758839452218953963}
   - component: {fileID: 2758839452218953969}
   - component: {fileID: 4167890457512715605}
+  - component: {fileID: 3428629715616182282}
   m_Layer: 0
   m_Name: PlayerSam
   m_TagString: Untagged
@@ -60,6 +61,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -155,6 +157,7 @@ MonoBehaviour:
   stunTime: 2
   onStunSpeedDivide: 5
   slowStrength: 5
+  dashEffect: {fileID: 0}
 --- !u!114 &2758839452218953962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,6 +237,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thresholds: []
   Health: 5
+--- !u!114 &3428629715616182282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2758839452218953968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45549462a7f64fa7a1944938dba0f56b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
 --- !u!1001 &2984825281499208267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -241,10 +257,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2758839452218953972}
     m_Modifications:
-    - target: {fileID: 1091391847767522253, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+    - target: {fileID: 1091391847767521840, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
-      propertyPath: m_Name
-      value: AttractZone
+      propertyPath: m_Offset.x
+      value: -0.0009128952
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091391847767521840, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.0882312
       objectReference: {fileID: 0}
     - target: {fileID: 1091391847767522252, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
@@ -301,15 +322,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1091391847767521840, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+    - target: {fileID: 1091391847767522253, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
-      propertyPath: m_Offset.x
-      value: -0.0009128952
-      objectReference: {fileID: 0}
-    - target: {fileID: 1091391847767521840, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.0882312
+      propertyPath: m_Name
+      value: AttractZone
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ebad5be1c8cad5409c4d64c07630d7c, type: 3}

@@ -36,14 +36,14 @@ public class PlayerHealth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(playerController.playerIndex == 1)
+        if(playerController?.playerIndex == 1)
         {
             GameObject p0 = GameManager.Instance.player2.gameObject;
             p0.GetComponent<ObjectHandler>().SetEnemyPos(transform);
             GetComponent<ObjectHandler>().SetEnemyPos(p0.transform);
         }
         
-        healthSlider = playerController.playerIndex == 0
+        healthSlider = playerController?.playerIndex == 0
             ? GameManager.Instance.PlayerSliderHealth1
             : GameManager.Instance.PlayerSliderHealth2;
 
