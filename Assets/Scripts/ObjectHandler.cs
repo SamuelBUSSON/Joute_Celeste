@@ -34,14 +34,47 @@ public class ObjectHandler : MonoBehaviour
 
         input.actions.Enable();
 
-        input.currentActionMap["Fire"].performed += context => OnFire(context);
+        input.currentActionMap["Fire"].canceled += context => OnFire(context);
 
         input.currentActionMap["Aim"].performed += context => OnAim(context);
         input.currentActionMap["Aim"].canceled += context => OnAutoAim(context);
+        
+        input.currentActionMap["HoldLv1"].performed += OnHoldLv1;
+        input.currentActionMap["HoldLv2"].performed += OnHoldLv2;
 
         enemyPos = transform;
 
 
+    }
+
+    private void OnHoldLv2(InputAction.CallbackContext obj)
+    {
+        print("HoldLv2");
+        
+        if (handledObject)
+        {
+            Projectile proj = handledObject.GetComponent<Projectile>();
+
+            if (proj.type != EProjectileType.PLANET)
+            {
+                proj.SetThresholdLevel(1);
+            }
+        }
+    }
+
+    private void OnHoldLv1(InputAction.CallbackContext obj)
+    {
+        print("HoldLv1");
+
+        if (handledObject)
+        {
+            Projectile proj = handledObject.GetComponent<Projectile>();
+
+            if (proj.type != EProjectileType.PLANET)
+            {
+                proj.SetThresholdLevel(0);
+            }
+        }
     }
 
     // Start is called before the first frame update
@@ -110,11 +143,15 @@ public class ObjectHandler : MonoBehaviour
             {
                 coolDownTimer = 0.0f;
                 handledObject.SetParent(null);
+
+                Projectile projectile = handledObject.GetComponent<Projectile>();
+                projectile.isLaunched = true;
+
                 Vector3 heading = handledObject.transform.position - transform.position;
-                handledObject.GetComponent<Rigidbody2D>().velocity = heading * launchStrength;                
+                handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
 
                 handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
-                handledObject.GetComponent<Projectile>().isLaunched = true;
+                
 
                 handledObject = null;
             }

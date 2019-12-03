@@ -57,6 +57,22 @@ public class @InputController : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""HoldLv1"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""a14da7a4-e6f4-4021-99ad-dd91a58fa38e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.5)""
+                },
+                {
+                    ""name"": ""HoldLv2"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""fda40f4c-cf97-4128-8194-a94e2c921263"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=1)""
                 }
             ],
             ""bindings"": [
@@ -202,6 +218,50 @@ public class @InputController : IInputActionCollection, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""845ddbe3-1e0c-43f8-83cb-abd23dbac950"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldLv1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6907ded2-fe5d-47b0-8b1f-87b52aa4bd24"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldLv1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""549c6965-81c3-46d2-9cfb-901f6bb45de3"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldLv2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8c32699-0131-4547-9f79-41f1ee784b67"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldLv2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -215,6 +275,8 @@ public class @InputController : IInputActionCollection, IDisposable
         m_Character_CaughtObject = m_Character.FindAction("CaughtObject", throwIfNotFound: true);
         m_Character_Aim = m_Character.FindAction("Aim", throwIfNotFound: true);
         m_Character_Dash = m_Character.FindAction("Dash", throwIfNotFound: true);
+        m_Character_HoldLv1 = m_Character.FindAction("HoldLv1", throwIfNotFound: true);
+        m_Character_HoldLv2 = m_Character.FindAction("HoldLv2", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -269,6 +331,8 @@ public class @InputController : IInputActionCollection, IDisposable
     private readonly InputAction m_Character_CaughtObject;
     private readonly InputAction m_Character_Aim;
     private readonly InputAction m_Character_Dash;
+    private readonly InputAction m_Character_HoldLv1;
+    private readonly InputAction m_Character_HoldLv2;
     public struct CharacterActions
     {
         private @InputController m_Wrapper;
@@ -278,6 +342,8 @@ public class @InputController : IInputActionCollection, IDisposable
         public InputAction @CaughtObject => m_Wrapper.m_Character_CaughtObject;
         public InputAction @Aim => m_Wrapper.m_Character_Aim;
         public InputAction @Dash => m_Wrapper.m_Character_Dash;
+        public InputAction @HoldLv1 => m_Wrapper.m_Character_HoldLv1;
+        public InputAction @HoldLv2 => m_Wrapper.m_Character_HoldLv2;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -302,6 +368,12 @@ public class @InputController : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnDash;
+                @HoldLv1.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnHoldLv1;
+                @HoldLv1.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnHoldLv1;
+                @HoldLv1.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnHoldLv1;
+                @HoldLv2.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnHoldLv2;
+                @HoldLv2.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnHoldLv2;
+                @HoldLv2.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnHoldLv2;
             }
             m_Wrapper.m_CharacterActionsCallbackInterface = instance;
             if (instance != null)
@@ -321,6 +393,12 @@ public class @InputController : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @HoldLv1.started += instance.OnHoldLv1;
+                @HoldLv1.performed += instance.OnHoldLv1;
+                @HoldLv1.canceled += instance.OnHoldLv1;
+                @HoldLv2.started += instance.OnHoldLv2;
+                @HoldLv2.performed += instance.OnHoldLv2;
+                @HoldLv2.canceled += instance.OnHoldLv2;
             }
         }
     }
@@ -332,5 +410,7 @@ public class @InputController : IInputActionCollection, IDisposable
         void OnCaughtObject(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnHoldLv1(InputAction.CallbackContext context);
+        void OnHoldLv2(InputAction.CallbackContext context);
     }
 }

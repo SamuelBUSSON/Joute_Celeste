@@ -27,7 +27,10 @@ public class PlayerZone : MonoBehaviour
     private bool canCatch = true;
     
 
-    private void Awake()
+
+
+    // Start is called before the first frame update
+    void Start()
     {
         input = GetComponentInParent<PlayerInput>();
 
@@ -37,13 +40,7 @@ public class PlayerZone : MonoBehaviour
 
         input.currentActionMap["Aim"].performed += context => OnAim(context);
         input.currentActionMap["Aim"].canceled += context => OnAimCanceled(context);
-    }
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
+        
         objectInZone = new List<Transform>();
         objectToSlowOnDash = new List<Transform>();
 
