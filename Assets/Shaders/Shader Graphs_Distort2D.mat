@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shader Graphs_Distort2D
-  m_Shader: {fileID: -6465566751694194690, guid: 30fc2fea1ee524249a990cdb73fed84a,
+  m_Shader: {fileID: -6465566751694194690, guid: cbf5b258296a0ce4caf871930f7c6463,
     type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4

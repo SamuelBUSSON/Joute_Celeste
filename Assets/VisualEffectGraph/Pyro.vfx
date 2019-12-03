@@ -31,6 +31,10 @@ MonoBehaviour:
   - link:
     - context: {fileID: 114946465509916290}
       slotIndex: 0
+  loopDuration: 0
+  loopCount: 0
+  delayBeforeLoop: 0
+  delayAfterLoop: 0
 --- !u!114 &114131763552434164
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -88,9 +92,16 @@ MonoBehaviour:
   m_Property:
     name: bounds
     m_serializedType:
-      m_SerializableType: UnityEditor.VFX.AABox, Unity.VisualEffectGraph.Editor, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    attributes: []
+      m_SerializableType: UnityEditor.VFX.AABox, Unity.VisualEffectGraph.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: The culling bounds of this system. The Visual Effect is only visible
+        if the bounding box specified here is visible to the camera.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 0
   m_LinkedSlots: []
 --- !u!114 &114340500867371532
@@ -211,7 +222,8 @@ MonoBehaviour:
 
       y: particle velocity
 
-      z: particle life time'
+      z: particle
+      life time'
     theme: Classic
     textSize: Small
   - title: Emitter System
@@ -235,7 +247,8 @@ MonoBehaviour:
       emits sparkle particels.
 
 
-      A sphere point cache is used to distribute the spawn points uniformally.'
+      A sphere point cache is used to distribute
+      the spawn points uniformally.'
     theme: Classic
     textSize: Small
   - title: 
@@ -390,8 +403,8 @@ MonoBehaviour:
     min: -Infinity
     max: Infinity
     descendantCount: 0
-  m_GraphVersion: 2
-  m_saved: 1
+  m_GraphVersion: 4
+  m_saved: 0
   m_SubgraphDependencies: []
   m_CategoryPath: 
 --- !u!114 &114380859405582094
@@ -448,7 +461,10 @@ MonoBehaviour:
   m_Owners:
   - {fileID: 114946465509916290}
   - {fileID: 114780028408030698}
-  m_Capacity: 65536
+  dataType: 0
+  capacity: 65536
+  stripCapacity: 16
+  particlePerStripCount: 16
   m_Space: 0
 --- !u!114 &114512514798047786
 MonoBehaviour:
@@ -726,7 +742,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The size of the box along each axis.
+      m_Tooltip: Sets the size of the box along each axis.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -768,7 +784,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The centre of the box.
+      m_Tooltip: Sets the center of the box.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -789,14 +805,14 @@ VisualEffectResource:
       VFX_USE_TARGETPOSITION_CURRENT 1\n#define VFX_USE_PARTICLEID_CURRENT 1\n#define
       VFX_USE_ALPHA_CURRENT 1\n#define VFX_USE_AGE_CURRENT 1\n#define VFX_USE_ALIVE_CURRENT
       1\n#define VFX_USE_POSITION_SOURCE 1\n#define VFX_USE_ALPHA_SOURCE 1\n#define
-      VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nCBUFFER_START(parameters)\n
-      \   float4 uniform_e;\n    float3 uniform_c;\n    float uniform_b;\n    float3
+      VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nCBUFFER_START(parameters)\n  
+      float4 uniform_e;\n    float3 uniform_c;\n    float uniform_b;\n    float3
       uniform_d;\n    float uniform_f;\nCBUFFER_END\n\n\r\n#include \"Packages/com.unity.visualeffectgraph/Shaders/Common/VFXCommonCompute.cginc\"\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\n\r\n\r\nRWByteAddressBuffer
       attributeBuffer;\r\nByteAddressBuffer sourceAttributeBuffer;\r\n\r\nCBUFFER_START(initParams)\r\n#if
       !VFX_USE_SPAWNER_FROM_GPU\r\n    uint nbSpawned;\t\t\t\t\t// Numbers of particle
-      spawned\r\n    uint spawnIndex;\t\t\t\t// Index of the first particle spawned\r\n
-      \   uint dispatchWidth;\r\n#else\r\n    uint offsetInAdditionalOutput;\r\n\tuint
+      spawned\r\n    uint spawnIndex;\t\t\t\t// Index of the first particle spawned\r\n  
+      uint dispatchWidth;\r\n#else\r\n    uint offsetInAdditionalOutput;\r\n\tuint
       nbMax;\r\n#endif\r\n\tuint systemSeed;\r\nCBUFFER_END\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\nRWStructuredBuffer<uint>
       deadListIn;\r\nByteAddressBuffer deadListCount; // This is bad to use a SRV
       to fetch deadList count but Unity API currently prevent from copying to CB\r\n#endif\r\n\r\n#if
@@ -811,57 +827,55 @@ VisualEffectResource:
       SetAttribute_2CF4000A(inout float3 targetPosition, float3 TargetPosition) /*attribute:targetPosition
       Composition:Overwrite Source:Slot Random:Off channels:XYZ */\n{\n    targetPosition
       = TargetPosition;\n}\n\n\r\n\r\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\r\nvoid
-      CSMain(uint3 groupId          : SV_GroupID,\r\n            uint3 groupThreadId
-      \   : SV_GroupThreadID)\r\n{\r\n    uint id = groupThreadId.x + groupId.x *
-      NB_THREADS_PER_GROUP;\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n    id += groupId.y
-      * dispatchWidth * NB_THREADS_PER_GROUP;\r\n#endif\r\n\r\n#if VFX_USE_SPAWNER_FROM_GPU\r\n
-      \   uint maxThreadId = inputAdditional.Load((offsetInAdditionalOutput * 2 +
-      0) << 2);\r\n    uint currentSpawnIndex = inputAdditional.Load((offsetInAdditionalOutput
-      * 2 + 1) << 2) - maxThreadId;\r\n#else\r\n    uint maxThreadId = nbSpawned;\r\n
-      \   uint currentSpawnIndex = spawnIndex;\r\n#endif\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n
-      \   maxThreadId = min(maxThreadId, deadListCount.Load(0x0));\r\n#elif VFX_USE_SPAWNER_FROM_GPU\r\n
-      \   maxThreadId = min(maxThreadId, nbMax); //otherwise, nbSpawned already clamped
-      on CPU\r\n#endif\r\n\r\n    if (id < maxThreadId)\r\n    {\r\n#if VFX_USE_SPAWNER_FROM_GPU\r\n
-      \       int sourceIndex = eventList[id];\r\n#endif\r\n        uint particleIndex
-      = id + currentSpawnIndex;\r\n\t\t\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n        int
-      sourceIndex = 0;\n        uint currentSumSpawnCount = 0u;\n        for (sourceIndex=0;
-      sourceIndex<5; sourceIndex++)\n        {\n            currentSumSpawnCount +=
-      uint(asfloat(sourceAttributeBuffer.Load((sourceIndex * 0x8 + 0x3) << 2)));\n
-      \           if (id < currentSumSpawnCount)\n            {\n                break;\n
-      \           }\n        }\n        \n\r\n#endif\r\n        float lifetime = (float)1;\n
-      \       float3 color = float3(1, 1, 1);\n        float3 position = float3(0,
-      0, 0);\n        float3 targetPosition = float3(0, 0, 0);\n        uint particleId
-      = (uint)0;\n        float age = (float)0;\n        bool alive = (bool)true;\n
-      \       float3 position_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
-      * 0x8 + 0x0) << 2));\n        float alpha_source = asfloat(sourceAttributeBuffer.Load((sourceIndex
-      * 0x8 + 0x4) << 2));\n        \n\r\n#if VFX_USE_PARTICLEID_CURRENT\r\n         particleId
+      CSMain(uint3 groupId          : SV_GroupID,\r\n            uint3 groupThreadId   
+      : SV_GroupThreadID)\r\n{\r\n    uint id = groupThreadId.x + groupId.x * NB_THREADS_PER_GROUP;\r\n#if
+      !VFX_USE_SPAWNER_FROM_GPU\r\n    id += groupId.y * dispatchWidth * NB_THREADS_PER_GROUP;\r\n#endif\r\n\r\n#if
+      VFX_USE_SPAWNER_FROM_GPU\r\n   uint maxThreadId = inputAdditional.Load((offsetInAdditionalOutput
+      * 2 + 0) << 2);\r\n    uint currentSpawnIndex = inputAdditional.Load((offsetInAdditionalOutput
+      * 2 + 1) << 2) - maxThreadId;\r\n#else\r\n    uint maxThreadId = nbSpawned;\r\n  
+      uint currentSpawnIndex = spawnIndex;\r\n#endif\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n  
+      maxThreadId = min(maxThreadId, deadListCount.Load(0x0));\r\n#elif VFX_USE_SPAWNER_FROM_GPU\r\n  
+      maxThreadId = min(maxThreadId, nbMax); //otherwise, nbSpawned already clamped
+      on CPU\r\n#endif\r\n\r\n    if (id < maxThreadId)\r\n    {\r\n#if VFX_USE_SPAWNER_FROM_GPU\r\n      
+      int sourceIndex = eventList[id];\r\n#endif\r\n        uint particleIndex =
+      id + currentSpawnIndex;\r\n\t\t\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n       
+      int sourceIndex = 0;\n        uint currentSumSpawnCount = 0u;\n        for
+      (sourceIndex=0; sourceIndex<5; sourceIndex++)\n        {\n            currentSumSpawnCount
+      += uint(asfloat(sourceAttributeBuffer.Load((sourceIndex * 0x8 + 0x3) << 2)));\n          
+      if (id < currentSumSpawnCount)\n            {\n                break;\n          
+      }\n        }\n        \n\r\n#endif\r\n        float lifetime = (float)1;\n      
+      float3 color = float3(1, 1, 1);\n        float3 position = float3(0, 0, 0);\n       
+      float3 targetPosition = float3(0, 0, 0);\n        uint particleId = (uint)0;\n       
+      float age = (float)0;\n        bool alive = (bool)true;\n       float3 position_source
+      = asfloat(sourceAttributeBuffer.Load3((sourceIndex * 0x8 + 0x0) << 2));\n       
+      float alpha_source = asfloat(sourceAttributeBuffer.Load((sourceIndex * 0x8
+      + 0x4) << 2));\n        \n\r\n#if VFX_USE_PARTICLEID_CURRENT\r\n         particleId
       = particleIndex;\r\n#endif\r\n#if VFX_USE_SEED_CURRENT\r\n        seed = WangHash(particleIndex
       ^ systemSeed);\r\n#endif\r\n        \r\n        {\n            SetAttribute_F0142CB9(
       /*inout */lifetime, (float)0);\n        }\n        {\n            uint tmp_o
-      = particleId ^ asuint(uniform_b);\n            float tmp_p = FixedRand(tmp_o);\n
-      \           float3 tmp_s = float3(tmp_p, (float)0.970000029, (float)1);\n            float3
-      tmp_t = HSVtoRGB(tmp_s);\n            float tmp_u = tmp_t[0];\n            float
-      tmp_v = tmp_t[1];\n            float tmp_w = tmp_t[2];\n            float3 tmp_x
-      = float3(tmp_u, tmp_v, tmp_w);\n            SetAttribute_FDD06EC7( /*inout */color,
-      tmp_x);\n        }\n        {\n            float3 tmp_o = position_source;\n
-      \           float3 tmp_p = tmp_o * uniform_d;\n            float3 tmp_q = uniform_c
-      + tmp_p;\n            SetAttribute_CAC29747( /*inout */position, tmp_q);\n        }\n
-      \       {\n            uint tmp_o = particleId ^ asuint(uniform_f);\n            float
-      tmp_p = FixedRand(tmp_o);\n            float tmp_q = SampleCurve(uniform_e,tmp_p);\n
-      \           float tmp_s = alpha_source;\n            float tmp_u = tmp_s * (float)2.5;\n
-      \           float tmp_v = (float)0.5 + tmp_u;\n            float tmp_y = tmp_p
-      * (float)1.20000005;\n            float tmp_z = (float)0.800000012 + tmp_y;\n
-      \           float3 tmp_ba = float3(tmp_q, tmp_v, tmp_z);\n            SetAttribute_2CF4000A(
-      /*inout */targetPosition, tmp_ba);\n        }\n        \n\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n
-      \       if (alive)\r\n        {\r\n\t\t\tuint deadIndex = deadListIn.DecrementCounter();\r\n
-      \           uint index = deadListIn[deadIndex];\r\n            attributeBuffer.Store((index
-      * 0x1 + 0x0) << 2,asuint(lifetime));\n            attributeBuffer.Store3((index
-      * 0xC + 0x30004) << 2,asuint(color));\n            attributeBuffer.Store3((index
-      * 0xC + 0x30000) << 2,asuint(position));\n            attributeBuffer.Store3((index
-      * 0xC + 0x30008) << 2,asuint(targetPosition));\n            attributeBuffer.Store((index
-      * 0x2 + 0x10000) << 2,asuint(age));\n            attributeBuffer.Store((index
-      * 0x2 + 0x10001) << 2,uint(alive));\n            \n\r\n        }\r\n#else\r\n
-      \       uint index = particleIndex;\r\n        attributeBuffer.Store((index
+      = particleId ^ asuint(uniform_b);\n            float tmp_p = FixedRand(tmp_o);\n          
+      float3 tmp_s = float3(tmp_p, (float)0.970000029, (float)1);\n            float3
+      tmp_t = HSVtoRGB(tmp_s);\n            float tmp_u = tmp_t[0];\n           
+      float tmp_v = tmp_t[1];\n            float tmp_w = tmp_t[2];\n            float3
+      tmp_x = float3(tmp_u, tmp_v, tmp_w);\n            SetAttribute_FDD06EC7( /*inout
+      */color, tmp_x);\n        }\n        {\n            float3 tmp_o = position_source;\n          
+      float3 tmp_p = tmp_o * uniform_d;\n            float3 tmp_q = uniform_c + tmp_p;\n           
+      SetAttribute_CAC29747( /*inout */position, tmp_q);\n        }\n       {\n           
+      uint tmp_o = particleId ^ asuint(uniform_f);\n            float tmp_p = FixedRand(tmp_o);\n           
+      float tmp_q = SampleCurve(uniform_e,tmp_p);\n           float tmp_s = alpha_source;\n           
+      float tmp_u = tmp_s * (float)2.5;\n           float tmp_v = (float)0.5 + tmp_u;\n           
+      float tmp_y = tmp_p * (float)1.20000005;\n            float tmp_z = (float)0.800000012
+      + tmp_y;\n           float3 tmp_ba = float3(tmp_q, tmp_v, tmp_z);\n           
+      SetAttribute_2CF4000A( /*inout */targetPosition, tmp_ba);\n        }\n       
+      \n\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n       if (alive)\r\n        {\r\n\t\t\tuint
+      deadIndex = deadListIn.DecrementCounter();\r\n           uint index = deadListIn[deadIndex];\r\n           
+      attributeBuffer.Store((index * 0x1 + 0x0) << 2,asuint(lifetime));\n           
+      attributeBuffer.Store3((index * 0xC + 0x30004) << 2,asuint(color));\n           
+      attributeBuffer.Store3((index * 0xC + 0x30000) << 2,asuint(position));\n           
+      attributeBuffer.Store3((index * 0xC + 0x30008) << 2,asuint(targetPosition));\n           
+      attributeBuffer.Store((index * 0x2 + 0x10000) << 2,asuint(age));\n           
+      attributeBuffer.Store((index * 0x2 + 0x10001) << 2,uint(alive));\n           
+      \n\r\n        }\r\n#else\r\n       uint index = particleIndex;\r\n        attributeBuffer.Store((index
       * 0x1 + 0x0) << 2,asuint(lifetime));\n        attributeBuffer.Store3((index
       * 0xC + 0x30004) << 2,asuint(color));\n        attributeBuffer.Store3((index
       * 0xC + 0x30000) << 2,asuint(position));\n        attributeBuffer.Store3((index
@@ -871,67 +885,69 @@ VisualEffectResource:
   - compute: 1
     name: '[System 1]Update'
     source: "#pragma kernel CSMain\r\n#define NB_THREADS_PER_GROUP 64\n#define VFX_USE_LIFETIME_CURRENT
-      1\n#define VFX_USE_AGE_CURRENT 1\n#define VFX_USE_ALIVE_CURRENT 1\n#define VFX_USE_EVENTCOUNT_CURRENT
-      1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nCBUFFER_START(parameters)\n
-      \   float deltaTime_a;\n    uint3 PADDING_0;\nCBUFFER_END\nAppendStructuredBuffer<uint>
+      1\n#define VFX_USE_AGE_CURRENT 1\n#define VFX_USE_ALIVE_CURRENT 1\n#define
+      VFX_USE_EVENTCOUNT_CURRENT 1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nCBUFFER_START(parameters)\n  
+      float deltaTime_a;\n    uint3 PADDING_0;\nCBUFFER_END\nAppendStructuredBuffer<uint>
       eventListOut_a;\n\n\r\n#include \"Packages/com.unity.visualeffectgraph/Shaders/Common/VFXCommonCompute.cginc\"\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\n\r\n\r\nRWByteAddressBuffer
       attributeBuffer;\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\nRWStructuredBuffer<uint>
       deadListOut;\r\n#endif\r\n\r\n#if VFX_HAS_INDIRECT_DRAW\r\nRWStructuredBuffer<uint>
       indirectBuffer;\r\n#endif\r\n\r\nCBUFFER_START(updateParams)\r\n    uint nbMax;\r\n\tuint
       dispatchWidth;\r\n\tuint systemSeed;\r\nCBUFFER_END\r\n\r\nvoid GPUEventOnDie(float
-      lifetime, float age, bool alive, inout uint eventCount, uint count, float deltaTime)\n{\n
-      \   eventCount = (age + deltaTime > lifetime || !alive) ? count : 0;\n}\nvoid
-      Age(inout float age, float deltaTime)\n{\n    age += deltaTime;\n}\nvoid Reap(float
-      age, float lifetime, inout bool alive)\n{\n    if(age > lifetime) { alive =
-      false; }\n}\n\n\r\n\r\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\r\nvoid CSMain(uint3
+      lifetime, float age, bool alive, inout uint eventCount, uint count, float deltaTime)\n{\n  
+      eventCount = (age + deltaTime > lifetime || !alive) ? count : 0;\n}\nvoid Age(inout
+      float age, float deltaTime)\n{\n    age += deltaTime;\n}\nvoid Reap(float age,
+      float lifetime, inout bool alive)\n{\n    if(age > lifetime) { alive = false;
+      }\n}\n\n\r\n\r\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\r\nvoid CSMain(uint3
       groupId          : SV_GroupID,\r\n            uint3 groupThreadId    : SV_GroupThreadID)\r\n{\r\n\tuint
       id = groupThreadId.x + groupId.x * NB_THREADS_PER_GROUP + groupId.y * dispatchWidth
       * NB_THREADS_PER_GROUP;\r\n\tuint index = id;\r\n\tif (id < nbMax)\r\n\t{\r\n#if
       VFX_USE_ALIVE_CURRENT\r\n\t\tbool alive = (attributeBuffer.Load((index * 0x2
       + 0x10001) << 2));\n\t\t\n\r\n\t\tif (alive)\r\n\t\t{\r\n\t\t\tfloat lifetime
       = asfloat(attributeBuffer.Load((index * 0x1 + 0x0) << 2));\n\t\t\tfloat age
-      = asfloat(attributeBuffer.Load((index * 0x2 + 0x10000) << 2));\n\t\t\tuint eventCount_a
-      = 0u;\n\t\t\tuint eventCount = (uint)0;\n\t\t\tfloat3 position_source = float3(0,
-      0, 0);\n\t\t\tfloat alpha_source = (float)1;\n\t\t\t\n\r\n\t\t\t\r\n#if VFX_USE_OLDPOSITION_CURRENT\r\n\t\t\toldPosition
-      = position;\r\n#endif\r\n\t\t\t\r\n\t\t\t{\n\t\t\t    eventCount = 0u;\n\t\t\t
-      \   GPUEventOnDie(lifetime, age, alive,  /*inout */eventCount, (uint)60, deltaTime_a);\n\t\t\t
-      \   eventCount_a += eventCount;\n\t\t\t}\n\t\t\tAge( /*inout */age, deltaTime_a);\n\t\t\tReap(age,
-      lifetime,  /*inout */alive);\n\t\t\t\n\r\n\t\t\tif (alive)\r\n\t\t\t{\r\n\t\t\t\tattributeBuffer.Store((index
-      * 0x2 + 0x10000) << 2,asuint(age));\n\t\t\t\tfor (uint i = 0; i < eventCount_a;
-      ++i) eventListOut_a.Append(index);\n\t\t\t\t\n\r\n#if VFX_HAS_INDIRECT_DRAW\r\n
-      \               uint indirectIndex = indirectBuffer.IncrementCounter();\r\n\t\t\t\tindirectBuffer[indirectIndex]
+      = asfloat(attributeBuffer.Load((index * 0x2 + 0x10000) << 2));\n\t\t\tuint
+      eventCount_a = 0u;\n\t\t\tuint eventCount = (uint)0;\n\t\t\tfloat3 position_source
+      = float3(0, 0, 0);\n\t\t\tfloat alpha_source = (float)1;\n\t\t\t\n\r\n\t\t\t\r\n#if
+      VFX_USE_OLDPOSITION_CURRENT\r\n\t\t\toldPosition = position;\r\n#endif\r\n\t\t\t\r\n\t\t\t{\n\t\t\t   
+      eventCount = 0u;\n\t\t\t    GPUEventOnDie(lifetime, age, alive,  /*inout */eventCount,
+      (uint)60, deltaTime_a);\n\t\t\t    eventCount_a += eventCount;\n\t\t\t}\n\t\t\tAge(
+      /*inout */age, deltaTime_a);\n\t\t\tReap(age, lifetime,  /*inout */alive);\n\t\t\t\n\r\n\t\t\tif
+      (alive)\r\n\t\t\t{\r\n\t\t\t\tattributeBuffer.Store((index * 0x2 + 0x10000)
+      << 2,asuint(age));\n\t\t\t\tfor (uint i = 0; i < eventCount_a; ++i) eventListOut_a.Append(index);\n\t\t\t\t\n\r\n#if
+      VFX_HAS_INDIRECT_DRAW\r\n               uint indirectIndex = indirectBuffer.IncrementCounter();\r\n\t\t\t\tindirectBuffer[indirectIndex]
       = index;\r\n#endif\r\n\t\t\t}\r\n\t\t\telse\r\n\t\t\t{\r\n\t\t\t\tattributeBuffer.Store((index
       * 0x2 + 0x10001) << 2,uint(alive));\n\t\t\t\tfor (uint i = 0; i < eventCount_a;
-      ++i) eventListOut_a.Append(index);\n\t\t\t\t\n\r\n\t\t\t\tuint deadIndex = deadListOut.IncrementCounter();\r\n\t\t\t\tdeadListOut[deadIndex]
-      = index;\r\n\t\t\t}\r\n\t\t}\r\n#else\r\n\t\tfloat lifetime = asfloat(attributeBuffer.Load((index
-      * 0x1 + 0x0) << 2));\n\t\tfloat age = asfloat(attributeBuffer.Load((index *
-      0x2 + 0x10000) << 2));\n\t\tbool alive = (attributeBuffer.Load((index * 0x2
-      + 0x10001) << 2));\n\t\tuint eventCount_a = 0u;\n\t\tuint eventCount = (uint)0;\n\t\tfloat3
-      position_source = float3(0, 0, 0);\n\t\tfloat alpha_source = (float)1;\n\t\t\n\r\n\t\t\r\n#if
-      VFX_USE_OLDPOSITION_CURRENT\r\n\t\toldPosition = position;\r\n#endif\r\n\t\t\r\n\t\t{\n\t\t
-      \   eventCount = 0u;\n\t\t    GPUEventOnDie(lifetime, age, alive,  /*inout */eventCount,
-      (uint)60, deltaTime_a);\n\t\t    eventCount_a += eventCount;\n\t\t}\n\t\tAge(
-      /*inout */age, deltaTime_a);\n\t\tReap(age, lifetime,  /*inout */alive);\n\t\t\n\r\n\t\tattributeBuffer.Store((index
-      * 0x2 + 0x10000) << 2,asuint(age));\n\t\tattributeBuffer.Store((index * 0x2
-      + 0x10001) << 2,uint(alive));\n\t\tfor (uint i = 0; i < eventCount_a; ++i) eventListOut_a.Append(index);\n\t\t\n\r\n#if
+      ++i) eventListOut_a.Append(index);\n\t\t\t\t\n\r\n\t\t\t\tuint deadIndex =
+      deadListOut.IncrementCounter();\r\n\t\t\t\tdeadListOut[deadIndex] = index;\r\n\t\t\t}\r\n\t\t}\r\n#else\r\n\t\tfloat
+      lifetime = asfloat(attributeBuffer.Load((index * 0x1 + 0x0) << 2));\n\t\tfloat
+      age = asfloat(attributeBuffer.Load((index * 0x2 + 0x10000) << 2));\n\t\tbool
+      alive = (attributeBuffer.Load((index * 0x2 + 0x10001) << 2));\n\t\tuint eventCount_a
+      = 0u;\n\t\tuint eventCount = (uint)0;\n\t\tfloat3 position_source = float3(0,
+      0, 0);\n\t\tfloat alpha_source = (float)1;\n\t\t\n\r\n\t\t\r\n#if VFX_USE_OLDPOSITION_CURRENT\r\n\t\toldPosition
+      = position;\r\n#endif\r\n\t\t\r\n\t\t{\n\t\t    eventCount = 0u;\n\t\t    GPUEventOnDie(lifetime,
+      age, alive,  /*inout */eventCount, (uint)60, deltaTime_a);\n\t\t    eventCount_a
+      += eventCount;\n\t\t}\n\t\tAge( /*inout */age, deltaTime_a);\n\t\tReap(age,
+      lifetime,  /*inout */alive);\n\t\t\n\r\n\t\tattributeBuffer.Store((index *
+      0x2 + 0x10000) << 2,asuint(age));\n\t\tattributeBuffer.Store((index * 0x2 +
+      0x10001) << 2,uint(alive));\n\t\tfor (uint i = 0; i < eventCount_a; ++i) eventListOut_a.Append(index);\n\t\t\n\r\n#if
       VFX_HAS_INDIRECT_DRAW\r\n        uint indirectIndex = indirectBuffer.IncrementCounter();\r\n\t\tindirectBuffer[indirectIndex]
       = index;\r\n#endif\r\n#endif\r\n\t}\r\n}\r\n"
   - compute: 1
     name: '[System 2]Initialize'
     source: "#pragma kernel CSMain\r\n#define NB_THREADS_PER_GROUP 64\n#define VFX_USE_POSITION_CURRENT
-      1\n#define VFX_USE_COLOR_CURRENT 1\n#define VFX_USE_TARGETPOSITION_CURRENT 1\n#define
-      VFX_USE_VELOCITY_CURRENT 1\n#define VFX_USE_PARTICLEID_CURRENT 1\n#define VFX_USE_LIFETIME_CURRENT
-      1\n#define VFX_USE_SEED_CURRENT 1\n#define VFX_USE_SIZE_CURRENT 1\n#define VFX_USE_RATECOUNT_D_CURRENT
-      1\n#define VFX_USE_AGE_CURRENT 1\n#define VFX_USE_ALIVE_CURRENT 1\n#define VFX_USE_POSITION_SOURCE
-      1\n#define VFX_USE_COLOR_SOURCE 1\n#define VFX_USE_TARGETPOSITION_SOURCE 1\n#define
-      VFX_USE_SPAWNER_FROM_GPU 1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nTexture2D
+      1\n#define VFX_USE_COLOR_CURRENT 1\n#define VFX_USE_TARGETPOSITION_CURRENT
+      1\n#define VFX_USE_VELOCITY_CURRENT 1\n#define VFX_USE_PARTICLEID_CURRENT 1\n#define
+      VFX_USE_LIFETIME_CURRENT 1\n#define VFX_USE_SEED_CURRENT 1\n#define VFX_USE_SIZE_CURRENT
+      1\n#define VFX_USE_RATECOUNT_D_CURRENT 1\n#define VFX_USE_AGE_CURRENT 1\n#define
+      VFX_USE_ALIVE_CURRENT 1\n#define VFX_USE_POSITION_SOURCE 1\n#define VFX_USE_COLOR_SOURCE
+      1\n#define VFX_USE_TARGETPOSITION_SOURCE 1\n#define VFX_USE_SPAWNER_FROM_GPU
+      1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nTexture2D
       attributeMap_d;\nSamplerState samplerattributeMap_d;\n\n\r\n#include \"Packages/com.unity.visualeffectgraph/Shaders/Common/VFXCommonCompute.cginc\"\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\n\r\n\r\nRWByteAddressBuffer
       attributeBuffer;\r\nByteAddressBuffer sourceAttributeBuffer;\r\n\r\nCBUFFER_START(initParams)\r\n#if
       !VFX_USE_SPAWNER_FROM_GPU\r\n    uint nbSpawned;\t\t\t\t\t// Numbers of particle
-      spawned\r\n    uint spawnIndex;\t\t\t\t// Index of the first particle spawned\r\n
-      \   uint dispatchWidth;\r\n#else\r\n    uint offsetInAdditionalOutput;\r\n\tuint
+      spawned\r\n    uint spawnIndex;\t\t\t\t// Index of the first particle spawned\r\n  
+      uint dispatchWidth;\r\n#else\r\n    uint offsetInAdditionalOutput;\r\n\tuint
       nbMax;\r\n#endif\r\n\tuint systemSeed;\r\nCBUFFER_END\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\nRWStructuredBuffer<uint>
       deadListIn;\r\nByteAddressBuffer deadListCount; // This is bad to use a SRV
       to fetch deadList count but Unity API currently prevent from copying to CB\r\n#endif\r\n\r\n#if
@@ -945,10 +961,11 @@ VisualEffectResource:
       Source:Source Random:Off channels:XYZ */\n{\n    targetPosition = Value;\n}\nvoid
       AttributeFromMap_930F1143(inout float3 velocity, uint particleId, VFXSampler2D
       attributeMap, float3 valueBias, float3 valueScale) /*attribute:velocity Composition:Overwrite
-      SampleMode:Sequential channels:XYZ */\n{\n    \n    uint width, height;\n    attributeMap.t.GetDimensions(width,
-      height);\n    uint count = width * height;\n    uint id = particleId % count;\n
-      \   uint y = id / width;\n    uint x = id - y * width;\n    float3 value = (float3)attributeMap.t.Load(int3(x,
-      y, 0));\n    value = (value  + valueBias) * valueScale;\n    velocity = value;\n}\nvoid
+      SampleMode:Sequential channels:XYZ */\n{\n    \n    uint width, height;\n   
+      attributeMap.t.GetDimensions(width, height);\n    uint count = width * height;\n   
+      uint id = particleId % count;\n   uint y = id / width;\n    uint x = id - y
+      * width;\n    float3 value = (float3)attributeMap.t.Load(int3(x, y, 0));\n   
+      value = (value  + valueBias) * valueScale;\n    velocity = value;\n}\nvoid
       SetAttribute_F0142CB9(inout float lifetime, float Lifetime) /*attribute:lifetime
       Composition:Overwrite Source:Slot Random:Off channels:XYZ */\n{\n    lifetime
       = Lifetime;\n}\nvoid SetAttribute_6ED152F(inout float3 velocity, float3 Velocity)
@@ -960,77 +977,76 @@ VisualEffectResource:
       Random:Off channels:XYZ */\n{\n    lifetime *= Lifetime;\n}\nvoid SetAttribute_E89EADA9(inout
       float lifetime, inout uint seed, float A, float B) /*attribute:lifetime Composition:Multiply
       Source:Slot Random:Uniform channels:XYZ */\n{\n    lifetime *= lerp(A,B,RAND);\n}\nvoid
-      SetAttribute_3278B545(inout float size, inout uint seed, float A, float B) /*attribute:size
-      Composition:Overwrite Source:Slot Random:Uniform channels:XYZ */\n{\n    size
-      = lerp(A,B,RAND);\n}\n\n\r\n\r\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\r\nvoid
-      CSMain(uint3 groupId          : SV_GroupID,\r\n            uint3 groupThreadId
-      \   : SV_GroupThreadID)\r\n{\r\n    uint id = groupThreadId.x + groupId.x *
-      NB_THREADS_PER_GROUP;\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n    id += groupId.y
-      * dispatchWidth * NB_THREADS_PER_GROUP;\r\n#endif\r\n\r\n#if VFX_USE_SPAWNER_FROM_GPU\r\n
-      \   uint maxThreadId = inputAdditional.Load((offsetInAdditionalOutput * 2 +
-      0) << 2);\r\n    uint currentSpawnIndex = inputAdditional.Load((offsetInAdditionalOutput
-      * 2 + 1) << 2) - maxThreadId;\r\n#else\r\n    uint maxThreadId = nbSpawned;\r\n
-      \   uint currentSpawnIndex = spawnIndex;\r\n#endif\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n
-      \   maxThreadId = min(maxThreadId, deadListCount.Load(0x0));\r\n#elif VFX_USE_SPAWNER_FROM_GPU\r\n
-      \   maxThreadId = min(maxThreadId, nbMax); //otherwise, nbSpawned already clamped
-      on CPU\r\n#endif\r\n\r\n    if (id < maxThreadId)\r\n    {\r\n#if VFX_USE_SPAWNER_FROM_GPU\r\n
-      \       int sourceIndex = eventList[id];\r\n#endif\r\n        uint particleIndex
-      = id + currentSpawnIndex;\r\n\t\t\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n        \r\n#endif\r\n
-      \       float3 position = float3(0, 0, 0);\n        float3 color = float3(1,
-      1, 1);\n        float3 targetPosition = float3(0, 0, 0);\n        float3 velocity
-      = float3(0, 0, 0);\n        uint particleId = (uint)0;\n        float lifetime
-      = (float)1;\n        uint seed = (uint)0;\n        float size = (float)0.100000001;\n
-      \       float rateCount_d = (float)0;\n        float age = (float)0;\n        bool
-      alive = (bool)true;\n        float3 position_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
-      * 0xC + 0x30000) << 2));\n        float3 color_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
-      * 0xC + 0x30004) << 2));\n        float3 targetPosition_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
-      * 0xC + 0x30008) << 2));\n        \n\r\n#if VFX_USE_PARTICLEID_CURRENT\r\n         particleId
-      = particleIndex;\r\n#endif\r\n#if VFX_USE_SEED_CURRENT\r\n        seed = WangHash(particleIndex
-      ^ systemSeed);\r\n#endif\r\n        \r\n        {\n            float3 tmp_bb
-      = position_source;\n            SetAttribute_CAC02F9E( /*inout */position, tmp_bb);\n
-      \       }\n        {\n            float3 tmp_bb = color_source;\n            SetAttribute_FDCE071E(
-      /*inout */color, tmp_bb);\n        }\n        {\n            float3 tmp_bb =
-      targetPosition_source;\n            SetAttribute_2CF667B3( /*inout */targetPosition,
-      tmp_bb);\n        }\n        {\n            AttributeFromMap_930F1143( /*inout
-      */velocity, particleId, GetVFXSampler(attributeMap_d, samplerattributeMap_d),
-      float3(0, 0, 0), float3(1, 1, 1));\n        }\n        {\n            float3
-      tmp_bc = velocity * velocity;\n            float tmp_bd = tmp_bc[2];\n            float
-      tmp_be = tmp_bc[1];\n            float tmp_bf = tmp_bd + tmp_be;\n            float
-      tmp_bg = tmp_bc[0];\n            float tmp_bh = tmp_bf + tmp_bg;\n            float
-      tmp_bj = pow(tmp_bh, (float)0.5);\n            float tmp_bl = tmp_bj - (float)1.5;\n
-      \           float tmp_bm = ceil(tmp_bl);\n            float tmp_bn = saturate(tmp_bm);\n
-      \           float tmp_bo = (float)1 - tmp_bn;\n            SetAttribute_F0142CB9(
-      /*inout */lifetime, tmp_bo);\n        }\n        {\n            float tmp_bb
-      = targetPosition[1];\n            float3 tmp_bc = float3(tmp_bb, tmp_bb, tmp_bb);\n
-      \           SetAttribute_6ED152F( /*inout */velocity, tmp_bc);\n        }\n
-      \       {\n            SetAttribute_AA7D638( /*inout */velocity, float3(-1,
-      -1, -1));\n        }\n        {\n            float tmp_bb = targetPosition[2];\n
-      \           SetAttribute_E89EAA93( /*inout */lifetime, tmp_bb);\n        }\n
-      \       {\n            SetAttribute_E89EADA9( /*inout */lifetime,  /*inout */seed,
-      (float)1, (float)1.5);\n        }\n        {\n            SetAttribute_3278B545(
-      /*inout */size,  /*inout */seed, (float)0.00999999978, (float)0.0299999993);\n
-      \       }\n        \n\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n        if (alive)\r\n
-      \       {\r\n\t\t\tuint deadIndex = deadListIn.DecrementCounter();\r\n            uint
-      index = deadListIn[deadIndex];\r\n            attributeBuffer.Store3((index
-      * 0x8 + 0x0) << 2,asuint(position));\n            attributeBuffer.Store3((index
-      * 0x4 + 0x80000) << 2,asuint(color));\n            attributeBuffer.Store3((index
-      * 0x4 + 0x120000) << 2,asuint(targetPosition));\n            attributeBuffer.Store3((index
-      * 0x4 + 0xC0000) << 2,asuint(velocity));\n            attributeBuffer.Store((index
-      * 0x2 + 0x100000) << 2,asuint(particleId));\n            attributeBuffer.Store((index
-      * 0x2 + 0x100001) << 2,asuint(lifetime));\n            attributeBuffer.Store((index
-      * 0x4 + 0x80003) << 2,asuint(size));\n            attributeBuffer.Store((index
-      * 0x4 + 0xC0003) << 2,asuint(rateCount_d));\n            attributeBuffer.Store((index
-      * 0x8 + 0x3) << 2,asuint(age));\n            attributeBuffer.Store((index *
-      0x8 + 0x4) << 2,uint(alive));\n            \n\r\n        }\r\n#else\r\n        uint
-      index = particleIndex;\r\n        attributeBuffer.Store3((index * 0x8 + 0x0)
-      << 2,asuint(position));\n        attributeBuffer.Store3((index * 0x4 + 0x80000)
-      << 2,asuint(color));\n        attributeBuffer.Store3((index * 0x4 + 0x120000)
-      << 2,asuint(targetPosition));\n        attributeBuffer.Store3((index * 0x4 +
-      0xC0000) << 2,asuint(velocity));\n        attributeBuffer.Store((index * 0x2
-      + 0x100000) << 2,asuint(particleId));\n        attributeBuffer.Store((index
+      SetAttribute_3278B545(inout float size, inout uint seed, float A, float B)
+      /*attribute:size Composition:Overwrite Source:Slot Random:Uniform channels:XYZ
+      */\n{\n    size = lerp(A,B,RAND);\n}\n\n\r\n\r\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\r\nvoid
+      CSMain(uint3 groupId          : SV_GroupID,\r\n            uint3 groupThreadId   
+      : SV_GroupThreadID)\r\n{\r\n    uint id = groupThreadId.x + groupId.x * NB_THREADS_PER_GROUP;\r\n#if
+      !VFX_USE_SPAWNER_FROM_GPU\r\n    id += groupId.y * dispatchWidth * NB_THREADS_PER_GROUP;\r\n#endif\r\n\r\n#if
+      VFX_USE_SPAWNER_FROM_GPU\r\n   uint maxThreadId = inputAdditional.Load((offsetInAdditionalOutput
+      * 2 + 0) << 2);\r\n    uint currentSpawnIndex = inputAdditional.Load((offsetInAdditionalOutput
+      * 2 + 1) << 2) - maxThreadId;\r\n#else\r\n    uint maxThreadId = nbSpawned;\r\n  
+      uint currentSpawnIndex = spawnIndex;\r\n#endif\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n  
+      maxThreadId = min(maxThreadId, deadListCount.Load(0x0));\r\n#elif VFX_USE_SPAWNER_FROM_GPU\r\n  
+      maxThreadId = min(maxThreadId, nbMax); //otherwise, nbSpawned already clamped
+      on CPU\r\n#endif\r\n\r\n    if (id < maxThreadId)\r\n    {\r\n#if VFX_USE_SPAWNER_FROM_GPU\r\n      
+      int sourceIndex = eventList[id];\r\n#endif\r\n        uint particleIndex =
+      id + currentSpawnIndex;\r\n\t\t\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n       
+      \r\n#endif\r\n       float3 position = float3(0, 0, 0);\n        float3 color
+      = float3(1, 1, 1);\n        float3 targetPosition = float3(0, 0, 0);\n       
+      float3 velocity = float3(0, 0, 0);\n        uint particleId = (uint)0;\n       
+      float lifetime = (float)1;\n        uint seed = (uint)0;\n        float size
+      = (float)0.100000001;\n       float rateCount_d = (float)0;\n        float
+      age = (float)0;\n        bool alive = (bool)true;\n        float3 position_source
+      = asfloat(sourceAttributeBuffer.Load3((sourceIndex * 0xC + 0x30000) << 2));\n       
+      float3 color_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex * 0xC
+      + 0x30004) << 2));\n        float3 targetPosition_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
+      * 0xC + 0x30008) << 2));\n        \n\r\n#if VFX_USE_PARTICLEID_CURRENT\r\n        
+      particleId = particleIndex;\r\n#endif\r\n#if VFX_USE_SEED_CURRENT\r\n       
+      seed = WangHash(particleIndex ^ systemSeed);\r\n#endif\r\n        \r\n       
+      {\n            float3 tmp_bb = position_source;\n            SetAttribute_CAC02F9E(
+      /*inout */position, tmp_bb);\n       }\n        {\n            float3 tmp_bb
+      = color_source;\n            SetAttribute_FDCE071E( /*inout */color, tmp_bb);\n       
+      }\n        {\n            float3 tmp_bb = targetPosition_source;\n           
+      SetAttribute_2CF667B3( /*inout */targetPosition, tmp_bb);\n        }\n       
+      {\n            AttributeFromMap_930F1143( /*inout */velocity, particleId, GetVFXSampler(attributeMap_d,
+      samplerattributeMap_d), float3(0, 0, 0), float3(1, 1, 1));\n        }\n       
+      {\n            float3 tmp_bc = velocity * velocity;\n            float tmp_bd
+      = tmp_bc[2];\n            float tmp_be = tmp_bc[1];\n            float tmp_bf
+      = tmp_bd + tmp_be;\n            float tmp_bg = tmp_bc[0];\n            float
+      tmp_bh = tmp_bf + tmp_bg;\n            float tmp_bj = pow(tmp_bh, (float)0.5);\n           
+      float tmp_bl = tmp_bj - (float)1.5;\n           float tmp_bm = ceil(tmp_bl);\n           
+      float tmp_bn = saturate(tmp_bm);\n           float tmp_bo = (float)1 - tmp_bn;\n           
+      SetAttribute_F0142CB9( /*inout */lifetime, tmp_bo);\n        }\n        {\n           
+      float tmp_bb = targetPosition[1];\n            float3 tmp_bc = float3(tmp_bb,
+      tmp_bb, tmp_bb);\n           SetAttribute_6ED152F( /*inout */velocity, tmp_bc);\n       
+      }\n       {\n            SetAttribute_AA7D638( /*inout */velocity, float3(-1,
+      -1, -1));\n        }\n        {\n            float tmp_bb = targetPosition[2];\n          
+      SetAttribute_E89EAA93( /*inout */lifetime, tmp_bb);\n        }\n       {\n           
+      SetAttribute_E89EADA9( /*inout */lifetime,  /*inout */seed, (float)1, (float)1.5);\n       
+      }\n        {\n            SetAttribute_3278B545( /*inout */size,  /*inout */seed,
+      (float)0.00999999978, (float)0.0299999993);\n       }\n        \n\r\n\r\n#if
+      VFX_USE_ALIVE_CURRENT\r\n        if (alive)\r\n       {\r\n\t\t\tuint deadIndex
+      = deadListIn.DecrementCounter();\r\n            uint index = deadListIn[deadIndex];\r\n           
+      attributeBuffer.Store3((index * 0x8 + 0x0) << 2,asuint(position));\n           
+      attributeBuffer.Store3((index * 0x4 + 0x80000) << 2,asuint(color));\n           
+      attributeBuffer.Store3((index * 0x4 + 0x120000) << 2,asuint(targetPosition));\n           
+      attributeBuffer.Store3((index * 0x4 + 0xC0000) << 2,asuint(velocity));\n           
+      attributeBuffer.Store((index * 0x2 + 0x100000) << 2,asuint(particleId));\n           
+      attributeBuffer.Store((index * 0x2 + 0x100001) << 2,asuint(lifetime));\n           
+      attributeBuffer.Store((index * 0x4 + 0x80003) << 2,asuint(size));\n           
+      attributeBuffer.Store((index * 0x4 + 0xC0003) << 2,asuint(rateCount_d));\n           
+      attributeBuffer.Store((index * 0x8 + 0x3) << 2,asuint(age));\n            attributeBuffer.Store((index
+      * 0x8 + 0x4) << 2,uint(alive));\n            \n\r\n        }\r\n#else\r\n       
+      uint index = particleIndex;\r\n        attributeBuffer.Store3((index * 0x8
+      + 0x0) << 2,asuint(position));\n        attributeBuffer.Store3((index * 0x4
+      + 0x80000) << 2,asuint(color));\n        attributeBuffer.Store3((index * 0x4
+      + 0x120000) << 2,asuint(targetPosition));\n        attributeBuffer.Store3((index
+      * 0x4 + 0xC0000) << 2,asuint(velocity));\n        attributeBuffer.Store((index
+      * 0x2 + 0x100000) << 2,asuint(particleId));\n        attributeBuffer.Store((index
       * 0x2 + 0x100001) << 2,asuint(lifetime));\n        attributeBuffer.Store((index
-      * 0x4 + 0x80003) << 2,asuint(size));\n        attributeBuffer.Store((index *
-      0x4 + 0xC0003) << 2,asuint(rateCount_d));\n        attributeBuffer.Store((index
+      * 0x4 + 0x80003) << 2,asuint(size));\n        attributeBuffer.Store((index
+      * 0x4 + 0xC0003) << 2,asuint(rateCount_d));\n        attributeBuffer.Store((index
       * 0x8 + 0x3) << 2,asuint(age));\n        attributeBuffer.Store((index * 0x8
       + 0x4) << 2,uint(alive));\n        \n\r\n#endif\r\n    }\r\n}\r\n"
   - compute: 1
@@ -1039,8 +1055,8 @@ VisualEffectResource:
       1\n#define VFX_USE_VELOCITY_CURRENT 1\n#define VFX_USE_PARTICLEID_CURRENT 1\n#define
       VFX_USE_LIFETIME_CURRENT 1\n#define VFX_USE_MASS_CURRENT 1\n#define VFX_USE_RATECOUNT_D_CURRENT
       1\n#define VFX_USE_EVENTCOUNT_CURRENT 1\n#define VFX_USE_AGE_CURRENT 1\n#define
-      VFX_USE_ALIVE_CURRENT 1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nCBUFFER_START(parameters)\n
-      \   float4 uniform_d;\n    float uniform_b;\n    float deltaTime_a;\n    uint2
+      VFX_USE_ALIVE_CURRENT 1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nCBUFFER_START(parameters)\n  
+      float4 uniform_d;\n    float uniform_b;\n    float deltaTime_a;\n    uint2
       PADDING_0;\nCBUFFER_END\nAppendStructuredBuffer<uint> eventListOut_a;\n\n\r\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/Common/VFXCommonCompute.cginc\"\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\n\r\n\r\nRWByteAddressBuffer
@@ -1053,18 +1069,19 @@ VisualEffectResource:
       Force_0(inout float3 velocity, float mass, float3 Force, float deltaTime) /*Mode:Absolute
       */\n{\n    velocity += (Force / mass) * deltaTime;\n}\nvoid Gravity(inout float3
       velocity, float3 Force, float deltaTime)\n{\n    velocity += Force * deltaTime;\n}\nvoid
-      GPUEventRate_0(inout float rateCount_d, inout uint eventCount, float Rate, float
-      deltaTime) /*mode:OverTime */\n{\n    rateCount_d += deltaTime * Rate;\n    uint
-      count = floor(rateCount_d);\n    rateCount_d = frac(rateCount_d);\n    eventCount
-      = count;\n}\nvoid EulerIntegration(inout float3 position, float3 velocity, float
-      deltaTime)\n{\n    position += velocity * deltaTime;\n}\nvoid Age(inout float
-      age, float deltaTime)\n{\n    age += deltaTime;\n}\nvoid Reap(float age, float
-      lifetime, inout bool alive)\n{\n    if(age > lifetime) { alive = false; }\n}\n\n\r\n\r\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\r\nvoid
-      CSMain(uint3 groupId          : SV_GroupID,\r\n            uint3 groupThreadId
-      \   : SV_GroupThreadID)\r\n{\r\n\tuint id = groupThreadId.x + groupId.x * NB_THREADS_PER_GROUP
-      + groupId.y * dispatchWidth * NB_THREADS_PER_GROUP;\r\n\tuint index = id;\r\n\tif
-      (id < nbMax)\r\n\t{\r\n#if VFX_USE_ALIVE_CURRENT\r\n\t\tbool alive = (attributeBuffer.Load((index
-      * 0x8 + 0x4) << 2));\n\t\t\n\r\n\t\tif (alive)\r\n\t\t{\r\n\t\t\tfloat3 position
+      GPUEventRate_0(inout float rateCount_d, inout uint eventCount, float Rate,
+      float deltaTime) /*mode:OverTime */\n{\n    rateCount_d += deltaTime * Rate;\n   
+      uint count = floor(rateCount_d);\n    rateCount_d = frac(rateCount_d);\n   
+      eventCount = count;\n}\nvoid EulerIntegration(inout float3 position, float3
+      velocity, float deltaTime)\n{\n    position += velocity * deltaTime;\n}\nvoid
+      Age(inout float age, float deltaTime)\n{\n    age += deltaTime;\n}\nvoid Reap(float
+      age, float lifetime, inout bool alive)\n{\n    if(age > lifetime) { alive =
+      false; }\n}\n\n\r\n\r\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\r\nvoid CSMain(uint3
+      groupId          : SV_GroupID,\r\n            uint3 groupThreadId    : SV_GroupThreadID)\r\n{\r\n\tuint
+      id = groupThreadId.x + groupId.x * NB_THREADS_PER_GROUP + groupId.y * dispatchWidth
+      * NB_THREADS_PER_GROUP;\r\n\tuint index = id;\r\n\tif (id < nbMax)\r\n\t{\r\n#if
+      VFX_USE_ALIVE_CURRENT\r\n\t\tbool alive = (attributeBuffer.Load((index * 0x8
+      + 0x4) << 2));\n\t\t\n\r\n\t\tif (alive)\r\n\t\t{\r\n\t\t\tfloat3 position
       = asfloat(attributeBuffer.Load3((index * 0x8 + 0x0) << 2));\n\t\t\tfloat3 velocity
       = asfloat(attributeBuffer.Load3((index * 0x4 + 0xC0000) << 2));\n\t\t\tuint
       particleId = (attributeBuffer.Load((index * 0x2 + 0x100000) << 2));\n\t\t\tfloat
@@ -1074,17 +1091,17 @@ VisualEffectResource:
       = (uint)0;\n\t\t\tfloat age = asfloat(attributeBuffer.Load((index * 0x8 + 0x3)
       << 2));\n\t\t\tfloat3 position_source = position;\n\t\t\tfloat3 color_source
       = float3(1, 1, 1);\n\t\t\tfloat3 targetPosition_source = float3(0, 0, 0);\n\t\t\t\n\r\n\t\t\t\r\n#if
-      VFX_USE_OLDPOSITION_CURRENT\r\n\t\t\toldPosition = position;\r\n#endif\r\n\t\t\t\r\n\t\t\t{\n\t\t\t
-      \   uint tmp_be = particleId ^ asuint(uniform_b);\n\t\t\t    float tmp_bf =
-      FixedRand(tmp_be);\n\t\t\t    float tmp_bh = tmp_bf * (float)0.400000036;\n\t\t\t
-      \   float tmp_bi = (float)0.800000012 + tmp_bh;\n\t\t\t    Drag_0( /*inout */velocity,
-      mass, tmp_bi, deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t    float3 tmp_bf = GeneratePerlinCurlNoise(position,
-      float3(4, 0.5, 2).x, (int)1, float3(4, 0.5, 2).y, float3(4, 0.5, 2).z);\n\t\t\t
-      \   float3 tmp_bh = tmp_bf * float3(0.100000001, 0.100000001, 0.100000001);\n\t\t\t
-      \   Force_0( /*inout */velocity, mass, tmp_bh, deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t
-      \   Gravity( /*inout */velocity, float3(0, -1, 0), deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t
-      \   float tmp_bd = age / lifetime;\n\t\t\t    float tmp_be = SampleCurve(uniform_d,tmp_bd);\n\t\t\t
-      \   eventCount = 0u;\n\t\t\t    GPUEventRate_0( /*inout */rateCount_d,  /*inout
+      VFX_USE_OLDPOSITION_CURRENT\r\n\t\t\toldPosition = position;\r\n#endif\r\n\t\t\t\r\n\t\t\t{\n\t\t\t   
+      uint tmp_be = particleId ^ asuint(uniform_b);\n\t\t\t    float tmp_bf = FixedRand(tmp_be);\n\t\t\t   
+      float tmp_bh = tmp_bf * (float)0.400000036;\n\t\t\t    float tmp_bi = (float)0.800000012
+      + tmp_bh;\n\t\t\t    Drag_0( /*inout */velocity, mass, tmp_bi, deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t   
+      float3 tmp_bf = GeneratePerlinCurlNoise(position, float3(4, 0.5, 2).x, (int)1,
+      float3(4, 0.5, 2).y, float3(4, 0.5, 2).z);\n\t\t\t    float3 tmp_bh = tmp_bf
+      * float3(0.100000001, 0.100000001, 0.100000001);\n\t\t\t    Force_0( /*inout
+      */velocity, mass, tmp_bh, deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t    Gravity(
+      /*inout */velocity, float3(0, -1, 0), deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t   
+      float tmp_bd = age / lifetime;\n\t\t\t    float tmp_be = SampleCurve(uniform_d,tmp_bd);\n\t\t\t   
+      eventCount = 0u;\n\t\t\t    GPUEventRate_0( /*inout */rateCount_d,  /*inout
       */eventCount, tmp_be, deltaTime_a);\n\t\t\t    eventCount_a += eventCount;\n\t\t\t}\n\t\t\tEulerIntegration(
       /*inout */position, velocity, deltaTime_a);\n\t\t\tAge( /*inout */age, deltaTime_a);\n\t\t\tReap(age,
       lifetime,  /*inout */alive);\n\t\t\t\n\r\n\t\t\tif (alive)\r\n\t\t\t{\r\n\t\t\t\tattributeBuffer.Store3((index
@@ -1092,38 +1109,39 @@ VisualEffectResource:
       * 0x4 + 0xC0000) << 2,asuint(velocity));\n\t\t\t\tattributeBuffer.Store((index
       * 0x4 + 0xC0003) << 2,asuint(rateCount_d));\n\t\t\t\tattributeBuffer.Store((index
       * 0x8 + 0x3) << 2,asuint(age));\n\t\t\t\tfor (uint i = 0; i < eventCount_a;
-      ++i) eventListOut_a.Append(index);\n\t\t\t\t\n\r\n#if VFX_HAS_INDIRECT_DRAW\r\n
-      \               uint indirectIndex = indirectBuffer.IncrementCounter();\r\n\t\t\t\tindirectBuffer[indirectIndex]
+      ++i) eventListOut_a.Append(index);\n\t\t\t\t\n\r\n#if VFX_HAS_INDIRECT_DRAW\r\n              
+      uint indirectIndex = indirectBuffer.IncrementCounter();\r\n\t\t\t\tindirectBuffer[indirectIndex]
       = index;\r\n#endif\r\n\t\t\t}\r\n\t\t\telse\r\n\t\t\t{\r\n\t\t\t\tattributeBuffer.Store((index
       * 0x8 + 0x4) << 2,uint(alive));\n\t\t\t\tfor (uint i = 0; i < eventCount_a;
-      ++i) eventListOut_a.Append(index);\n\t\t\t\t\n\r\n\t\t\t\tuint deadIndex = deadListOut.IncrementCounter();\r\n\t\t\t\tdeadListOut[deadIndex]
-      = index;\r\n\t\t\t}\r\n\t\t}\r\n#else\r\n\t\tfloat3 position = asfloat(attributeBuffer.Load3((index
-      * 0x8 + 0x0) << 2));\n\t\tfloat3 velocity = asfloat(attributeBuffer.Load3((index
-      * 0x4 + 0xC0000) << 2));\n\t\tuint particleId = (attributeBuffer.Load((index
-      * 0x2 + 0x100000) << 2));\n\t\tfloat lifetime = asfloat(attributeBuffer.Load((index
-      * 0x2 + 0x100001) << 2));\n\t\tfloat mass = (float)1;\n\t\tfloat rateCount_d
-      = asfloat(attributeBuffer.Load((index * 0x4 + 0xC0003) << 2));\n\t\tuint eventCount_a
-      = 0u;\n\t\tuint eventCount = (uint)0;\n\t\tfloat age = asfloat(attributeBuffer.Load((index
-      * 0x8 + 0x3) << 2));\n\t\tbool alive = (attributeBuffer.Load((index * 0x8 +
-      0x4) << 2));\n\t\tfloat3 position_source = position;\n\t\tfloat3 color_source
-      = float3(1, 1, 1);\n\t\tfloat3 targetPosition_source = float3(0, 0, 0);\n\t\t\n\r\n\t\t\r\n#if
-      VFX_USE_OLDPOSITION_CURRENT\r\n\t\toldPosition = position;\r\n#endif\r\n\t\t\r\n\t\t{\n\t\t
-      \   uint tmp_be = particleId ^ asuint(uniform_b);\n\t\t    float tmp_bf = FixedRand(tmp_be);\n\t\t
-      \   float tmp_bh = tmp_bf * (float)0.400000036;\n\t\t    float tmp_bi = (float)0.800000012
-      + tmp_bh;\n\t\t    Drag_0( /*inout */velocity, mass, tmp_bi, deltaTime_a);\n\t\t}\n\t\t{\n\t\t
-      \   float3 tmp_bf = GeneratePerlinCurlNoise(position, float3(4, 0.5, 2).x, (int)1,
-      float3(4, 0.5, 2).y, float3(4, 0.5, 2).z);\n\t\t    float3 tmp_bh = tmp_bf *
-      float3(0.100000001, 0.100000001, 0.100000001);\n\t\t    Force_0( /*inout */velocity,
-      mass, tmp_bh, deltaTime_a);\n\t\t}\n\t\t{\n\t\t    Gravity( /*inout */velocity,
-      float3(0, -1, 0), deltaTime_a);\n\t\t}\n\t\t{\n\t\t    float tmp_bd = age /
-      lifetime;\n\t\t    float tmp_be = SampleCurve(uniform_d,tmp_bd);\n\t\t    eventCount
-      = 0u;\n\t\t    GPUEventRate_0( /*inout */rateCount_d,  /*inout */eventCount,
+      ++i) eventListOut_a.Append(index);\n\t\t\t\t\n\r\n\t\t\t\tuint deadIndex =
+      deadListOut.IncrementCounter();\r\n\t\t\t\tdeadListOut[deadIndex] = index;\r\n\t\t\t}\r\n\t\t}\r\n#else\r\n\t\tfloat3
+      position = asfloat(attributeBuffer.Load3((index * 0x8 + 0x0) << 2));\n\t\tfloat3
+      velocity = asfloat(attributeBuffer.Load3((index * 0x4 + 0xC0000) << 2));\n\t\tuint
+      particleId = (attributeBuffer.Load((index * 0x2 + 0x100000) << 2));\n\t\tfloat
+      lifetime = asfloat(attributeBuffer.Load((index * 0x2 + 0x100001) << 2));\n\t\tfloat
+      mass = (float)1;\n\t\tfloat rateCount_d = asfloat(attributeBuffer.Load((index
+      * 0x4 + 0xC0003) << 2));\n\t\tuint eventCount_a = 0u;\n\t\tuint eventCount
+      = (uint)0;\n\t\tfloat age = asfloat(attributeBuffer.Load((index * 0x8 + 0x3)
+      << 2));\n\t\tbool alive = (attributeBuffer.Load((index * 0x8 + 0x4) << 2));\n\t\tfloat3
+      position_source = position;\n\t\tfloat3 color_source = float3(1, 1, 1);\n\t\tfloat3
+      targetPosition_source = float3(0, 0, 0);\n\t\t\n\r\n\t\t\r\n#if VFX_USE_OLDPOSITION_CURRENT\r\n\t\toldPosition
+      = position;\r\n#endif\r\n\t\t\r\n\t\t{\n\t\t    uint tmp_be = particleId ^
+      asuint(uniform_b);\n\t\t    float tmp_bf = FixedRand(tmp_be);\n\t\t    float
+      tmp_bh = tmp_bf * (float)0.400000036;\n\t\t    float tmp_bi = (float)0.800000012
+      + tmp_bh;\n\t\t    Drag_0( /*inout */velocity, mass, tmp_bi, deltaTime_a);\n\t\t}\n\t\t{\n\t\t   
+      float3 tmp_bf = GeneratePerlinCurlNoise(position, float3(4, 0.5, 2).x, (int)1,
+      float3(4, 0.5, 2).y, float3(4, 0.5, 2).z);\n\t\t    float3 tmp_bh = tmp_bf
+      * float3(0.100000001, 0.100000001, 0.100000001);\n\t\t    Force_0( /*inout
+      */velocity, mass, tmp_bh, deltaTime_a);\n\t\t}\n\t\t{\n\t\t    Gravity( /*inout
+      */velocity, float3(0, -1, 0), deltaTime_a);\n\t\t}\n\t\t{\n\t\t    float tmp_bd
+      = age / lifetime;\n\t\t    float tmp_be = SampleCurve(uniform_d,tmp_bd);\n\t\t   
+      eventCount = 0u;\n\t\t    GPUEventRate_0( /*inout */rateCount_d,  /*inout */eventCount,
       tmp_be, deltaTime_a);\n\t\t    eventCount_a += eventCount;\n\t\t}\n\t\tEulerIntegration(
       /*inout */position, velocity, deltaTime_a);\n\t\tAge( /*inout */age, deltaTime_a);\n\t\tReap(age,
       lifetime,  /*inout */alive);\n\t\t\n\r\n\t\tattributeBuffer.Store3((index *
       0x8 + 0x0) << 2,asuint(position));\n\t\tattributeBuffer.Store3((index * 0x4
-      + 0xC0000) << 2,asuint(velocity));\n\t\tattributeBuffer.Store((index * 0x4 +
-      0xC0003) << 2,asuint(rateCount_d));\n\t\tattributeBuffer.Store((index * 0x8
+      + 0xC0000) << 2,asuint(velocity));\n\t\tattributeBuffer.Store((index * 0x4
+      + 0xC0003) << 2,asuint(rateCount_d));\n\t\tattributeBuffer.Store((index * 0x8
       + 0x3) << 2,asuint(age));\n\t\tattributeBuffer.Store((index * 0x8 + 0x4) <<
       2,uint(alive));\n\t\tfor (uint i = 0; i < eventCount_a; ++i) eventListOut_a.Append(index);\n\t\t\n\r\n#if
       VFX_HAS_INDIRECT_DRAW\r\n        uint indirectIndex = indirectBuffer.IncrementCounter();\r\n\t\tindirectBuffer[indirectIndex]
@@ -1140,17 +1158,17 @@ VisualEffectResource:
       1\n\t\t#define VFX_USE_LIFETIME_CURRENT 1\n\t\t#define VFX_USE_SIZE_CURRENT
       1\n\t\t#define VFX_USE_AGE_CURRENT 1\n\t\t#define VFX_USE_ALPHA_CURRENT 1\n\t\t#define
       VFX_USE_ALIVE_CURRENT 1\n\t\t#define VFX_USE_AXISX_CURRENT 1\n\t\t#define VFX_USE_AXISY_CURRENT
-      1\n\t\t#define VFX_USE_AXISZ_CURRENT 1\n\t\t#define VFX_USE_ANGLEX_CURRENT 1\n\t\t#define
-      VFX_USE_ANGLEY_CURRENT 1\n\t\t#define VFX_USE_ANGLEZ_CURRENT 1\n\t\t#define
-      VFX_USE_PIVOTX_CURRENT 1\n\t\t#define VFX_USE_PIVOTY_CURRENT 1\n\t\t#define
-      VFX_USE_PIVOTZ_CURRENT 1\n\t\t#define VFX_USE_SCALEX_CURRENT 1\n\t\t#define
-      VFX_USE_SCALEY_CURRENT 1\n\t\t#define VFX_USE_SCALEZ_CURRENT 1\n\t\t#define
-      VFX_COLORMAPPING_DEFAULT 1\n\t\t#define IS_TRANSPARENT_PARTICLE 1\n\t\t#define
-      VFX_BLENDMODE_ADD 1\n\t\t#define VFX_PRIMITIVE_QUAD 1\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t#define
-      VFX_LOCAL_SPACE 1\n\t\t#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\t\t\n\n\t\tCBUFFER_START(parameters)\n\t\t
-      \   float Color_b;\n\t\t    uint3 PADDING_0;\n\t\tCBUFFER_END\n\t\tTexture2D
-      mainTexture;\n\t\tSamplerState samplermainTexture;\n\t\t\n\n\t\t\n\t\t#define
-      VFX_NEEDS_COLOR_INTERPOLATOR (VFX_USE_COLOR_CURRENT || VFX_USE_ALPHA_CURRENT)\n\t\t\n\t\tByteAddressBuffer
+      1\n\t\t#define VFX_USE_AXISZ_CURRENT 1\n\t\t#define VFX_USE_ANGLEX_CURRENT
+      1\n\t\t#define VFX_USE_ANGLEY_CURRENT 1\n\t\t#define VFX_USE_ANGLEZ_CURRENT
+      1\n\t\t#define VFX_USE_PIVOTX_CURRENT 1\n\t\t#define VFX_USE_PIVOTY_CURRENT
+      1\n\t\t#define VFX_USE_PIVOTZ_CURRENT 1\n\t\t#define VFX_USE_SCALEX_CURRENT
+      1\n\t\t#define VFX_USE_SCALEY_CURRENT 1\n\t\t#define VFX_USE_SCALEZ_CURRENT
+      1\n\t\t#define VFX_COLORMAPPING_DEFAULT 1\n\t\t#define IS_TRANSPARENT_PARTICLE
+      1\n\t\t#define VFX_BLENDMODE_ADD 1\n\t\t#define VFX_PRIMITIVE_QUAD 1\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t#define
+      VFX_LOCAL_SPACE 1\n\t\t#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\t\t\n\n\t\tCBUFFER_START(parameters)\n\t\t   
+      float Color_b;\n\t\t    uint3 PADDING_0;\n\t\tCBUFFER_END\n\t\tTexture2D mainTexture;\n\t\tSamplerState
+      samplermainTexture;\n\t\t\n\n\t\t\n\t\t#define VFX_NEEDS_COLOR_INTERPOLATOR
+      (VFX_USE_COLOR_CURRENT || VFX_USE_ALPHA_CURRENT)\n\t\t\n\t\tByteAddressBuffer
       attributeBuffer;\t\n\t\t\n\t\t#if VFX_HAS_INDIRECT_DRAW\n\t\tStructuredBuffer<uint>
       indirectBuffer;\t\n\t\t#endif\t\n\t\t\n\t\t#if USE_DEAD_LIST_COUNT\n\t\tByteAddressBuffer
       deadListCount;\n\t\t#endif\n\t\t\n\t\tCBUFFER_START(outputParams)\n\t\t\tfloat
@@ -1180,19 +1198,18 @@ VisualEffectResource:
       \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXCommon.cginc\"\n\t\t\t#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\t\t\t\n\n\t\t\tvoid
       Orient_0(inout float3 axisX, inout float3 axisY, inout float3 axisZ) /*mode:FaceCameraPlane
-      */\n\t\t\t{\n\t\t\t    \n\t\t\t    float3x3 viewRot = GetVFXToViewRotMatrix();\n\t\t\t
-      \   axisX = viewRot[0].xyz;\n\t\t\t    axisY = viewRot[1].xyz;\n\t\t\t    #if
-      VFX_LOCAL_SPACE // Need to remove potential scale in local transform\n\t\t\t
-      \   axisX = normalize(axisX);\n\t\t\t    axisY = normalize(axisY);\n\t\t\t    axisZ
-      = cross(axisX,axisY);\n\t\t\t    #else\n\t\t\t    axisZ = -viewRot[2].xyz;\n\t\t\t
-      \   #endif\n\t\t\t    \n\t\t\t}\n\t\t\tvoid AttributeFromCurve_80EE3201(inout
-      float3 color, float age, float lifetime, float Color) /*attribute:color Composition:Multiply
-      AlphaComposition:Overwrite SampleMode:OverLife Mode:PerComponent ColorMode:Color
-      channels:XYZ */\n\t\t\t{\n\t\t\t    float t = age / lifetime;\n\t\t\t    float4
-      value = 0.0f;\n\t\t\t    value = SampleGradient(Color, t);\n\t\t\t    color
-      *= value.rgb;\n\t\t\t}\n\t\t\tvoid SetAttribute_545F0ED(inout float3 color,
-      float3 Color) /*attribute:color Composition:Multiply Source:Slot Random:Off
-      channels:XYZ */\n\t\t\t{\n\t\t\t    color *= Color;\n\t\t\t}\n\t\t\t\n\n\t\t\t\n\t\t\t#pragma
+      */\n\t\t\t{\n\t\t\t    \n\t\t\t    float3x3 viewRot = GetVFXToViewRotMatrix();\n\t\t\t   
+      axisX = viewRot[0].xyz;\n\t\t\t    axisY = viewRot[1].xyz;\n\t\t\t    #if VFX_LOCAL_SPACE
+      // Need to remove potential scale in local transform\n\t\t\t    axisX = normalize(axisX);\n\t\t\t   
+      axisY = normalize(axisY);\n\t\t\t    axisZ = cross(axisX,axisY);\n\t\t\t   
+      #else\n\t\t\t    axisZ = -viewRot[2].xyz;\n\t\t\t    #endif\n\t\t\t    \n\t\t\t}\n\t\t\tvoid
+      AttributeFromCurve_80EE3201(inout float3 color, float age, float lifetime,
+      float Color) /*attribute:color Composition:Multiply AlphaComposition:Overwrite
+      SampleMode:OverLife Mode:PerComponent ColorMode:Color channels:XYZ */\n\t\t\t{\n\t\t\t   
+      float t = age / lifetime;\n\t\t\t    float4 value = 0.0f;\n\t\t\t    value
+      = SampleGradient(Color, t);\n\t\t\t    color *= value.rgb;\n\t\t\t}\n\t\t\tvoid
+      SetAttribute_545F0ED(inout float3 color, float3 Color) /*attribute:color Composition:Multiply
+      Source:Slot Random:Off channels:XYZ */\n\t\t\t{\n\t\t\t    color *= Color;\n\t\t\t}\n\t\t\t\n\n\t\t\t\n\t\t\t#pragma
       vertex vert\n\t\t\tVFX_VARYING_PS_INPUTS vert(uint id : SV_VertexID, uint instanceID
       : SV_InstanceID)\n\t\t\t{\n\t\t\t#if VFX_PRIMITIVE_TRIANGLE\n\t\t\t\tuint index
       = id / 3;\n\t\t\t#elif VFX_PRIMITIVE_QUAD\n\t\t\t\tuint index = (id >> 2) +
@@ -1209,8 +1226,8 @@ VisualEffectResource:
       lifetime = asfloat(attributeBuffer.Load((index * 0x2 + 0x100001) << 2));\n\t\t\t\t\t\tfloat
       size = asfloat(attributeBuffer.Load((index * 0x4 + 0x80003) << 2));\n\t\t\t\t\t\tfloat
       age = asfloat(attributeBuffer.Load((index * 0x8 + 0x3) << 2));\n\t\t\t\t\t\tfloat
-      alpha = (float)1;\n\t\t\t\t\t\tbool alive = (attributeBuffer.Load((index * 0x8
-      + 0x4) << 2));\n\t\t\t\t\t\tfloat3 axisX = float3(1, 0, 0);\n\t\t\t\t\t\tfloat3
+      alpha = (float)1;\n\t\t\t\t\t\tbool alive = (attributeBuffer.Load((index *
+      0x8 + 0x4) << 2));\n\t\t\t\t\t\tfloat3 axisX = float3(1, 0, 0);\n\t\t\t\t\t\tfloat3
       axisY = float3(0, 1, 0);\n\t\t\t\t\t\tfloat3 axisZ = float3(0, 0, 1);\n\t\t\t\t\t\tfloat
       angleX = (float)0;\n\t\t\t\t\t\tfloat angleY = (float)0;\n\t\t\t\t\t\tfloat
       angleZ = (float)0;\n\t\t\t\t\t\tfloat pivotX = (float)0;\n\t\t\t\t\t\tfloat
@@ -1238,16 +1255,15 @@ VisualEffectResource:
       0, 0);\n\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\n\t\t\t\tOrient_0(
       /*inout */axisX,  /*inout */axisY,  /*inout */axisZ);\n\t\t\t\tAttributeFromCurve_80EE3201(
       /*inout */color, age, lifetime, Color_b);\n\t\t\t\t{\n\t\t\t\t    float tmp_bd
-      = (float)particleId;\n\t\t\t\t    float tmp_bf = tmp_bd * (float)0.790000021;\n\t\t\t\t
-      \   float tmp_bg = age / lifetime;\n\t\t\t\t    float2 tmp_bh = float2(tmp_bf,
+      = (float)particleId;\n\t\t\t\t    float tmp_bf = tmp_bd * (float)0.790000021;\n\t\t\t\t   
+      float tmp_bg = age / lifetime;\n\t\t\t\t    float2 tmp_bh = float2(tmp_bf,
       tmp_bg);\n\t\t\t\t    float3 tmp_bk = GeneratePerlinNoise(tmp_bh, float3(13.1199999,
-      0.5, 2).x, (int)1, float3(13.1199999, 0.5, 2).y, float3(13.1199999, 0.5, 2).z);\n\t\t\t\t
-      \   float tmp_bl = tmp_bk[0];\n\t\t\t\t    float tmp_bn = tmp_bl - (float)-1;\n\t\t\t\t
-      \   float tmp_bp = tmp_bn / (float)2;\n\t\t\t\t    float tmp_br = tmp_bp * (float)0.200000048;\n\t\t\t\t
-      \   float tmp_bs = (float)0.899999976 + tmp_br;\n\t\t\t\t    float3 tmp_bt =
-      float3(tmp_bs, tmp_bs, tmp_bs);\n\t\t\t\t    SetAttribute_545F0ED( /*inout */color,
-      tmp_bt);\n\t\t\t\t}\n\t\t\t\t\n\n\t\t\t\t\n\t\t\t\tif (!alive)\n\t\t\t\t\treturn
-      o;\n\t\t\t\t\n\t\t\t#if VFX_PRIMITIVE_QUAD\n\t\t\t\n\t\t\t\to.VFX_VARYING_UV.x
+      0.5, 2).x, (int)1, float3(13.1199999, 0.5, 2).y, float3(13.1199999, 0.5, 2).z);\n\t\t\t\t   
+      float tmp_bl = tmp_bk[0];\n\t\t\t\t    float tmp_bn = tmp_bl - (float)-1;\n\t\t\t\t   
+      float tmp_bp = tmp_bn / (float)2;\n\t\t\t\t    float tmp_br = tmp_bp * (float)0.200000048;\n\t\t\t\t   
+      float tmp_bs = (float)0.899999976 + tmp_br;\n\t\t\t\t    float3 tmp_bt = float3(tmp_bs,
+      tmp_bs, tmp_bs);\n\t\t\t\t    SetAttribute_545F0ED( /*inout */color, tmp_bt);\n\t\t\t\t}\n\t\t\t\t\n\n\t\t\t\t\n\t\t\t\tif
+      (!alive)\n\t\t\t\t\treturn o;\n\t\t\t\t\n\t\t\t#if VFX_PRIMITIVE_QUAD\n\t\t\t\n\t\t\t\to.VFX_VARYING_UV.x
       = float(id & 1);\n\t\t\t\to.VFX_VARYING_UV.y = float((id & 2) >> 1);\n\t\t\t\tconst
       float2 vOffsets = o.VFX_VARYING_UV.xy - 0.5f;\n\t\t\t\t\n\t\t\t#elif VFX_PRIMITIVE_TRIANGLE\n\t\t\t\n\t\t\t\tconst
       float2 kOffsets[] = {\n\t\t\t\t\tfloat2(-0.5f, \t-0.288675129413604736328125f),\n\t\t\t\t\tfloat2(0.0f,
@@ -1268,8 +1284,9 @@ VisualEffectResource:
       VFX_VARYING_NORMAL\n\t\t\t\tfloat normalFlip = (size3.x * size3.y * size3.z)
       < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL = normalFlip * normalWS;\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_TANGENT\n\t\t\t\to.VFX_VARYING_TANGENT = normalize(TransformDirectionVFXToWorld(normalize(transpose(elementToVFX)[0].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
-      VFX_VARYING_BENTFACTORS\n\t\t\t\t\n\t\t\t\t#if HAS_STRIPS\n\t\t\t\t#define BENT_FACTOR_MULTIPLIER
-      2.0f\n\t\t\t\t#else\n\t\t\t\t#define BENT_FACTOR_MULTIPLIER 1.41421353816986083984375f\n\t\t\t\t#endif\n\t\t\t\to.VFX_VARYING_BENTFACTORS
+      VFX_VARYING_BENTFACTORS\n\t\t\t\t\n\t\t\t\t#if HAS_STRIPS\n\t\t\t\t#define
+      BENT_FACTOR_MULTIPLIER 2.0f\n\t\t\t\t#else\n\t\t\t\t#define BENT_FACTOR_MULTIPLIER
+      1.41421353816986083984375f\n\t\t\t\t#endif\n\t\t\t\to.VFX_VARYING_BENTFACTORS
       = vOffsets * bentNormalFactor * BENT_FACTOR_MULTIPLIER;\n\t\t\t\t#endif\n\t\t\t\n\t\t\t\t\n\t\t\t\t\t\t#if
       VFX_USE_COLOR_CURRENT && defined(VFX_VARYING_COLOR)\n\t\t\t\t\t\to.VFX_VARYING_COLOR
       = color;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t#if VFX_USE_ALPHA_CURRENT && defined(VFX_VARYING_ALPHA)
@@ -1304,17 +1321,17 @@ VisualEffectResource:
     name: '[System 3]Initialize'
     source: "#pragma kernel CSMain\r\n#define NB_THREADS_PER_GROUP 64\n#define VFX_USE_POSITION_CURRENT
       1\n#define VFX_USE_VELOCITY_CURRENT 1\n#define VFX_USE_TARGETPOSITION_CURRENT
-      1\n#define VFX_USE_SIZE_CURRENT 1\n#define VFX_USE_SEED_CURRENT 1\n#define VFX_USE_ALPHA_CURRENT
-      1\n#define VFX_USE_LIFETIME_CURRENT 1\n#define VFX_USE_ALIVE_CURRENT 1\n#define
-      VFX_USE_AGE_CURRENT 1\n#define VFX_USE_POSITION_SOURCE 1\n#define VFX_USE_VELOCITY_SOURCE
-      1\n#define VFX_USE_TARGETPOSITION_SOURCE 1\n#define VFX_USE_SPAWNER_FROM_GPU
-      1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\n\r\n#include
+      1\n#define VFX_USE_SIZE_CURRENT 1\n#define VFX_USE_SEED_CURRENT 1\n#define
+      VFX_USE_ALPHA_CURRENT 1\n#define VFX_USE_LIFETIME_CURRENT 1\n#define VFX_USE_ALIVE_CURRENT
+      1\n#define VFX_USE_AGE_CURRENT 1\n#define VFX_USE_POSITION_SOURCE 1\n#define
+      VFX_USE_VELOCITY_SOURCE 1\n#define VFX_USE_TARGETPOSITION_SOURCE 1\n#define
+      VFX_USE_SPAWNER_FROM_GPU 1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\n\r\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/Common/VFXCommonCompute.cginc\"\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\n\r\n\r\nRWByteAddressBuffer
       attributeBuffer;\r\nByteAddressBuffer sourceAttributeBuffer;\r\n\r\nCBUFFER_START(initParams)\r\n#if
       !VFX_USE_SPAWNER_FROM_GPU\r\n    uint nbSpawned;\t\t\t\t\t// Numbers of particle
-      spawned\r\n    uint spawnIndex;\t\t\t\t// Index of the first particle spawned\r\n
-      \   uint dispatchWidth;\r\n#else\r\n    uint offsetInAdditionalOutput;\r\n\tuint
+      spawned\r\n    uint spawnIndex;\t\t\t\t// Index of the first particle spawned\r\n  
+      uint dispatchWidth;\r\n#else\r\n    uint offsetInAdditionalOutput;\r\n\tuint
       nbMax;\r\n#endif\r\n\tuint systemSeed;\r\nCBUFFER_END\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\nRWStructuredBuffer<uint>
       deadListIn;\r\nByteAddressBuffer deadListCount; // This is bad to use a SRV
       to fetch deadList count but Unity API currently prevent from copying to CB\r\n#endif\r\n\r\n#if
@@ -1326,79 +1343,80 @@ VisualEffectResource:
       Random:Off channels:XYZ */\n{\n    velocity = Value;\n}\nvoid SetAttribute_2CF667B3(inout
       float3 targetPosition, float3 Value) /*attribute:targetPosition Composition:Overwrite
       Source:Source Random:Off channels:XYZ */\n{\n    targetPosition = Value;\n}\nvoid
-      SetAttribute_3278B545(inout float size, inout uint seed, float A, float B) /*attribute:size
-      Composition:Overwrite Source:Slot Random:Uniform channels:XYZ */\n{\n    size
-      = lerp(A,B,RAND);\n}\nvoid SetAttribute_CEEAF046(inout float alpha, inout uint
-      seed, float A, float B) /*attribute:alpha Composition:Overwrite Source:Slot
-      Random:Uniform channels:XYZ */\n{\n    alpha = lerp(A,B,RAND);\n}\nvoid SetAttribute_AA7D638(inout
-      float3 velocity, float3 Velocity) /*attribute:velocity Composition:Add Source:Slot
-      Random:Off channels:XYZ */\n{\n    velocity += Velocity;\n}\nvoid SetAttribute_F0142CB9(inout
-      float lifetime, float Lifetime) /*attribute:lifetime Composition:Overwrite Source:Slot
-      Random:Off channels:XYZ */\n{\n    lifetime = Lifetime;\n}\nvoid SetAttribute_E89EADA9(inout
-      float lifetime, inout uint seed, float A, float B) /*attribute:lifetime Composition:Multiply
+      SetAttribute_3278B545(inout float size, inout uint seed, float A, float B)
+      /*attribute:size Composition:Overwrite Source:Slot Random:Uniform channels:XYZ
+      */\n{\n    size = lerp(A,B,RAND);\n}\nvoid SetAttribute_CEEAF046(inout float
+      alpha, inout uint seed, float A, float B) /*attribute:alpha Composition:Overwrite
+      Source:Slot Random:Uniform channels:XYZ */\n{\n    alpha = lerp(A,B,RAND);\n}\nvoid
+      SetAttribute_AA7D638(inout float3 velocity, float3 Velocity) /*attribute:velocity
+      Composition:Add Source:Slot Random:Off channels:XYZ */\n{\n    velocity +=
+      Velocity;\n}\nvoid SetAttribute_F0142CB9(inout float lifetime, float Lifetime)
+      /*attribute:lifetime Composition:Overwrite Source:Slot Random:Off channels:XYZ
+      */\n{\n    lifetime = Lifetime;\n}\nvoid SetAttribute_E89EADA9(inout float
+      lifetime, inout uint seed, float A, float B) /*attribute:lifetime Composition:Multiply
       Source:Slot Random:Uniform channels:XYZ */\n{\n    lifetime *= lerp(A,B,RAND);\n}\n\n\r\n\r\n[numthreads(NB_THREADS_PER_GROUP,1,1)]\r\nvoid
-      CSMain(uint3 groupId          : SV_GroupID,\r\n            uint3 groupThreadId
-      \   : SV_GroupThreadID)\r\n{\r\n    uint id = groupThreadId.x + groupId.x *
-      NB_THREADS_PER_GROUP;\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n    id += groupId.y
-      * dispatchWidth * NB_THREADS_PER_GROUP;\r\n#endif\r\n\r\n#if VFX_USE_SPAWNER_FROM_GPU\r\n
-      \   uint maxThreadId = inputAdditional.Load((offsetInAdditionalOutput * 2 +
-      0) << 2);\r\n    uint currentSpawnIndex = inputAdditional.Load((offsetInAdditionalOutput
-      * 2 + 1) << 2) - maxThreadId;\r\n#else\r\n    uint maxThreadId = nbSpawned;\r\n
-      \   uint currentSpawnIndex = spawnIndex;\r\n#endif\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n
-      \   maxThreadId = min(maxThreadId, deadListCount.Load(0x0));\r\n#elif VFX_USE_SPAWNER_FROM_GPU\r\n
-      \   maxThreadId = min(maxThreadId, nbMax); //otherwise, nbSpawned already clamped
-      on CPU\r\n#endif\r\n\r\n    if (id < maxThreadId)\r\n    {\r\n#if VFX_USE_SPAWNER_FROM_GPU\r\n
-      \       int sourceIndex = eventList[id];\r\n#endif\r\n        uint particleIndex
-      = id + currentSpawnIndex;\r\n\t\t\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n        \r\n#endif\r\n
-      \       float3 position = float3(0, 0, 0);\n        float3 velocity = float3(0,
-      0, 0);\n        float3 targetPosition = float3(0, 0, 0);\n        float size
-      = (float)0.100000001;\n        uint seed = (uint)0;\n        float alpha = (float)1;\n
-      \       float lifetime = (float)1;\n        bool alive = (bool)true;\n        float
-      age = (float)0;\n        float3 position_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
-      * 0x8 + 0x0) << 2));\n        float3 velocity_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
-      * 0x4 + 0xC0000) << 2));\n        float3 targetPosition_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
-      * 0x4 + 0x120000) << 2));\n        \n\r\n#if VFX_USE_PARTICLEID_CURRENT\r\n
-      \        particleId = particleIndex;\r\n#endif\r\n#if VFX_USE_SEED_CURRENT\r\n
-      \       seed = WangHash(particleIndex ^ systemSeed);\r\n#endif\r\n        \r\n
-      \       {\n            float3 tmp_x = position_source;\n            SetAttribute_CAC02F9E(
+      CSMain(uint3 groupId          : SV_GroupID,\r\n            uint3 groupThreadId   
+      : SV_GroupThreadID)\r\n{\r\n    uint id = groupThreadId.x + groupId.x * NB_THREADS_PER_GROUP;\r\n#if
+      !VFX_USE_SPAWNER_FROM_GPU\r\n    id += groupId.y * dispatchWidth * NB_THREADS_PER_GROUP;\r\n#endif\r\n\r\n#if
+      VFX_USE_SPAWNER_FROM_GPU\r\n   uint maxThreadId = inputAdditional.Load((offsetInAdditionalOutput
+      * 2 + 0) << 2);\r\n    uint currentSpawnIndex = inputAdditional.Load((offsetInAdditionalOutput
+      * 2 + 1) << 2) - maxThreadId;\r\n#else\r\n    uint maxThreadId = nbSpawned;\r\n  
+      uint currentSpawnIndex = spawnIndex;\r\n#endif\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n  
+      maxThreadId = min(maxThreadId, deadListCount.Load(0x0));\r\n#elif VFX_USE_SPAWNER_FROM_GPU\r\n  
+      maxThreadId = min(maxThreadId, nbMax); //otherwise, nbSpawned already clamped
+      on CPU\r\n#endif\r\n\r\n    if (id < maxThreadId)\r\n    {\r\n#if VFX_USE_SPAWNER_FROM_GPU\r\n      
+      int sourceIndex = eventList[id];\r\n#endif\r\n        uint particleIndex =
+      id + currentSpawnIndex;\r\n\t\t\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n       
+      \r\n#endif\r\n       float3 position = float3(0, 0, 0);\n        float3 velocity
+      = float3(0, 0, 0);\n        float3 targetPosition = float3(0, 0, 0);\n       
+      float size = (float)0.100000001;\n        uint seed = (uint)0;\n        float
+      alpha = (float)1;\n       float lifetime = (float)1;\n        bool alive =
+      (bool)true;\n        float age = (float)0;\n        float3 position_source
+      = asfloat(sourceAttributeBuffer.Load3((sourceIndex * 0x8 + 0x0) << 2));\n       
+      float3 velocity_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex *
+      0x4 + 0xC0000) << 2));\n        float3 targetPosition_source = asfloat(sourceAttributeBuffer.Load3((sourceIndex
+      * 0x4 + 0x120000) << 2));\n        \n\r\n#if VFX_USE_PARTICLEID_CURRENT\r\n       
+      particleId = particleIndex;\r\n#endif\r\n#if VFX_USE_SEED_CURRENT\r\n      
+      seed = WangHash(particleIndex ^ systemSeed);\r\n#endif\r\n        \r\n      
+      {\n            float3 tmp_x = position_source;\n            SetAttribute_CAC02F9E(
       /*inout */position, tmp_x);\n        }\n        {\n            float3 tmp_x
-      = velocity_source;\n            SetAttribute_E602FAC( /*inout */velocity, tmp_x);\n
-      \       }\n        {\n            float3 tmp_x = targetPosition_source;\n            SetAttribute_2CF667B3(
-      /*inout */targetPosition, tmp_x);\n        }\n        {\n            SetAttribute_3278B545(
-      /*inout */size,  /*inout */seed, (float)0.00499999989, (float)0.0149999997);\n
-      \       }\n        {\n            SetAttribute_CEEAF046( /*inout */alpha,  /*inout
-      */seed, (float)0.5, (float)1);\n        }\n        {\n            float3 tmp_z
-      = GeneratePerlinCurlNoise(position, float3(8, 0.5, 2).x, (int)1, float3(8, 0.5,
-      2).y, float3(8, 0.5, 2).z);\n            float3 tmp_bb = tmp_z * float3(0.0299999993,
-      0.0299999993, 0.0299999993);\n            SetAttribute_AA7D638( /*inout */velocity,
-      tmp_bb);\n        }\n        {\n            float tmp_x = targetPosition[0];\n
-      \           SetAttribute_F0142CB9( /*inout */lifetime, tmp_x);\n        }\n
-      \       {\n            SetAttribute_E89EADA9( /*inout */lifetime,  /*inout */seed,
-      (float)1, (float)1.5);\n        }\n        \n\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n
-      \       if (alive)\r\n        {\r\n\t\t\tuint deadIndex = deadListIn.DecrementCounter();\r\n
-      \           uint index = deadListIn[deadIndex];\r\n            attributeBuffer.Store3((index
-      * 0x8 + 0x0) << 2,asuint(position));\n            attributeBuffer.Store3((index
-      * 0x4 + 0x80000) << 2,asuint(velocity));\n            attributeBuffer.Store((index
-      * 0x2 + 0xC0000) << 2,asuint(size));\n            attributeBuffer.Store((index
-      * 0x2 + 0xC0001) << 2,asuint(alpha));\n            attributeBuffer.Store((index
-      * 0x1 + 0xE0000) << 2,asuint(lifetime));\n            attributeBuffer.Store((index
-      * 0x8 + 0x3) << 2,uint(alive));\n            attributeBuffer.Store((index *
-      0x8 + 0x4) << 2,asuint(age));\n            \n\r\n        }\r\n#else\r\n        uint
-      index = particleIndex;\r\n        attributeBuffer.Store3((index * 0x8 + 0x0)
-      << 2,asuint(position));\n        attributeBuffer.Store3((index * 0x4 + 0x80000)
-      << 2,asuint(velocity));\n        attributeBuffer.Store((index * 0x2 + 0xC0000)
-      << 2,asuint(size));\n        attributeBuffer.Store((index * 0x2 + 0xC0001) <<
-      2,asuint(alpha));\n        attributeBuffer.Store((index * 0x1 + 0xE0000) <<
-      2,asuint(lifetime));\n        attributeBuffer.Store((index * 0x8 + 0x3) << 2,uint(alive));\n
-      \       attributeBuffer.Store((index * 0x8 + 0x4) << 2,asuint(age));\n        \n\r\n#endif\r\n
-      \   }\r\n}\r\n"
+      = velocity_source;\n            SetAttribute_E602FAC( /*inout */velocity, tmp_x);\n      
+      }\n        {\n            float3 tmp_x = targetPosition_source;\n           
+      SetAttribute_2CF667B3( /*inout */targetPosition, tmp_x);\n        }\n       
+      {\n            SetAttribute_3278B545( /*inout */size,  /*inout */seed, (float)0.00499999989,
+      (float)0.0149999997);\n       }\n        {\n            SetAttribute_CEEAF046(
+      /*inout */alpha,  /*inout */seed, (float)0.5, (float)1);\n        }\n       
+      {\n            float3 tmp_z = GeneratePerlinCurlNoise(position, float3(8, 0.5,
+      2).x, (int)1, float3(8, 0.5, 2).y, float3(8, 0.5, 2).z);\n            float3
+      tmp_bb = tmp_z * float3(0.0299999993, 0.0299999993, 0.0299999993);\n           
+      SetAttribute_AA7D638( /*inout */velocity, tmp_bb);\n        }\n        {\n           
+      float tmp_x = targetPosition[0];\n           SetAttribute_F0142CB9( /*inout
+      */lifetime, tmp_x);\n        }\n       {\n            SetAttribute_E89EADA9(
+      /*inout */lifetime,  /*inout */seed, (float)1, (float)1.5);\n        }\n       
+      \n\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\n       if (alive)\r\n        {\r\n\t\t\tuint
+      deadIndex = deadListIn.DecrementCounter();\r\n           uint index = deadListIn[deadIndex];\r\n           
+      attributeBuffer.Store3((index * 0x8 + 0x0) << 2,asuint(position));\n           
+      attributeBuffer.Store3((index * 0x4 + 0x80000) << 2,asuint(velocity));\n           
+      attributeBuffer.Store((index * 0x2 + 0xC0000) << 2,asuint(size));\n           
+      attributeBuffer.Store((index * 0x2 + 0xC0001) << 2,asuint(alpha));\n           
+      attributeBuffer.Store((index * 0x1 + 0xE0000) << 2,asuint(lifetime));\n           
+      attributeBuffer.Store((index * 0x8 + 0x3) << 2,uint(alive));\n            attributeBuffer.Store((index
+      * 0x8 + 0x4) << 2,asuint(age));\n            \n\r\n        }\r\n#else\r\n       
+      uint index = particleIndex;\r\n        attributeBuffer.Store3((index * 0x8
+      + 0x0) << 2,asuint(position));\n        attributeBuffer.Store3((index * 0x4
+      + 0x80000) << 2,asuint(velocity));\n        attributeBuffer.Store((index *
+      0x2 + 0xC0000) << 2,asuint(size));\n        attributeBuffer.Store((index *
+      0x2 + 0xC0001) << 2,asuint(alpha));\n        attributeBuffer.Store((index *
+      0x1 + 0xE0000) << 2,asuint(lifetime));\n        attributeBuffer.Store((index
+      * 0x8 + 0x3) << 2,uint(alive));\n       attributeBuffer.Store((index * 0x8
+      + 0x4) << 2,asuint(age));\n        \n\r\n#endif\r\n   }\r\n}\r\n"
   - compute: 1
     name: '[System 3]Update'
     source: "#pragma kernel CSMain\r\n#define NB_THREADS_PER_GROUP 64\n#define VFX_USE_POSITION_CURRENT
       1\n#define VFX_USE_VELOCITY_CURRENT 1\n#define VFX_USE_LIFETIME_CURRENT 1\n#define
       VFX_USE_MASS_CURRENT 1\n#define VFX_USE_ALIVE_CURRENT 1\n#define VFX_USE_AGE_CURRENT
-      1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nCBUFFER_START(parameters)\n
-      \   float deltaTime_a;\n    uint3 PADDING_0;\nCBUFFER_END\n\n\r\n#include \"Packages/com.unity.visualeffectgraph/Shaders/Common/VFXCommonCompute.cginc\"\n#include
+      1\n#define VFX_LOCAL_SPACE 1\n#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\n\r\nCBUFFER_START(parameters)\n  
+      float deltaTime_a;\n    uint3 PADDING_0;\nCBUFFER_END\n\n\r\n#include \"Packages/com.unity.visualeffectgraph/Shaders/Common/VFXCommonCompute.cginc\"\n#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\n\r\n\r\nRWByteAddressBuffer
       attributeBuffer;\r\n\r\n#if VFX_USE_ALIVE_CURRENT\r\nRWStructuredBuffer<uint>
       deadListOut;\r\n#endif\r\n\r\n#if VFX_HAS_INDIRECT_DRAW\r\nRWStructuredBuffer<uint>
@@ -1418,17 +1436,17 @@ VisualEffectResource:
       id = groupThreadId.x + groupId.x * NB_THREADS_PER_GROUP + groupId.y * dispatchWidth
       * NB_THREADS_PER_GROUP;\r\n\tuint index = id;\r\n\tif (id < nbMax)\r\n\t{\r\n#if
       VFX_USE_ALIVE_CURRENT\r\n\t\tbool alive = (attributeBuffer.Load((index * 0x8
-      + 0x3) << 2));\n\t\t\n\r\n\t\tif (alive)\r\n\t\t{\r\n\t\t\tfloat3 position =
-      asfloat(attributeBuffer.Load3((index * 0x8 + 0x0) << 2));\n\t\t\tfloat3 velocity
+      + 0x3) << 2));\n\t\t\n\r\n\t\tif (alive)\r\n\t\t{\r\n\t\t\tfloat3 position
+      = asfloat(attributeBuffer.Load3((index * 0x8 + 0x0) << 2));\n\t\t\tfloat3 velocity
       = asfloat(attributeBuffer.Load3((index * 0x4 + 0x80000) << 2));\n\t\t\tfloat
       lifetime = asfloat(attributeBuffer.Load((index * 0x1 + 0xE0000) << 2));\n\t\t\tfloat
       mass = (float)1;\n\t\t\tfloat age = asfloat(attributeBuffer.Load((index * 0x8
       + 0x4) << 2));\n\t\t\tfloat3 position_source = position;\n\t\t\tfloat3 velocity_source
       = velocity;\n\t\t\tfloat3 targetPosition_source = float3(0, 0, 0);\n\t\t\t\n\r\n\t\t\t\r\n#if
-      VFX_USE_OLDPOSITION_CURRENT\r\n\t\t\toldPosition = position;\r\n#endif\r\n\t\t\t\r\n\t\t\t{\n\t\t\t
-      \   Drag_0( /*inout */velocity, mass, (float)3, deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t
-      \   Gravity( /*inout */velocity, float3(0, -1, 0), deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t
-      \   float3 tmp_ba = GeneratePerlinCurlNoise(position, float3(6, 0.5, 2).x, (int)1,
+      VFX_USE_OLDPOSITION_CURRENT\r\n\t\t\toldPosition = position;\r\n#endif\r\n\t\t\t\r\n\t\t\t{\n\t\t\t   
+      Drag_0( /*inout */velocity, mass, (float)3, deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t   
+      Gravity( /*inout */velocity, float3(0, -1, 0), deltaTime_a);\n\t\t\t}\n\t\t\t{\n\t\t\t   
+      float3 tmp_ba = GeneratePerlinCurlNoise(position, float3(6, 0.5, 2).x, (int)1,
       float3(6, 0.5, 2).y, float3(6, 0.5, 2).z);\n\t\t\t    float3 tmp_bc = tmp_ba
       * float3(0.0500000007, 0.0500000007, 0.0500000007);\n\t\t\t    Force_0( /*inout
       */velocity, mass, tmp_bc, deltaTime_a);\n\t\t\t}\n\t\t\tEulerIntegration( /*inout
@@ -1436,8 +1454,8 @@ VisualEffectResource:
       lifetime,  /*inout */alive);\n\t\t\t\n\r\n\t\t\tif (alive)\r\n\t\t\t{\r\n\t\t\t\tattributeBuffer.Store3((index
       * 0x8 + 0x0) << 2,asuint(position));\n\t\t\t\tattributeBuffer.Store3((index
       * 0x4 + 0x80000) << 2,asuint(velocity));\n\t\t\t\tattributeBuffer.Store((index
-      * 0x8 + 0x4) << 2,asuint(age));\n\t\t\t\t\n\r\n#if VFX_HAS_INDIRECT_DRAW\r\n
-      \               uint indirectIndex = indirectBuffer.IncrementCounter();\r\n\t\t\t\tindirectBuffer[indirectIndex]
+      * 0x8 + 0x4) << 2,asuint(age));\n\t\t\t\t\n\r\n#if VFX_HAS_INDIRECT_DRAW\r\n              
+      uint indirectIndex = indirectBuffer.IncrementCounter();\r\n\t\t\t\tindirectBuffer[indirectIndex]
       = index;\r\n#endif\r\n\t\t\t}\r\n\t\t\telse\r\n\t\t\t{\r\n\t\t\t\tattributeBuffer.Store((index
       * 0x8 + 0x3) << 2,uint(alive));\n\t\t\t\t\n\r\n\t\t\t\tuint deadIndex = deadListOut.IncrementCounter();\r\n\t\t\t\tdeadListOut[deadIndex]
       = index;\r\n\t\t\t}\r\n\t\t}\r\n#else\r\n\t\tfloat3 position = asfloat(attributeBuffer.Load3((index
@@ -1447,20 +1465,21 @@ VisualEffectResource:
       * 0x8 + 0x3) << 2));\n\t\tfloat age = asfloat(attributeBuffer.Load((index *
       0x8 + 0x4) << 2));\n\t\tfloat3 position_source = position;\n\t\tfloat3 velocity_source
       = velocity;\n\t\tfloat3 targetPosition_source = float3(0, 0, 0);\n\t\t\n\r\n\t\t\r\n#if
-      VFX_USE_OLDPOSITION_CURRENT\r\n\t\toldPosition = position;\r\n#endif\r\n\t\t\r\n\t\t{\n\t\t
-      \   Drag_0( /*inout */velocity, mass, (float)3, deltaTime_a);\n\t\t}\n\t\t{\n\t\t
-      \   Gravity( /*inout */velocity, float3(0, -1, 0), deltaTime_a);\n\t\t}\n\t\t{\n\t\t
-      \   float3 tmp_ba = GeneratePerlinCurlNoise(position, float3(6, 0.5, 2).x, (int)1,
-      float3(6, 0.5, 2).y, float3(6, 0.5, 2).z);\n\t\t    float3 tmp_bc = tmp_ba *
-      float3(0.0500000007, 0.0500000007, 0.0500000007);\n\t\t    Force_0( /*inout
+      VFX_USE_OLDPOSITION_CURRENT\r\n\t\toldPosition = position;\r\n#endif\r\n\t\t\r\n\t\t{\n\t\t   
+      Drag_0( /*inout */velocity, mass, (float)3, deltaTime_a);\n\t\t}\n\t\t{\n\t\t   
+      Gravity( /*inout */velocity, float3(0, -1, 0), deltaTime_a);\n\t\t}\n\t\t{\n\t\t   
+      float3 tmp_ba = GeneratePerlinCurlNoise(position, float3(6, 0.5, 2).x, (int)1,
+      float3(6, 0.5, 2).y, float3(6, 0.5, 2).z);\n\t\t    float3 tmp_bc = tmp_ba
+      * float3(0.0500000007, 0.0500000007, 0.0500000007);\n\t\t    Force_0( /*inout
       */velocity, mass, tmp_bc, deltaTime_a);\n\t\t}\n\t\tEulerIntegration( /*inout
       */position, velocity, deltaTime_a);\n\t\tAge( /*inout */age, deltaTime_a);\n\t\tReap(age,
       lifetime,  /*inout */alive);\n\t\t\n\r\n\t\tattributeBuffer.Store3((index *
       0x8 + 0x0) << 2,asuint(position));\n\t\tattributeBuffer.Store3((index * 0x4
-      + 0x80000) << 2,asuint(velocity));\n\t\tattributeBuffer.Store((index * 0x8 +
-      0x3) << 2,uint(alive));\n\t\tattributeBuffer.Store((index * 0x8 + 0x4) << 2,asuint(age));\n\t\t\n\r\n#if
-      VFX_HAS_INDIRECT_DRAW\r\n        uint indirectIndex = indirectBuffer.IncrementCounter();\r\n\t\tindirectBuffer[indirectIndex]
-      = index;\r\n#endif\r\n#endif\r\n\t}\r\n}\r\n"
+      + 0x80000) << 2,asuint(velocity));\n\t\tattributeBuffer.Store((index * 0x8
+      + 0x3) << 2,uint(alive));\n\t\tattributeBuffer.Store((index * 0x8 + 0x4) <<
+      2,asuint(age));\n\t\t\n\r\n#if VFX_HAS_INDIRECT_DRAW\r\n        uint indirectIndex
+      = indirectBuffer.IncrementCounter();\r\n\t\tindirectBuffer[indirectIndex] =
+      index;\r\n#endif\r\n#endif\r\n\t}\r\n}\r\n"
   - compute: 0
     name: '[System 3]Quad Output'
     source: "Shader \"Hidden/VFX/System 3/Quad Output\"\n{\r\n\tSubShader\r\n\t{\t\r\n\t\tCull
@@ -1472,17 +1491,18 @@ VisualEffectResource:
       1\n\t\t#define VFX_USE_SIZE_CURRENT 1\n\t\t#define VFX_USE_ALPHA_CURRENT 1\n\t\t#define
       VFX_USE_LIFETIME_CURRENT 1\n\t\t#define VFX_USE_COLOR_CURRENT 1\n\t\t#define
       VFX_USE_ALIVE_CURRENT 1\n\t\t#define VFX_USE_AXISX_CURRENT 1\n\t\t#define VFX_USE_AXISY_CURRENT
-      1\n\t\t#define VFX_USE_AXISZ_CURRENT 1\n\t\t#define VFX_USE_ANGLEX_CURRENT 1\n\t\t#define
-      VFX_USE_ANGLEY_CURRENT 1\n\t\t#define VFX_USE_ANGLEZ_CURRENT 1\n\t\t#define
-      VFX_USE_PIVOTX_CURRENT 1\n\t\t#define VFX_USE_PIVOTY_CURRENT 1\n\t\t#define
-      VFX_USE_PIVOTZ_CURRENT 1\n\t\t#define VFX_USE_SCALEX_CURRENT 1\n\t\t#define
-      VFX_USE_SCALEY_CURRENT 1\n\t\t#define VFX_USE_SCALEZ_CURRENT 1\n\t\t#define
-      VFX_USE_AGE_CURRENT 1\n\t\t#define VFX_COLORMAPPING_DEFAULT 1\n\t\t#define IS_TRANSPARENT_PARTICLE
-      1\n\t\t#define VFX_BLENDMODE_ADD 1\n\t\t#define VFX_PRIMITIVE_QUAD 1\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t#define
-      VFX_LOCAL_SPACE 1\n\t\t#include \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\t\t\n\n\t\tCBUFFER_START(parameters)\n\t\t
-      \   float Color_a;\n\t\t    uint3 PADDING_0;\n\t\tCBUFFER_END\n\t\tTexture2D
-      mainTexture;\n\t\tSamplerState samplermainTexture;\n\t\t\n\n\t\t\n\t\t#define
-      VFX_NEEDS_COLOR_INTERPOLATOR (VFX_USE_COLOR_CURRENT || VFX_USE_ALPHA_CURRENT)\n\t\t\n\t\tByteAddressBuffer
+      1\n\t\t#define VFX_USE_AXISZ_CURRENT 1\n\t\t#define VFX_USE_ANGLEX_CURRENT
+      1\n\t\t#define VFX_USE_ANGLEY_CURRENT 1\n\t\t#define VFX_USE_ANGLEZ_CURRENT
+      1\n\t\t#define VFX_USE_PIVOTX_CURRENT 1\n\t\t#define VFX_USE_PIVOTY_CURRENT
+      1\n\t\t#define VFX_USE_PIVOTZ_CURRENT 1\n\t\t#define VFX_USE_SCALEX_CURRENT
+      1\n\t\t#define VFX_USE_SCALEY_CURRENT 1\n\t\t#define VFX_USE_SCALEZ_CURRENT
+      1\n\t\t#define VFX_USE_AGE_CURRENT 1\n\t\t#define VFX_COLORMAPPING_DEFAULT
+      1\n\t\t#define IS_TRANSPARENT_PARTICLE 1\n\t\t#define VFX_BLENDMODE_ADD 1\n\t\t#define
+      VFX_PRIMITIVE_QUAD 1\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t#define VFX_LOCAL_SPACE 1\n\t\t#include
+      \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXDefines.hlsl\"\n\t\t\n\n\t\tCBUFFER_START(parameters)\n\t\t   
+      float Color_a;\n\t\t    uint3 PADDING_0;\n\t\tCBUFFER_END\n\t\tTexture2D mainTexture;\n\t\tSamplerState
+      samplermainTexture;\n\t\t\n\n\t\t\n\t\t#define VFX_NEEDS_COLOR_INTERPOLATOR
+      (VFX_USE_COLOR_CURRENT || VFX_USE_ALPHA_CURRENT)\n\t\t\n\t\tByteAddressBuffer
       attributeBuffer;\t\n\t\t\n\t\t#if VFX_HAS_INDIRECT_DRAW\n\t\tStructuredBuffer<uint>
       indirectBuffer;\t\n\t\t#endif\t\n\t\t\n\t\t#if USE_DEAD_LIST_COUNT\n\t\tByteAddressBuffer
       deadListCount;\n\t\t#endif\n\t\t\n\t\tCBUFFER_START(outputParams)\n\t\t\tfloat
@@ -1511,13 +1531,13 @@ VisualEffectResource:
       VFX_VARYING_PS_INPUTS, VFX_VARYING_POSCS and VFX_VARYING_UV must be defined.\n\t\t\t#endif\n\t\t\t\n\t\t\t#include
       \"Packages/com.unity.visualeffectgraph/Shaders/RenderPipeline/LWRP/VFXCommon.cginc\"\n\t\t\t#include
       \"Packages/com.unity.visualeffectgraph/Shaders/VFXCommon.cginc\"\n\t\t\t\n\n\t\t\tvoid
-      AttributeFromCurve_48A85E4B(inout float3 color, float age, float lifetime, float
-      Color) /*attribute:color Composition:Overwrite AlphaComposition:Overwrite SampleMode:OverLife
-      Mode:PerComponent ColorMode:Color channels:XYZ */\n\t\t\t{\n\t\t\t    float
-      t = age / lifetime;\n\t\t\t    float4 value = 0.0f;\n\t\t\t    value = SampleGradient(Color,
-      t);\n\t\t\t    color = value.rgb;\n\t\t\t}\n\t\t\tvoid SetAttribute_545F0ED(inout
-      float3 color, float3 Color) /*attribute:color Composition:Multiply Source:Slot
-      Random:Off channels:XYZ */\n\t\t\t{\n\t\t\t    color *= Color;\n\t\t\t}\n\t\t\t\n\n\t\t\t\n\t\t\t#pragma
+      AttributeFromCurve_48A85E4B(inout float3 color, float age, float lifetime,
+      float Color) /*attribute:color Composition:Overwrite AlphaComposition:Overwrite
+      SampleMode:OverLife Mode:PerComponent ColorMode:Color channels:XYZ */\n\t\t\t{\n\t\t\t   
+      float t = age / lifetime;\n\t\t\t    float4 value = 0.0f;\n\t\t\t    value
+      = SampleGradient(Color, t);\n\t\t\t    color = value.rgb;\n\t\t\t}\n\t\t\tvoid
+      SetAttribute_545F0ED(inout float3 color, float3 Color) /*attribute:color Composition:Multiply
+      Source:Slot Random:Off channels:XYZ */\n\t\t\t{\n\t\t\t    color *= Color;\n\t\t\t}\n\t\t\t\n\n\t\t\t\n\t\t\t#pragma
       vertex vert\n\t\t\tVFX_VARYING_PS_INPUTS vert(uint id : SV_VertexID, uint instanceID
       : SV_InstanceID)\n\t\t\t{\n\t\t\t#if VFX_PRIMITIVE_TRIANGLE\n\t\t\t\tuint index
       = id / 3;\n\t\t\t#elif VFX_PRIMITIVE_QUAD\n\t\t\t\tuint index = (id >> 2) +
@@ -1561,13 +1581,12 @@ VisualEffectResource:
       = float3(0, 0, 0);\n\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t\n\t\t\t\tAttributeFromCurve_48A85E4B(
       /*inout */color, age, lifetime, Color_a);\n\t\t\t\t{\n\t\t\t\t    float4 tmp_bc
       = GeneratePerlinNoise(position, float3(30, 0.5, 2).x, (int)1, float3(30, 0.5,
-      2).y, float3(30, 0.5, 2).z);\n\t\t\t\t    float tmp_bd = tmp_bc[0];\n\t\t\t\t
-      \   float tmp_be = tmp_bd - (float)-1;\n\t\t\t\t    float tmp_bg = tmp_be /
-      (float)2;\n\t\t\t\t    float tmp_bi = tmp_bg * (float)3;\n\t\t\t\t    float
-      tmp_bj = (float)-1 + tmp_bi;\n\t\t\t\t    float tmp_bl = max(tmp_bj, (float)0);\n\t\t\t\t
-      \   float3 tmp_bm = float3(tmp_bl, tmp_bl, tmp_bl);\n\t\t\t\t    SetAttribute_545F0ED(
-      /*inout */color, tmp_bm);\n\t\t\t\t}\n\t\t\t\t\n\n\t\t\t\t\n\t\t\t\tif (!alive)\n\t\t\t\t\treturn
-      o;\n\t\t\t\t\n\t\t\t#if VFX_PRIMITIVE_QUAD\n\t\t\t\n\t\t\t\to.VFX_VARYING_UV.x
+      2).y, float3(30, 0.5, 2).z);\n\t\t\t\t    float tmp_bd = tmp_bc[0];\n\t\t\t\t   
+      float tmp_be = tmp_bd - (float)-1;\n\t\t\t\t    float tmp_bg = tmp_be / (float)2;\n\t\t\t\t   
+      float tmp_bi = tmp_bg * (float)3;\n\t\t\t\t    float tmp_bj = (float)-1 + tmp_bi;\n\t\t\t\t   
+      float tmp_bl = max(tmp_bj, (float)0);\n\t\t\t\t    float3 tmp_bm = float3(tmp_bl,
+      tmp_bl, tmp_bl);\n\t\t\t\t    SetAttribute_545F0ED( /*inout */color, tmp_bm);\n\t\t\t\t}\n\t\t\t\t\n\n\t\t\t\t\n\t\t\t\tif
+      (!alive)\n\t\t\t\t\treturn o;\n\t\t\t\t\n\t\t\t#if VFX_PRIMITIVE_QUAD\n\t\t\t\n\t\t\t\to.VFX_VARYING_UV.x
       = float(id & 1);\n\t\t\t\to.VFX_VARYING_UV.y = float((id & 2) >> 1);\n\t\t\t\tconst
       float2 vOffsets = o.VFX_VARYING_UV.xy - 0.5f;\n\t\t\t\t\n\t\t\t#elif VFX_PRIMITIVE_TRIANGLE\n\t\t\t\n\t\t\t\tconst
       float2 kOffsets[] = {\n\t\t\t\t\tfloat2(-0.5f, \t-0.288675129413604736328125f),\n\t\t\t\t\tfloat2(0.0f,
@@ -1588,8 +1607,9 @@ VisualEffectResource:
       VFX_VARYING_NORMAL\n\t\t\t\tfloat normalFlip = (size3.x * size3.y * size3.z)
       < 0 ? -1 : 1;\n\t\t\t\to.VFX_VARYING_NORMAL = normalFlip * normalWS;\n\t\t\t\t#endif\n\t\t\t\t#ifdef
       VFX_VARYING_TANGENT\n\t\t\t\to.VFX_VARYING_TANGENT = normalize(TransformDirectionVFXToWorld(normalize(transpose(elementToVFX)[0].xyz)));\n\t\t\t\t#endif\n\t\t\t\t#ifdef
-      VFX_VARYING_BENTFACTORS\n\t\t\t\t\n\t\t\t\t#if HAS_STRIPS\n\t\t\t\t#define BENT_FACTOR_MULTIPLIER
-      2.0f\n\t\t\t\t#else\n\t\t\t\t#define BENT_FACTOR_MULTIPLIER 1.41421353816986083984375f\n\t\t\t\t#endif\n\t\t\t\to.VFX_VARYING_BENTFACTORS
+      VFX_VARYING_BENTFACTORS\n\t\t\t\t\n\t\t\t\t#if HAS_STRIPS\n\t\t\t\t#define
+      BENT_FACTOR_MULTIPLIER 2.0f\n\t\t\t\t#else\n\t\t\t\t#define BENT_FACTOR_MULTIPLIER
+      1.41421353816986083984375f\n\t\t\t\t#endif\n\t\t\t\to.VFX_VARYING_BENTFACTORS
       = vOffsets * bentNormalFactor * BENT_FACTOR_MULTIPLIER;\n\t\t\t\t#endif\n\t\t\t\n\t\t\t\t\n\t\t\t\t\t\t#if
       VFX_USE_COLOR_CURRENT && defined(VFX_VARYING_COLOR)\n\t\t\t\t\t\to.VFX_VARYING_COLOR
       = color;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t#if VFX_USE_ALPHA_CURRENT && defined(VFX_VARYING_ALPHA)
@@ -2957,6 +2977,7 @@ VisualEffectResource:
     m_UpdateMode: 0
     m_PreWarmDeltaTime: 0.05
     m_PreWarmStepCount: 0
+    m_InitialEventName: OnPlay
   m_Systems:
   - type: 0
     flags: 0
@@ -3418,7 +3439,14 @@ MonoBehaviour:
     m_serializedType:
       m_SerializableType: System.UInt32, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-    attributes: []
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: Sets the number of particles spawned via a GPU event when this block
+        is triggered.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 0
   m_LinkedSlots: []
 --- !u!114 &8926484042661614586
@@ -3452,7 +3480,14 @@ MonoBehaviour:
     m_serializedType:
       m_SerializableType: UnityEditor.VFX.GPUEvent, Unity.VisualEffectGraph.Editor,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    attributes: []
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: Outputs a GPU event which can connect to another system via a GPUEvent
+        context. Attributes from the current system can be inherited in the new system.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 1
   m_LinkedSlots:
   - {fileID: 8926484042661614588}
@@ -3590,9 +3625,16 @@ MonoBehaviour:
   m_Property:
     name: bounds
     m_serializedType:
-      m_SerializableType: UnityEditor.VFX.AABox, Unity.VisualEffectGraph.Editor, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    attributes: []
+      m_SerializableType: UnityEditor.VFX.AABox, Unity.VisualEffectGraph.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: The culling bounds of this system. The Visual Effect is only visible
+        if the bounding box specified here is visible to the camera.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 0
   m_LinkedSlots: []
 --- !u!114 &8926484042661614591
@@ -3632,7 +3674,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The centre of the box.
+      m_Tooltip: Sets the center of the box.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -3773,7 +3815,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The size of the box along each axis.
+      m_Tooltip: Sets the size of the box along each axis.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -3899,7 +3941,10 @@ MonoBehaviour:
   - {fileID: 8926484042661614589}
   - {fileID: 8926484042661614621}
   - {fileID: 8926484042661614626}
-  m_Capacity: 65536
+  dataType: 0
+  capacity: 65536
+  stripCapacity: 16
+  particlePerStripCount: 16
   m_Space: 0
 --- !u!114 &8926484042661614600
 MonoBehaviour:
@@ -4116,6 +4161,8 @@ MonoBehaviour:
   m_OutputFlowSlot:
   - link: []
   blendMode: 0
+  useAlphaClipping: 0
+  generateMotionVector: 0
   m_SubOutputs:
   - {fileID: 0}
   - {fileID: 0}
@@ -4123,7 +4170,7 @@ MonoBehaviour:
   cullMode: 0
   zWriteMode: 0
   zTestMode: 0
-  colorMappingMode: 0
+  colorMapping: 0
   uvMode: 0
   useSoftParticle: 0
   sortPriority: 0
@@ -4131,6 +4178,8 @@ MonoBehaviour:
   indirectDraw: 0
   castShadows: 0
   useExposureWeight: 0
+  shaderGraph: {fileID: 0}
+  shadergraphGUID: 
   primitiveType: 1
   useGeometryShader: 0
 --- !u!114 &8926484042661614627
@@ -4164,7 +4213,13 @@ MonoBehaviour:
     m_serializedType:
       m_SerializableType: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-    attributes: []
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: Specifies the base color (RGB) and opacity (A) of the particle.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 0
   m_LinkedSlots: []
 --- !u!114 &8926484042661614631
@@ -4188,6 +4243,7 @@ MonoBehaviour:
   m_OutputSlots: []
   m_Disabled: 0
   mode: 0
+  axes: 4
 --- !u!114 &8926484042661614760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4499,7 +4555,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Drag coefficient of the particle
+      m_Tooltip: Sets the drag coefficient. Higher drag forces particles to slow
+        down more.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -4562,7 +4619,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Gravity Force applied to Particle Velocity
+      m_Tooltip: Sets the gravity acting upon the particles.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -5368,7 +5425,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The coordinate in the noise field to take the sample from.
+      m_Tooltip: Sets the coordinate in the noise field to take the sample from.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -5508,7 +5565,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The frequency of the noise.
+      m_Tooltip: Sets the period in which the noise is sampled. Higher frequencies
+        result in more frequent noise change.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -5548,7 +5606,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The number of layers of noise.
+      m_Tooltip: Sets the number of layers of noise. More octaves create a more varied
+        look, but are also more expensive to calculate.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -5594,7 +5653,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The scaling factor applied to each octave. Also known as persistence.
+      m_Tooltip: 'Sets the scaling factor applied to each octave (also known as persistence.) '
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -5640,7 +5699,9 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The rate of change of the frequency for each successive octave.
+      m_Tooltip: Sets the rate of change of the frequency for each successive octave.
+        A lacunarity value of 1 results in each octave having the same frequency.
+        Higher values result in more details, and values below 1 produce less details.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -5680,7 +5741,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The magnitude of the noise.
+      m_Tooltip: Sets the magnitude of the noise. Higher amplitudes result in a greater
+        range of the noise value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -5723,7 +5785,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The calculated noise vector.
+      m_Tooltip: Outputs the calculated noise vector.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -6046,7 +6108,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Force vector applied to particles (in units per squared second)
+      m_Tooltip: Sets the force vector applied to particles (in units per squared
+        second).
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -6253,7 +6316,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The minimum value to be generated.
+      m_Tooltip: Sets the minimum range of the random value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -6293,7 +6356,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The maximum value to be generated.
+      m_Tooltip: Sets the maximum range of the random value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -6333,7 +6396,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Seed to compute the constant random
+      m_Tooltip: Sets the value used when determining the random number. Using the
+        same seed results in the same random number every time.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -6373,7 +6437,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: A random number between 0 and 1.
+      m_Tooltip: Outputs a random number between the min and max range.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -6439,7 +6503,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The minimum value to be generated.
+      m_Tooltip: Sets the minimum range of the random value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -6479,7 +6543,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The maximum value to be generated.
+      m_Tooltip: Sets the maximum range of the random value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -6519,7 +6583,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Seed to compute the constant random
+      m_Tooltip: Sets the value used when determining the random number. Using the
+        same seed results in the same random number every time.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -6559,12 +6624,12 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: A random number between 0 and 1.
+      m_Tooltip: Outputs a random number between the min and max range.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
   m_LinkedSlots:
-  - {fileID: 8926484042661614870}
+  - {fileID: 8926484042661615641}
 --- !u!114 &8926484042661614868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6583,323 +6648,9 @@ MonoBehaviour:
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
-  - {fileID: 8926484042661614869}
+  - {fileID: 8926484042661615640}
   m_OutputSlots:
-  - {fileID: 8926484042661614873}
---- !u!114 &8926484042661614869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac39bd03fca81b849929b9c966f1836a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 0}
-  m_Children:
-  - {fileID: 8926484042661614870}
-  - {fileID: 8926484042661614871}
-  - {fileID: 8926484042661614872}
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 0
-  m_UISuperCollapsed: 0
-  m_MasterSlot: {fileID: 8926484042661614869}
-  m_MasterData:
-    m_Owner: {fileID: 8926484042661614868}
-    m_Value:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":1.0,"y":0.9700000286102295,"z":1.0}'
-    m_Space: 2147483647
-  m_Property:
-    name: hsv
-    m_serializedType:
-      m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    attributes:
-    - m_Type: 3
-      m_Min: -Infinity
-      m_Max: Infinity
-      m_Tooltip: The Hue, Saturation and Value parameters.
-      m_Regex: 
-      m_RegexMaxLength: 0
-  m_Direction: 0
-  m_LinkedSlots: []
---- !u!114 &8926484042661614870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 8926484042661614869}
-  m_Children: []
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  m_MasterSlot: {fileID: 8926484042661614869}
-  m_MasterData:
-    m_Owner: {fileID: 0}
-    m_Value:
-      m_Type:
-        m_SerializableType: 
-      m_SerializableObject: 
-    m_Space: 2147483647
-  m_Property:
-    name: x
-    m_serializedType:
-      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-    attributes: []
-  m_Direction: 0
-  m_LinkedSlots:
-  - {fileID: 8926484042661614867}
---- !u!114 &8926484042661614871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 8926484042661614869}
-  m_Children: []
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  m_MasterSlot: {fileID: 8926484042661614869}
-  m_MasterData:
-    m_Owner: {fileID: 0}
-    m_Value:
-      m_Type:
-        m_SerializableType: 
-      m_SerializableObject: 
-    m_Space: 2147483647
-  m_Property:
-    name: y
-    m_serializedType:
-      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-    attributes: []
-  m_Direction: 0
-  m_LinkedSlots: []
---- !u!114 &8926484042661614872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 8926484042661614869}
-  m_Children: []
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  m_MasterSlot: {fileID: 8926484042661614869}
-  m_MasterData:
-    m_Owner: {fileID: 0}
-    m_Value:
-      m_Type:
-        m_SerializableType: 
-      m_SerializableObject: 
-    m_Space: 2147483647
-  m_Property:
-    name: z
-    m_serializedType:
-      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-    attributes: []
-  m_Direction: 0
-  m_LinkedSlots: []
---- !u!114 &8926484042661614873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c499060cea9bbb24b8d723eafa343303, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 0}
-  m_Children:
-  - {fileID: 8926484042661614874}
-  - {fileID: 8926484042661614875}
-  - {fileID: 8926484042661614876}
-  - {fileID: 8926484042661614877}
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  m_MasterSlot: {fileID: 8926484042661614873}
-  m_MasterData:
-    m_Owner: {fileID: 8926484042661614868}
-    m_Value:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.0,"y":0.0,"z":0.0,"w":0.0}'
-    m_Space: 2147483647
-  m_Property:
-    name: rgb
-    m_serializedType:
-      m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    attributes: []
-  m_Direction: 1
-  m_LinkedSlots:
-  - {fileID: 8926484042661614887}
---- !u!114 &8926484042661614874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 8926484042661614873}
-  m_Children: []
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  m_MasterSlot: {fileID: 8926484042661614873}
-  m_MasterData:
-    m_Owner: {fileID: 0}
-    m_Value:
-      m_Type:
-        m_SerializableType: 
-      m_SerializableObject: 
-    m_Space: 2147483647
-  m_Property:
-    name: x
-    m_serializedType:
-      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-    attributes: []
-  m_Direction: 1
-  m_LinkedSlots: []
---- !u!114 &8926484042661614875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 8926484042661614873}
-  m_Children: []
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  m_MasterSlot: {fileID: 8926484042661614873}
-  m_MasterData:
-    m_Owner: {fileID: 0}
-    m_Value:
-      m_Type:
-        m_SerializableType: 
-      m_SerializableObject: 
-    m_Space: 2147483647
-  m_Property:
-    name: y
-    m_serializedType:
-      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-    attributes: []
-  m_Direction: 1
-  m_LinkedSlots: []
---- !u!114 &8926484042661614876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 8926484042661614873}
-  m_Children: []
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  m_MasterSlot: {fileID: 8926484042661614873}
-  m_MasterData:
-    m_Owner: {fileID: 0}
-    m_Value:
-      m_Type:
-        m_SerializableType: 
-      m_SerializableObject: 
-    m_Space: 2147483647
-  m_Property:
-    name: z
-    m_serializedType:
-      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-    attributes: []
-  m_Direction: 1
-  m_LinkedSlots: []
---- !u!114 &8926484042661614877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Parent: {fileID: 8926484042661614873}
-  m_Children: []
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  m_MasterSlot: {fileID: 8926484042661614873}
-  m_MasterData:
-    m_Owner: {fileID: 0}
-    m_Value:
-      m_Type:
-        m_SerializableType: 
-      m_SerializableObject: 
-    m_Space: 2147483647
-  m_Property:
-    name: w
-    m_serializedType:
-      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-    attributes: []
-  m_Direction: 1
-  m_LinkedSlots: []
+  - {fileID: 8926484042661615644}
 --- !u!114 &8926484042661614883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7056,7 +6807,7 @@ MonoBehaviour:
       m_RegexMaxLength: 0
   m_Direction: 0
   m_LinkedSlots:
-  - {fileID: 8926484042661614873}
+  - {fileID: 8926484042661615644}
 --- !u!114 &8926484042661614888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7179,6 +6930,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614893}
   m_Disabled: 0
   mode: 0
+  clampToOne: 1
 --- !u!114 &8926484042661614892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7214,7 +6966,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Rate (in particles per second or space unit (depending on the mode)
+      m_Tooltip: Sets the rate of spawning particles via a GPU event based on the
+        selected mode.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -7251,7 +7004,14 @@ MonoBehaviour:
     m_serializedType:
       m_SerializableType: UnityEditor.VFX.GPUEvent, Unity.VisualEffectGraph.Editor,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    attributes: []
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: Outputs a GPU event which can connect to another system via a GPUEvent
+        context. Attributes from the current system can be inherited in the new system.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 1
   m_LinkedSlots:
   - {fileID: 8926484042661614895}
@@ -7387,9 +7147,16 @@ MonoBehaviour:
   m_Property:
     name: bounds
     m_serializedType:
-      m_SerializableType: UnityEditor.VFX.AABox, Unity.VisualEffectGraph.Editor, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    attributes: []
+      m_SerializableType: UnityEditor.VFX.AABox, Unity.VisualEffectGraph.Editor,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: The culling bounds of this system. The Visual Effect is only visible
+        if the bounding box specified here is visible to the camera.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 0
   m_LinkedSlots: []
 --- !u!114 &8926484042661614898
@@ -7429,7 +7196,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The centre of the box.
+      m_Tooltip: Sets the center of the box.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -7570,7 +7337,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The size of the box along each axis.
+      m_Tooltip: Sets the size of the box along each axis.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -7696,7 +7463,10 @@ MonoBehaviour:
   - {fileID: 8926484042661614896}
   - {fileID: 8926484042661614909}
   - {fileID: 8926484042661614919}
-  m_Capacity: 65536
+  dataType: 0
+  capacity: 65536
+  stripCapacity: 16
+  particlePerStripCount: 16
   m_Space: 0
 --- !u!114 &8926484042661614907
 MonoBehaviour:
@@ -7841,7 +7611,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Drag coefficient of the particle
+      m_Tooltip: Sets the drag coefficient. Higher drag forces particles to slow
+        down more.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -7903,7 +7674,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Gravity Force applied to Particle Velocity
+      m_Tooltip: Sets the gravity acting upon the particles.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -8080,6 +7851,8 @@ MonoBehaviour:
   m_OutputFlowSlot:
   - link: []
   blendMode: 0
+  useAlphaClipping: 0
+  generateMotionVector: 0
   m_SubOutputs:
   - {fileID: 0}
   - {fileID: 0}
@@ -8087,7 +7860,7 @@ MonoBehaviour:
   cullMode: 0
   zWriteMode: 0
   zTestMode: 0
-  colorMappingMode: 0
+  colorMapping: 0
   uvMode: 0
   useSoftParticle: 0
   sortPriority: 0
@@ -8095,6 +7868,8 @@ MonoBehaviour:
   indirectDraw: 0
   castShadows: 0
   useExposureWeight: 0
+  shaderGraph: {fileID: 0}
+  shadergraphGUID: 
   primitiveType: 1
   useGeometryShader: 0
 --- !u!114 &8926484042661614920
@@ -8128,7 +7903,13 @@ MonoBehaviour:
     m_serializedType:
       m_SerializableType: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-    attributes: []
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: Specifies the base color (RGB) and opacity (A) of the particle.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 0
   m_LinkedSlots: []
 --- !u!114 &8926484042661614923
@@ -8467,7 +8248,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The curve to sample from.
+      m_Tooltip: Sets the curve to sample from.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -8507,7 +8288,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The time along the curve to take a sample from.
+      m_Tooltip: Sets the time along the curve to take a sample from.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -8544,7 +8325,13 @@ MonoBehaviour:
     m_serializedType:
       m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-    attributes: []
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: Outputs the sampled value from the curve at the specified time.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 1
   m_LinkedSlots:
   - {fileID: 8926484042661614892}
@@ -9100,7 +8887,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The coordinate in the noise field to take the sample from.
+      m_Tooltip: Sets the coordinate in the noise field to take the sample from.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -9240,7 +9027,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The frequency of the noise.
+      m_Tooltip: Sets the period in which the noise is sampled. Higher frequencies
+        result in more frequent noise change.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -9280,7 +9068,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The number of layers of noise.
+      m_Tooltip: Sets the number of layers of noise. More octaves create a more varied
+        look, but are also more expensive to calculate.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -9326,7 +9115,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The scaling factor applied to each octave. Also known as persistence.
+      m_Tooltip: 'Sets the scaling factor applied to each octave (also known as persistence.) '
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -9372,7 +9161,9 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The rate of change of the frequency for each successive octave.
+      m_Tooltip: Sets the rate of change of the frequency for each successive octave.
+        A lacunarity value of 1 results in each octave having the same frequency.
+        Higher values result in more details, and values below 1 produce less details.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -9412,7 +9203,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The magnitude of the noise.
+      m_Tooltip: Sets the magnitude of the noise. Higher amplitudes result in a greater
+        range of the noise value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -9455,7 +9247,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The calculated noise vector.
+      m_Tooltip: Outputs the calculated noise vector.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -9901,7 +9693,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The coordinate in the noise field to take the sample from.
+      m_Tooltip: Sets the coordinate in the noise field to take the sample from.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -10009,7 +9801,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The frequency of the noise.
+      m_Tooltip: Sets the period in which the noise is sampled. Higher frequencies
+        result in more frequent noise change.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -10049,7 +9842,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The number of layers of noise.
+      m_Tooltip: Sets the number of layers of noise. More octaves create a more varied
+        look, but are also more expensive to calculate.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -10095,7 +9889,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The scaling factor applied to each octave. Also known as persistence.
+      m_Tooltip: 'Sets the scaling factor applied to each octave (also known as persistence.) '
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -10141,7 +9935,9 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The rate of change of the frequency for each successive octave.
+      m_Tooltip: Sets the rate of change of the frequency for each successive octave.
+        A lacunarity value of 1 results in each octave having the same frequency.
+        Higher values result in more details, and values below 1 produce less details.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -10183,7 +9979,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The noise will be calculated within the specified range.
+      m_Tooltip: Sets the range within which the noise is calculated.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -10289,7 +10085,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The calculated noise.
+      m_Tooltip: Outputs the calculated noise value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -10332,7 +10128,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The rate of change of the noise.
+      m_Tooltip: Outputs the rate of change of the noise.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -11663,7 +11459,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The minimum value to be generated.
+      m_Tooltip: Sets the minimum range of the random value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -11703,7 +11499,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The maximum value to be generated.
+      m_Tooltip: Sets the maximum range of the random value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -11743,7 +11539,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Seed to compute the constant random
+      m_Tooltip: Sets the value used when determining the random number. Using the
+        same seed results in the same random number every time.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -11783,7 +11580,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: A random number between 0 and 1.
+      m_Tooltip: Outputs a random number between the min and max range.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -11846,7 +11643,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The curve to sample from.
+      m_Tooltip: Sets the curve to sample from.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -11886,7 +11683,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The time along the curve to take a sample from.
+      m_Tooltip: Sets the time along the curve to take a sample from.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -11923,7 +11720,13 @@ MonoBehaviour:
     m_serializedType:
       m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-    attributes: []
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: Outputs the sampled value from the curve at the specified time.
+      m_Regex: 
+      m_RegexMaxLength: 0
   m_Direction: 1
   m_LinkedSlots:
   - {fileID: 8926484042661615145}
@@ -12170,7 +11973,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The coordinate in the noise field to take the sample from.
+      m_Tooltip: Sets the coordinate in the noise field to take the sample from.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -12310,7 +12113,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The frequency of the noise.
+      m_Tooltip: Sets the period in which the noise is sampled. Higher frequencies
+        result in more frequent noise change.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -12350,7 +12154,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The number of layers of noise.
+      m_Tooltip: Sets the number of layers of noise. More octaves create a more varied
+        look, but are also more expensive to calculate.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -12396,7 +12201,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The scaling factor applied to each octave. Also known as persistence.
+      m_Tooltip: 'Sets the scaling factor applied to each octave (also known as persistence.) '
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -12442,7 +12247,9 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The rate of change of the frequency for each successive octave.
+      m_Tooltip: Sets the rate of change of the frequency for each successive octave.
+        A lacunarity value of 1 results in each octave having the same frequency.
+        Higher values result in more details, and values below 1 produce less details.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -12482,7 +12289,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The magnitude of the noise.
+      m_Tooltip: Sets the magnitude of the noise. Higher amplitudes result in a greater
+        range of the noise value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -12525,7 +12333,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The calculated noise vector.
+      m_Tooltip: Outputs the calculated noise vector.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -12848,7 +12656,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Force vector applied to particles (in units per squared second)
+      m_Tooltip: Sets the force vector applied to particles (in units per squared
+        second).
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -13055,7 +12864,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The minimum value to be generated.
+      m_Tooltip: Sets the minimum range of the random value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -13095,7 +12904,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The maximum value to be generated.
+      m_Tooltip: Sets the maximum range of the random value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -13135,7 +12944,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Seed to compute the constant random
+      m_Tooltip: Sets the value used when determining the random number. Using the
+        same seed results in the same random number every time.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -13175,7 +12985,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: A random number between 0 and 1.
+      m_Tooltip: Outputs a random number between the min and max range.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -13924,7 +13734,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Spawn Rate (in number per seconds)
+      m_Tooltip: Sets the number of particles to be spawned per second.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -13994,7 +13804,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The frequency of the noise.
+      m_Tooltip: Sets the period in which the noise is sampled. Higher frequencies
+        result in more frequent noise change.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -14034,7 +13845,8 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The number of layers of noise.
+      m_Tooltip: Sets the number of layers of noise. More octaves create a more varied
+        look, but are also more expensive to calculate.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -14080,7 +13892,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The scaling factor applied to each octave. Also known as persistence.
+      m_Tooltip: 'Sets the scaling factor applied to each octave (also known as persistence.) '
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -14126,7 +13938,9 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The rate of change of the frequency for each successive octave.
+      m_Tooltip: Sets the rate of change of the frequency for each successive octave.
+        A lacunarity value of 1 results in each octave having the same frequency.
+        Higher values result in more details, and values below 1 produce less details.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -14168,7 +13982,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The noise will be calculated within the specified range.
+      m_Tooltip: Sets the range within which the noise is calculated.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -14274,7 +14088,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The calculated noise.
+      m_Tooltip: Outputs the calculated noise value.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -14487,7 +14301,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The coordinate in the noise field to take the sample from.
+      m_Tooltip: Sets the coordinate in the noise field to take the sample from.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 0
@@ -14630,7 +14444,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: The rate of change of the noise.
+      m_Tooltip: Outputs the rate of change of the noise.
       m_Regex: 
       m_RegexMaxLength: 0
   m_Direction: 1
@@ -16873,6 +16687,10 @@ MonoBehaviour:
   - link:
     - context: {fileID: 114946465509916290}
       slotIndex: 0
+  loopDuration: 0
+  loopCount: 0
+  delayBeforeLoop: 0
+  delayAfterLoop: 0
 --- !u!114 &8926484042661615498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16933,7 +16751,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Count for each burst
+      m_Tooltip: Sets the number of particles to be spawned with each burst.
       m_Regex: 
       m_RegexMaxLength: 0
     - m_Type: 1
@@ -16979,7 +16797,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Delay between each burst
+      m_Tooltip: Sets the delay in seconds between each burst.
       m_Regex: 
       m_RegexMaxLength: 0
     - m_Type: 1
@@ -17166,6 +16984,10 @@ MonoBehaviour:
   - link:
     - context: {fileID: 114946465509916290}
       slotIndex: 0
+  loopDuration: 0
+  loopCount: 0
+  delayBeforeLoop: 0
+  delayAfterLoop: 0
 --- !u!114 &8926484042661615572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17226,7 +17048,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Count for each burst
+      m_Tooltip: Sets the number of particles to be spawned with each burst.
       m_Regex: 
       m_RegexMaxLength: 0
     - m_Type: 1
@@ -17272,7 +17094,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Delay between each burst
+      m_Tooltip: Sets the delay in seconds between each burst.
       m_Regex: 
       m_RegexMaxLength: 0
     - m_Type: 1
@@ -17367,6 +17189,10 @@ MonoBehaviour:
   - link:
     - context: {fileID: 114946465509916290}
       slotIndex: 0
+  loopDuration: 0
+  loopCount: 0
+  delayBeforeLoop: 0
+  delayAfterLoop: 0
 --- !u!114 &8926484042661615582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17427,7 +17253,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Count for each burst
+      m_Tooltip: Sets the number of particles to be spawned with each burst.
       m_Regex: 
       m_RegexMaxLength: 0
     - m_Type: 1
@@ -17473,7 +17299,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Delay between each burst
+      m_Tooltip: Sets the delay in seconds between each burst.
       m_Regex: 
       m_RegexMaxLength: 0
     - m_Type: 1
@@ -17568,6 +17394,10 @@ MonoBehaviour:
   - link:
     - context: {fileID: 114946465509916290}
       slotIndex: 0
+  loopDuration: 0
+  loopCount: 0
+  delayBeforeLoop: 0
+  delayAfterLoop: 0
 --- !u!114 &8926484042661615592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17628,7 +17458,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Count for each burst
+      m_Tooltip: Sets the number of particles to be spawned with each burst.
       m_Regex: 
       m_RegexMaxLength: 0
     - m_Type: 1
@@ -17674,7 +17504,7 @@ MonoBehaviour:
     - m_Type: 3
       m_Min: -Infinity
       m_Max: Infinity
-      m_Tooltip: Delay between each burst
+      m_Tooltip: Sets the delay in seconds between each burst.
       m_Regex: 
       m_RegexMaxLength: 0
     - m_Type: 1
@@ -19069,3 +18899,325 @@ MonoBehaviour:
   m_Direction: 1
   m_LinkedSlots:
   - {fileID: 8926484042661615146}
+--- !u!114 &8926484042661615640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac39bd03fca81b849929b9c966f1836a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 0}
+  m_Children:
+  - {fileID: 8926484042661615641}
+  - {fileID: 8926484042661615642}
+  - {fileID: 8926484042661615643}
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661615640}
+  m_MasterData:
+    m_Owner: {fileID: 8926484042661614868}
+    m_Value:
+      m_Type:
+        m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      m_SerializableObject: '{"x":1.0,"y":0.9700000286102295,"z":1.0}'
+    m_Space: 2147483647
+  m_Property:
+    name: HSV
+    m_serializedType:
+      m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: Sets the Hue, Saturation, and Value parameters to be converted to
+        color values.
+      m_Regex: 
+      m_RegexMaxLength: 0
+  m_Direction: 0
+  m_LinkedSlots: []
+--- !u!114 &8926484042661615641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 8926484042661615640}
+  m_Children: []
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661615640}
+  m_MasterData:
+    m_Owner: {fileID: 0}
+    m_Value:
+      m_Type:
+        m_SerializableType: 
+      m_SerializableObject: 
+    m_Space: 2147483647
+  m_Property:
+    name: x
+    m_serializedType:
+      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+    attributes: []
+  m_Direction: 0
+  m_LinkedSlots:
+  - {fileID: 8926484042661614867}
+--- !u!114 &8926484042661615642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 8926484042661615640}
+  m_Children: []
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661615640}
+  m_MasterData:
+    m_Owner: {fileID: 0}
+    m_Value:
+      m_Type:
+        m_SerializableType: 
+      m_SerializableObject: 
+    m_Space: 2147483647
+  m_Property:
+    name: y
+    m_serializedType:
+      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+    attributes: []
+  m_Direction: 0
+  m_LinkedSlots: []
+--- !u!114 &8926484042661615643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 8926484042661615640}
+  m_Children: []
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661615640}
+  m_MasterData:
+    m_Owner: {fileID: 0}
+    m_Value:
+      m_Type:
+        m_SerializableType: 
+      m_SerializableObject: 
+    m_Space: 2147483647
+  m_Property:
+    name: z
+    m_serializedType:
+      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+    attributes: []
+  m_Direction: 0
+  m_LinkedSlots: []
+--- !u!114 &8926484042661615644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c499060cea9bbb24b8d723eafa343303, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 0}
+  m_Children:
+  - {fileID: 8926484042661615645}
+  - {fileID: 8926484042661615646}
+  - {fileID: 8926484042661615647}
+  - {fileID: 8926484042661615648}
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661615644}
+  m_MasterData:
+    m_Owner: {fileID: 8926484042661614868}
+    m_Value:
+      m_Type:
+        m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      m_SerializableObject: '{"x":0.0,"y":0.0,"z":0.0,"w":0.0}'
+    m_Space: 2147483647
+  m_Property:
+    name: RGB
+    m_serializedType:
+      m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    attributes:
+    - m_Type: 3
+      m_Min: -Infinity
+      m_Max: Infinity
+      m_Tooltip: Outputs the color values derived from the Hue, Saturation, and Value
+        parameters.
+      m_Regex: 
+      m_RegexMaxLength: 0
+  m_Direction: 1
+  m_LinkedSlots:
+  - {fileID: 8926484042661614887}
+--- !u!114 &8926484042661615645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 8926484042661615644}
+  m_Children: []
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661615644}
+  m_MasterData:
+    m_Owner: {fileID: 0}
+    m_Value:
+      m_Type:
+        m_SerializableType: 
+      m_SerializableObject: 
+    m_Space: 2147483647
+  m_Property:
+    name: x
+    m_serializedType:
+      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+    attributes: []
+  m_Direction: 1
+  m_LinkedSlots: []
+--- !u!114 &8926484042661615646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 8926484042661615644}
+  m_Children: []
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661615644}
+  m_MasterData:
+    m_Owner: {fileID: 0}
+    m_Value:
+      m_Type:
+        m_SerializableType: 
+      m_SerializableObject: 
+    m_Space: 2147483647
+  m_Property:
+    name: y
+    m_serializedType:
+      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+    attributes: []
+  m_Direction: 1
+  m_LinkedSlots: []
+--- !u!114 &8926484042661615647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 8926484042661615644}
+  m_Children: []
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661615644}
+  m_MasterData:
+    m_Owner: {fileID: 0}
+    m_Value:
+      m_Type:
+        m_SerializableType: 
+      m_SerializableObject: 
+    m_Space: 2147483647
+  m_Property:
+    name: z
+    m_serializedType:
+      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+    attributes: []
+  m_Direction: 1
+  m_LinkedSlots: []
+--- !u!114 &8926484042661615648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Parent: {fileID: 8926484042661615644}
+  m_Children: []
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661615644}
+  m_MasterData:
+    m_Owner: {fileID: 0}
+    m_Value:
+      m_Type:
+        m_SerializableType: 
+      m_SerializableObject: 
+    m_Space: 2147483647
+  m_Property:
+    name: w
+    m_serializedType:
+      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+    attributes: []
+  m_Direction: 1
+  m_LinkedSlots: []

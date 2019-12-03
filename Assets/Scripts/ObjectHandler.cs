@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.Experimental.VFX;
+using UnityEngine.VFX;
 using UnityEngine.InputSystem;
 
 public class ObjectHandler : MonoBehaviour
