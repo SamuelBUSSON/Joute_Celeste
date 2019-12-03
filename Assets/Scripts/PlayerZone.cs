@@ -18,6 +18,7 @@ public class PlayerZone : MonoBehaviour
     private ObjectHandler playerObjectHandler;
 
     private List<Transform> objectInZone;
+    private List<Transform> objectToSlowOnDash;
     private Transform nearestElement;
 
     private PlayerInput input;
@@ -26,7 +27,10 @@ public class PlayerZone : MonoBehaviour
     private bool canCatch = true;
     
 
-    private void Awake()
+
+
+    // Start is called before the first frame update
+    void Start()
     {
         input = GetComponentInParent<PlayerInput>();
 
@@ -36,20 +40,12 @@ public class PlayerZone : MonoBehaviour
 
         input.currentActionMap["Aim"].performed += context => OnAim(context);
         input.currentActionMap["Aim"].canceled += context => OnAimCanceled(context);
-
-
-    }
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
+        
         objectInZone = new List<Transform>();
+        objectToSlowOnDash = new List<Transform>();
 
         player = GetComponentInParent<Displacement>().transform;
-        playerObjectHandler = player.GetComponent<ObjectHandler>();
-        
+        playerObjectHandler = player.GetComponent<ObjectHandler>();        
     }
 
     // Update is called once per frame
@@ -60,7 +56,7 @@ public class PlayerZone : MonoBehaviour
         if(nearestElement && Vector2.Distance(nearestElement.position, transform.position) <= distanceToCatch)
         {
             CaughtObject(nearestElement);
-        }
+        }        
     }
 
     private void OnCaughtObject(InputAction.CallbackContext obj)
@@ -112,7 +108,6 @@ public class PlayerZone : MonoBehaviour
         {
             AimCanceled();
         }
-
     }
 
     public void Aim(Vector2 v)
@@ -157,6 +152,12 @@ public class PlayerZone : MonoBehaviour
         {
             objectInZone.Add(other.transform);
         }
+        objectToSlowOnDash.Add(other.transform);
+
+        if (player.GetComponent<Displacement>().IsDashing() && objectToSlowOnDash.Contains(other.transform))
+        {
+            other.GetComponent<Rigidbody2D>().velocity /= player.GetComponent<Displacement>().slowStrength;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -169,6 +170,12 @@ public class PlayerZone : MonoBehaviour
                 ChangeNearestElementColor(false);
             }
         }
+        if (player.GetComponent<Displacement>().IsDashing() && objectToSlowOnDash.Contains(other.transform))
+        {
+            other.GetComponent<Rigidbody2D>().velocity *= player.GetComponent<Displacement>().slowStrength;
+        }
+        objectToSlowOnDash.Remove(other.transform);
+
     }
 
     private void SortList()
@@ -204,10 +211,22 @@ public class PlayerZone : MonoBehaviour
         return null;
     }
 
+    public void ChangeSpeedObjectInZone(bool isSlow)
+    {
+        foreach (var item in objectToSlowOnDash)
+        {
+            item.GetComponent<Rigidbody2D>().velocity *= isSlow ? 1/ player.GetComponent<Displacement>().slowStrength : player.GetComponent<Displacement>().slowStrength;
+        }
+    }
+
     private void ChangeNearestElementColor(bool isBlack)
     {
-        nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(190, 27, 0) / 255 * 2, "Color_15CF1060", 1.0f);
-        nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(100, 13, 25) / 255 * 2, "Color_B93BCC95", 1.0f);
+        if (nearestElement)
+        {
+            nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(190, 27, 0) / 255 * 2, "Color_15CF1060", 1.0f);
+            nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(100, 13, 25) / 255 * 2, "Color_B93BCC95", 1.0f);
+        }
+
     }
 
 }

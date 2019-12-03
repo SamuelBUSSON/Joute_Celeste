@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityTemplateProjects.Player;
 
 public enum EProjectileType
 {
@@ -13,22 +14,30 @@ public enum EProjectileType
 
 public class Projectile : MonoBehaviour
 {
+    [Serializable]
+    public struct SThresholdLevel
+    {
+        public float speed;
+        public float damage;
+    }
+    
     public EProjectileType type;
     [NonSerialized]
     public int playerIndex;
-    public int damage;
+    public float startingDamage;
+
+    [NonSerialized]
+    public float currentDamage;
+
+    [NonSerialized]
+    public float speed = 1f;
+    
+    [NonSerialized]
+    public int thresholdIndex = -1;
+
+    public List<SThresholdLevel> thresholdLevels;
 
     [NonSerialized] public bool isLaunched;
-
-    private void Awake()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -37,17 +46,18 @@ public class Projectile : MonoBehaviour
         if (proj && proj.isLaunched)
         {
             if(proj.type > type)
-                Destroy(gameObject); //TODO: add the kaboom
+               Die();
             else if(proj.type < type)
             {
-                //TODO: add the kaboom
-                Destroy(proj.gameObject);
+                proj.Die();
             }
-            else
+            else if(proj.thresholdIndex > thresholdIndex)
             {
-                //TODO: add the kaboom
-                Destroy(proj.gameObject);
-                Destroy(gameObject);
+                Die();
+            }
+            else if(proj.thresholdIndex < thresholdIndex)
+            {
+                proj.Die();
             }
         }
         else
@@ -55,10 +65,25 @@ public class Projectile : MonoBehaviour
             PlayerHealth player = other.transform.GetComponent<PlayerHealth>();
 
             //TODO: check if it's the creator
-            if (player)
+            if (player && player.GetComponent<PlayerController>().playerIndex != playerIndex)
             {
-                player.TakeDamage(damage);
+                player.TakeDamage(currentDamage);
+                Die();
             }
         }
+    }
+
+    public void SetThresholdLevel(int level)
+    {
+        thresholdIndex = level;
+
+        speed = thresholdLevels[thresholdIndex].speed;
+        currentDamage = startingDamage * thresholdLevels[thresholdIndex].damage;
+    }
+
+    public void Die()
+    {
+        //TODO: add kaboom
+        Destroy(gameObject);
     }
 }

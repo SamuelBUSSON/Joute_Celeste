@@ -1,16 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityTemplateProjects.Player;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    [NonSerialized]
+    public PlayerController player1;
+    
+    [NonSerialized]
+    public PlayerController player2;
+    
     public Slider PlayerSliderHealth1;
     public Slider PlayerSliderHealth2;
+
+    public CinemachineTargetGroup targetGroup;
 
     private PlayerInputManager inputManager;
     [NonSerialized]
@@ -21,6 +31,7 @@ public class GameManager : MonoBehaviour
         if (!Instance)
         {
             Instance = this;
+            PlayerInputManager.instance.onPlayerJoined += OnPlayerJoin;
         }
         else
         {
@@ -28,20 +39,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnPlayerJoin()
+    private void OnPlayerJoin(PlayerInput obj)
     {
+        targetGroup.AddMember(obj.transform, 1, 1);
+        
+        if (playerIndex == -1)
+            player1 = obj.GetComponent<PlayerController>();
+        else
+        {
+            player2 = obj.GetComponent<PlayerController>();
+        }
         playerIndex++;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.Experimental.VFX;
+using UnityEngine.VFX;
 using UnityEngine.InputSystem;
 
 public class ObjectHandler : MonoBehaviour
@@ -25,6 +25,8 @@ public class ObjectHandler : MonoBehaviour
 
     private bool autoAim = false;
 
+    private Displacement playerMovement;
+
 
     private void Awake()
     {
@@ -32,20 +34,55 @@ public class ObjectHandler : MonoBehaviour
 
         input.actions.Enable();
 
-        input.currentActionMap["Fire"].performed += context => OnFire(context);
+        input.currentActionMap["Fire"].canceled += context => OnFire(context);
 
         input.currentActionMap["Aim"].performed += context => OnAim(context);
         input.currentActionMap["Aim"].canceled += context => OnAutoAim(context);
+        
+        input.currentActionMap["HoldLv1"].performed += OnHoldLv1;
+        input.currentActionMap["HoldLv2"].performed += OnHoldLv2;
 
         enemyPos = transform;
 
 
     }
 
+    private void OnHoldLv2(InputAction.CallbackContext obj)
+    {
+        print("HoldLv2");
+        
+        if (handledObject)
+        {
+            Projectile proj = handledObject.GetComponent<Projectile>();
+
+            if (proj.type != EProjectileType.PLANET)
+            {
+                proj.SetThresholdLevel(1);
+            }
+        }
+    }
+
+    private void OnHoldLv1(InputAction.CallbackContext obj)
+    {
+        print("HoldLv1");
+
+        if (handledObject)
+        {
+            Projectile proj = handledObject.GetComponent<Projectile>();
+
+            if (proj.type != EProjectileType.PLANET)
+            {
+                proj.SetThresholdLevel(0);
+            }
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         displaceAngleVector = new Vector3();
+
+        playerMovement = GetComponent<Displacement>();
     }
 
 
@@ -76,7 +113,10 @@ public class ObjectHandler : MonoBehaviour
 
     private void OnFire(InputAction.CallbackContext obj)
     {
-        Fire();
+        if (!playerMovement.IsDashing())
+        {
+            Fire();
+        }
     }
 
     private void OnAim(InputAction.CallbackContext obj)
@@ -103,13 +143,15 @@ public class ObjectHandler : MonoBehaviour
             {
                 coolDownTimer = 0.0f;
                 handledObject.SetParent(null);
-                Vector3 heading = handledObject.transform.position - transform.position;
-                handledObject.GetComponent<Rigidbody2D>().velocity = heading * launchStrength;
 
-               // Destroy(handledObject.gameObject, 3.0f);
+                Projectile projectile = handledObject.GetComponent<Projectile>();
+                projectile.isLaunched = true;
+
+                Vector3 heading = handledObject.transform.position - transform.position;
+                handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
 
                 handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
-                handledObject.GetComponent<Projectile>().isLaunched = true;
+                
 
                 handledObject = null;
             }

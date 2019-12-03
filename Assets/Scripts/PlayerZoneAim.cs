@@ -42,7 +42,8 @@ public class PlayerZoneAim : MonoBehaviour
 
     private void SortList()
     {
-        objectInZone.Sort((t1, t2) => Vector3.Distance(t1.position, player.position).CompareTo(Vector3.Distance(t2.position, player.position)));
+        if(objectInZone.Count > 1)
+            objectInZone.Sort((t1, t2) => Vector3.Distance(t1.position, player.position).CompareTo(Vector3.Distance(t2.position, player.position)));
     }
 
     
