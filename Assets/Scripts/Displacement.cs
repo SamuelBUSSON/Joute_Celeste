@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using UnityEngine.Experimental.VFX;
 
 public class Displacement : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class Displacement : MonoBehaviour
 
     [Header("Zone Slow")]
     public float slowStrength = 3.0f;
+
+    public VisualEffect dashEffect;
 
 
     private float dashCoolDownTimer = 0.0f;
@@ -62,8 +65,6 @@ public class Displacement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(currentDash);
-
         Move();
 
         DashTimer();
@@ -133,6 +134,9 @@ public class Displacement : MonoBehaviour
             if(movement.x != 0 || movement.y != 0)
             {
                 isDashing = true;
+
+                dashEffect.SendEvent("OnDash");
+
                 GetComponentInChildren<PlayerZone>().ChangeSpeedObjectInZone(true);                
                 rigidbody2d.DOMove(transform.position + movement * dashs[currentDash].dashStrength, dashs[currentDash].timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(dashs[currentDash].easeDash);
 
