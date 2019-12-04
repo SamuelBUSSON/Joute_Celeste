@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,10 +11,15 @@ public class ProjectileSpawner : MonoBehaviour
     public float probability;
 
     public float cooldown;
-    public int maxSpawned;
-    public float radius;
 
-    public Color radiusColor;
+    public int minSpawned;
+    public int maxSpawned;
+
+    public int spawnedThreshold;
+
+    public float speed;
+    
+    Vector2 center = new Vector2(Screen.height, Screen.width);
 
     private void Start()
     {
@@ -25,13 +31,11 @@ public class ProjectileSpawner : MonoBehaviour
         //TODO: make this stop when the round stops
         while (true)
         {
-            if (probability <= Random.value && maxSpawned > transform.childCount)
+            if (probability <= Random.value && transform.childCount < spawnedThreshold)
             {
-                Vector2 position = (Random.insideUnitCircle * radius);
-                var proj = Instantiate(prefabToSpawn, transform.position + new Vector3(position.x, position.y, 0),
-                    Quaternion.identity,
-                    transform);
-                proj.GetComponent<Rigidbody2D>().velocity = 0.1f * new Vector2(Random.value, Random.value);
+                //TODO: add proba to event
+                SpawnMeteorRain();
+                
             }
                 
             
@@ -39,9 +43,33 @@ public class ProjectileSpawner : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void SpawnMeteorRain()
     {
-        Gizmos.color = radiusColor;
-        Gizmos.DrawSphere(transform.position, radius);
+        int amount = Random.Range(minSpawned, maxSpawned);
+
+        Vector2 startingPosition = ((Random.insideUnitCircle + Vector2.one) * (Screen.width *.25f));
+        
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2 position = startingPosition + (Random.insideUnitCircle * 4f);
+            var proj = Instantiate(prefabToSpawn, new Vector3(position.x, position.y, 0),
+                Quaternion.identity,
+                transform);
+            proj.transform.LookAt(center);
+            proj.transform.Rotate(0, 0, Random.Range(-5f, 5f));
+            proj.GetComponent<Rigidbody2D>().AddForce(new Vector2(speed, 0));
+        }
+    }
+
+    private void SpawnMeteorBelt()
+    {
+        int amount = Random.Range(minSpawned, maxSpawned);
+
+        Vector2 startingPosition = ((Random.insideUnitCircle + Vector2.one) * (Screen.width *.25f));
+
+        for (int i = 0; i < amount; i++)
+        {
+            
+        }
     }
 }
