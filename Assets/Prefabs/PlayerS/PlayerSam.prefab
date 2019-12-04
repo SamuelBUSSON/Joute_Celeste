@@ -173,6 +173,7 @@ MonoBehaviour:
   distance: 1
   coolDown: 1
   launchStrength: 5
+  knockbackForce: 10
   enemyPos: {fileID: 0}
 --- !u!114 &2758839452218953963
 MonoBehaviour:

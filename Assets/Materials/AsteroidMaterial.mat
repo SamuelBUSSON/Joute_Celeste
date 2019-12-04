@@ -24,6 +24,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 5e7e7597cba880a40ba7b586f916e945, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2DLOD_FDD71490_Texture_1:
+        m_Texture: {fileID: 2800000, guid: a863b332b0b926e4bb46c8b61a64590e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_2448968D: 2
     - Vector1_4C861AD6: 2

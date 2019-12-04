@@ -15,59 +15,319 @@ MonoBehaviour:
   AcousticTextureWwu:
   - PhysicalPath: Virtual Acoustics\Default Work Unit.wwu
     ParentPhysicalPath: 
-    guid: f848a29f459e6b4ca15c4f9353c2a093
+    guid: df9e64862ca8a042b3ec5a621d57e7db
     GuidInternal: 
-    m_lastTime: -8586266410581663730
+    m_lastTime: -8586262171489546770
     List: []
   AuxBusWwu:
   - PhysicalPath: Master-Mixer Hierarchy\Default Work Unit.wwu
     ParentPhysicalPath: 
-    guid: 70d435ca72ca6e41b246765c1d54a22e
+    guid: 0fcc13c57297d24b8a35bed7e8af5bb2
     GuidInternal: 
-    m_lastTime: -8586266410581753446
+    m_lastTime: -8586262171490195037
     List: []
   BankWwu:
   - PhysicalPath: SoundBanks\Default Work Unit.wwu
     ParentPhysicalPath: 
-    guid: c6cd3763c853e24ea71a91b0a910db14
+    guid: 174613c4b638834d82e6e1c733e21d14
     GuidInternal: 
-    m_lastTime: -8586266410581693665
-    List: []
+    m_lastTime: -8586262171489576688
+    List:
+    - name: Son_General
+      guid: aea6cb949070b44c817cff3d4c5b6d0b
+      id: 2716681386
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Son_General
+        ObjectType: 7
+      Path: Default Work Unit\Son_General
   EventWwu:
   - PhysicalPath: Events\Default Work Unit.wwu
     ParentPhysicalPath: 
-    guid: 85c70c112d9cd24db1d571786aa37287
+    guid: d797f9769f5a1349bc7d8f150177038f
     GuidInternal: 
-    m_lastTime: -8586266410581793577
-    List: []
+    m_lastTime: -8586262171490354609
+    List:
+    - name: Down
+      guid: f5ea12268449ac49b4a105d964fb4815
+      id: 2280510569
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Player_move
+        ObjectType: 4
+      - ElementName: Down
+        ObjectType: 3
+      Path: Default Work Unit\Player_move\Down
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Left_Right
+      guid: 7a4ca158b5295f408fde541ee15d060e
+      id: 189100965
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Player_move
+        ObjectType: 4
+      - ElementName: Left_Right
+        ObjectType: 3
+      Path: Default Work Unit\Player_move\Left_Right
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Contact_for_Comete
+      guid: 35807f761d6aa44ea50dbe352adb78b8
+      id: 1722544548
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Contact_for_Comete
+        ObjectType: 3
+      Path: Default Work Unit\Play_Contact_for_Comete
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Contact_for_Etoile
+      guid: f5792c0045e3ea42b04457aa2d8ca0b7
+      id: 3099463575
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Contact_for_Etoile
+        ObjectType: 3
+      Path: Default Work Unit\Play_Contact_for_Etoile
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Contact_for_Planete
+      guid: 4391595bb75f56478830b9b2ef9fea07
+      id: 3938359640
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Contact_for_Planete
+        ObjectType: 3
+      Path: Default Work Unit\Play_Contact_for_Planete
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Explosion_Comete
+      guid: 103210bf96ab6442b69a0264165a3d74
+      id: 1037682143
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Explosion_Comete
+        ObjectType: 3
+      Path: Default Work Unit\Play_Explosion_Comete
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Explosion_Etoile
+      guid: 7a929542b508b9419c7ea920cb7e52ae
+      id: 4292554548
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Explosion_Etoile
+        ObjectType: 3
+      Path: Default Work Unit\Play_Explosion_Etoile
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Explosion_Planete
+      guid: 8919b634e7b5914ab5c929f7ee1f1992
+      id: 1818497125
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Explosion_Planete
+        ObjectType: 3
+      Path: Default Work Unit\Play_Explosion_Planete
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Charge
+      guid: 726d47fa7fab864c8e164ea00038068b
+      id: 2363478948
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Charge
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Charge
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Contact
+      guid: 6d8a385b56c7d94fb9ae261731d00a25
+      id: 2512253940
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Contact
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Contact
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Dash
+      guid: 5f8854099a6db14384181c671aafd914
+      id: 2175711460
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Dash
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Dash
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Death
+      guid: 5b9d746bc5561d41acaa9c60a1effc2f
+      id: 1835085974
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Death
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Death
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Fire
+      guid: 6dffb9e2ae02bc4eb04f43b9b13d1546
+      id: 1408288908
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Fire
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Fire
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Heal
+      guid: 23b1ba58486e1646abc753c146e05ec5
+      id: 638998366
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Heal
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Heal
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Life
+      guid: 8f7c379778d1fb4b936e36f334c6acf1
+      id: 4116265926
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Life
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Life
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Touch
+      guid: 11a15bec58cf0645872f4ea84ae032ae
+      id: 1289724125
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Touch
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Touch
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Up
+      guid: 254531508260734a836a095a0468e428
+      id: 1551306158
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Player_move
+        ObjectType: 4
+      - ElementName: Up
+        ObjectType: 3
+      Path: Default Work Unit\Player_move\Up
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
   RtpcWwu:
   - PhysicalPath: Game Parameters\Default Work Unit.wwu
     ParentPhysicalPath: 
-    guid: cc6b5c67ae086c4e9edf2764fa1546f3
+    guid: 3b02738d29f06b45ae3659bb54f2c823
     GuidInternal: 
-    m_lastTime: -8586266410581783581
-    List: []
+    m_lastTime: -8586262171490344636
+    List:
+    - name: Life_Bar
+      guid: a40e23a4203dc8458111d8d76d8c2e2b
+      id: 1151835453
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Life_Bar
+        ObjectType: 13
+      Path: Default Work Unit\Life_Bar
   StateWwu:
   - PhysicalPath: States\Default Work Unit.wwu
     ParentPhysicalPath: 
-    guid: 50134ee312ad0f4798a1722dec900d83
+    guid: e763a5e66753094c97102f11f2cacc20
     GuidInternal: 
-    m_lastTime: -8586266410581683686
+    m_lastTime: -8586262171489566715
     List: []
   SwitchWwu:
   - PhysicalPath: Switches\Default Work Unit.wwu
     ParentPhysicalPath: 
-    guid: ff3152ed6906ca408957b687283baff5
+    guid: 2ea1b818b045414286d7285a8b7539c2
     GuidInternal: 
-    m_lastTime: -8586266410581673716
-    List: []
+    m_lastTime: -8586262171489556743
+    List:
+    - name: Choix_Astres
+      guid: a96cbf15ef5d30459cff9c637d637bde
+      id: 1901131985
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Choix_Astres
+        ObjectType: 11
+      Path: Default Work Unit\Choix_Astres
+      values:
+      - name: Comete
+        guid: 65e618c70a38c344aefce31d42916a80
+        id: 2578848224
+        PathAndIcons:
+        - ElementName: Comete
+          ObjectType: 10
+      - name: Etoile
+        guid: d1fef6d4b6c2194cb93a19924cd341ac
+        id: 2999290755
+        PathAndIcons:
+        - ElementName: Etoile
+          ObjectType: 10
+      - name: Planete
+        guid: 27ff42742ec2c944b7732d6f30ded9b9
+        id: 2962930636
+        PathAndIcons:
+        - ElementName: Planete
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
   TriggerWwu:
   - PhysicalPath: Triggers\Default Work Unit.wwu
     ParentPhysicalPath: 
-    guid: 09050051372ad44ebf7ea5b9b6d9db48
+    guid: e953f878e8cf3644b57972f441eeaaaf
     GuidInternal: 
-    m_lastTime: -8586266410581663730
+    m_lastTime: -8586262171489556743
     List: []
-  ExpandedItems: []
+  ExpandedItems:
+  - /Joute_Celeste_WwiseProject
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

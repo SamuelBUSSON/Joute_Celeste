@@ -135,9 +135,10 @@ public class Displacement : MonoBehaviour
             {
                 isDashing = true;
 
-                dashEffect.SendEvent("OnDash");
+                PlayerZone pl = GetComponentInChildren<PlayerZone>();
+                pl.RemoveNull();
+                pl.ChangeSpeedObjectInZone(true);
 
-                GetComponentInChildren<PlayerZone>().ChangeSpeedObjectInZone(true);                
                 rigidbody2d.DOMove(transform.position + movement * dashs[currentDash].dashStrength, dashs[currentDash].timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(dashs[currentDash].easeDash);
 
                 dashCoolDownTimer = 0.0f;

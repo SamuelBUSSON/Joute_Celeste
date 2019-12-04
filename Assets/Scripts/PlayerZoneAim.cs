@@ -25,7 +25,7 @@ public class PlayerZoneAim : MonoBehaviour
     {
         if (other.CompareTag("Projectile") && other.transform)
         {
-            objectInZone.Add(other.transform);
+            objectInZone.Add(other.transform);            
         }
     }
 
@@ -42,10 +42,18 @@ public class PlayerZoneAim : MonoBehaviour
 
     private void SortList()
     {
+        int i = 0;
+        foreach (var item in objectInZone)
+        {
+            if (!item)
+            {
+                objectInZone.RemoveAt(i);
+            }
+            i++;
+        }
+
+
         if(objectInZone.Count > 1)
             objectInZone.Sort((t1, t2) => Vector3.Distance(t1.position, player.position).CompareTo(Vector3.Distance(t2.position, player.position)));
     }
-
-    
-
 }

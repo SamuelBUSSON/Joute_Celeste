@@ -22,6 +22,7 @@ public class ObjectLauncher : MonoBehaviour
     {
         coolDownTimer += Time.deltaTime;
 
+
         if (coolDownTimer >= coolDown)
         {
             GameObject objectToLaunch = Instantiate(objectLaunched, transform.position, Quaternion.identity);
@@ -31,6 +32,7 @@ public class ObjectLauncher : MonoBehaviour
             coolDownTimer = 0.0f;
             Vector3 heading = -transform.right;
             objectToLaunch.GetComponent<Rigidbody2D>().velocity = heading * launchStrength;
+
 
             Destroy(objectToLaunch.gameObject, 10.0f);
 
