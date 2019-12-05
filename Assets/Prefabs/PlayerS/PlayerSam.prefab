@@ -17,9 +17,9 @@ GameObject:
   - component: {fileID: 2758839452218953969}
   - component: {fileID: 4167890457512715605}
   - component: {fileID: 3428629715616182282}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: PlayerSam
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,7 +160,6 @@ MonoBehaviour:
   stunTime: 2
   onStunSpeedDivide: 5
   slowStrength: 5
-  dashEffect: {fileID: 0}
 --- !u!114 &2758839452218953962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +264,7 @@ GameObject:
   - component: {fileID: 5285883017592362768}
   - component: {fileID: 3872819554724585126}
   - component: {fileID: 7932190389996229580}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FX_Dash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,6 +370,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2758839452218953972}
     m_Modifications:
+    - target: {fileID: 1091391847290148046, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091391847542295414, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 1091391847767521840, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
       propertyPath: m_Offset.x
@@ -444,7 +453,7 @@ PrefabInstance:
     - target: {fileID: 1091391847767522253, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1091391847767522254, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
