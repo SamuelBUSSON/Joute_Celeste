@@ -45,11 +45,15 @@ public class Projectile : MonoBehaviour
 
         if (proj && proj.isLaunched)
         {
-            if(proj.type > type)
-               Die();
+            if (proj.type > type)
+            {
+                if (thresholdLevels.Count - 1 != thresholdIndex || type + 1 != proj.type || proj.type == EProjectileType.PLANET)
+                    Die();
+            }
             else if(proj.type < type)
             {
-                proj.Die();
+                if (proj.thresholdLevels.Count - 1 == proj.thresholdIndex && proj.type + 1 == type || type == EProjectileType.PLANET)
+                    proj.Die();
             }
             else if(proj.thresholdIndex > thresholdIndex)
             {

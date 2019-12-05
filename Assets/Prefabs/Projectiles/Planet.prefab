@@ -14,6 +14,7 @@ VFXRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -96,6 +97,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -133,7 +135,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  damage: 2
+  startingDamage: 0
+  thresholdLevels:
+  - speed: 1
+    damage: 1
+  - speed: 1
+    damage: 1
 --- !u!50 &-43059019884636479
 Rigidbody2D:
   serializedVersion: 4
@@ -182,6 +189,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TrailEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 4562040613720177668, guid: cf1edf800ebc9e84fba83bbda0327b5b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4562040613720177671, guid: cf1edf800ebc9e84fba83bbda0327b5b,
         type: 3}
@@ -237,11 +249,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -175.93001
-      objectReference: {fileID: 0}
-    - target: {fileID: 4562040613720177668, guid: cf1edf800ebc9e84fba83bbda0327b5b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf1edf800ebc9e84fba83bbda0327b5b, type: 3}

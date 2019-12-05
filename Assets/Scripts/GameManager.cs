@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
 
     public CinemachineTargetGroup targetGroup;
 
-    private PlayerInputManager inputManager;
     [NonSerialized]
     public int playerIndex = -1;
 
@@ -31,7 +30,7 @@ public class GameManager : MonoBehaviour
         if (!Instance)
         {
             Instance = this;
-            PlayerInputManager.instance.onPlayerJoined += OnPlayerJoin;
+            GetComponent<PlayerInputManager>().onPlayerJoined += OnPlayerJoin;
         }
         else
         {
