@@ -145,11 +145,9 @@ public class Displacement : MonoBehaviour
                 PlayerZone pl = GetComponentInChildren<PlayerZone>();
                 pl.RemoveNull();
                 pl.ChangeSpeedObjectInZone(true);
-
                 
                 dash_FX.SendEvent("OnDash");
                 dash_FX.SetFloat("RotateAngle", Mathf.Atan2(-movement.normalized.x, -movement.normalized.y));
-
 
                 rigidbody2d.DOMove(transform.position + movement * dashs[currentDash].dashStrength, dashs[currentDash].timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(dashs[currentDash].easeDash);
 
