@@ -10,6 +10,9 @@ public class ExplosionEffect : MonoBehaviour
     public float speed = 1.1f;
     public float scaleSizeDestroy = 100.0f;
 
+    public GameObject objectAfter;
+    public float scaleToInstantiate = 20f;
+
     private Vector2 scale;
 
     private void Start()
@@ -31,6 +34,15 @@ public class ExplosionEffect : MonoBehaviour
         if(transform.localScale.x <= 0)
         {
             Destroy(gameObject);
+        }
+
+        if(scale.x >= scaleToInstantiate)
+        {
+            if (objectAfter)
+            {
+                Instantiate(objectAfter, transform.position, Quaternion.identity).GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder + 1;
+                objectAfter = null;
+            }
         }
     }
 }
