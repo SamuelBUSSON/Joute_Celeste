@@ -24,9 +24,7 @@ public class Displacement : MonoBehaviour
     public float onStunSpeedDivide = 5.0f;
 
     [Header("Zone Slow")]
-    public float slowStrength = 3.0f;
-
-    public VisualEffect dashEffect;
+    public float slowStrength = 3.0f;    
 
 
     private float dashCoolDownTimer = 0.0f;
