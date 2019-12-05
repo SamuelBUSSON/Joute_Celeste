@@ -11,7 +11,9 @@ public class ObjectHandler : MonoBehaviour
     public float distance = 1.0f;
     public float coolDown = 0.2f;
 
-    public float launchStrength = 2.0f;    
+    public float launchStrength = 2.0f;
+
+    public float knockbackForce = 2.0f;
 
     public Transform enemyPos;
 
@@ -26,8 +28,6 @@ public class ObjectHandler : MonoBehaviour
     private bool autoAim = false;
 
     private Displacement playerMovement;
-
-
     private void Awake()
     {
         input = GetComponent<PlayerInput>();
@@ -141,6 +141,11 @@ public class ObjectHandler : MonoBehaviour
         {
             if (coolDownTimer >= coolDown)
             {
+
+                AkSoundEngine.SetSwitch("Choix_Astres", "Planete", gameObject);
+                AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
+
+
                 coolDownTimer = 0.0f;
                 handledObject.SetParent(null);
 
@@ -151,7 +156,8 @@ public class ObjectHandler : MonoBehaviour
                 handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
 
                 handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
-                
+
+                GetComponent<Rigidbody2D>().AddForce(-heading.normalized * knockbackForce * 15, ForceMode2D.Force);
 
                 handledObject = null;
             }

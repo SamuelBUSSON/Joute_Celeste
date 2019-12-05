@@ -165,7 +165,7 @@ public class PlayerZone : MonoBehaviour
         if (other.CompareTag("Projectile"))
         {
             objectInZone.Remove(other.transform);
-            if(other.transform == nearestElement?.transform)
+            if(nearestElement && other.transform == nearestElement.transform)
             {
                 ChangeNearestElementColor(false);
             }
@@ -181,6 +181,19 @@ public class PlayerZone : MonoBehaviour
     private void SortList()
     {
         objectInZone.Sort((t1, t2) => Vector3.Distance(t1.position, player.position).CompareTo(Vector3.Distance(t2.position, player.position)));
+    }
+
+    public void RemoveNull()
+    {
+        int i = 0;
+        foreach (var item in objectInZone)
+        {
+            if (!item)
+            {
+                objectInZone.RemoveAt(i);
+            }
+            i++;
+        }
     }
 
     private Transform GetParentTransform(Transform t)
@@ -215,7 +228,10 @@ public class PlayerZone : MonoBehaviour
     {
         foreach (var item in objectToSlowOnDash)
         {
-            item.GetComponent<Rigidbody2D>().velocity *= isSlow ? 1/ player.GetComponent<Displacement>().slowStrength : player.GetComponent<Displacement>().slowStrength;
+            if (item)
+            {
+                item.GetComponent<Rigidbody2D>().velocity *= isSlow ? 1/ player.GetComponent<Displacement>().slowStrength : player.GetComponent<Displacement>().slowStrength;
+            }
         }
     }
 
