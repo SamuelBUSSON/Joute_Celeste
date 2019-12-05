@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class ProjectileSpawner : MonoBehaviour
 {
     public Projectile prefabToSpawn;
     
+    [Header("Propriétés des projectiles lents")]
     [Range(0, 1f)]
     public float probability;
 
@@ -16,14 +18,30 @@ public class ProjectileSpawner : MonoBehaviour
     public int maxSpawned;
 
     public int spawnedThreshold;
-
-    public float speed;
     
-    Vector2 center = new Vector2(Screen.height, Screen.width);
+    [Tooltip("Vitesse des projectiles lents")]
+    public float slowSpeed;
+    
+    [Header("Propriétés des projectiles rapides")]
+    [Range(0f, 1f)]
+    public float fastSpeedProbability;
+
+    [Tooltip("Seconde écoulées pour que les rapides spawn")]
+    public float secondToHighSpeed;
+    [Tooltip("Vitesse des projectiles rapides")]
+    public float fastSpeed;
+    
+    private Camera cam;
 
     private void Start()
     {
+        cam = Camera.main;
         StartCoroutine(SpawnProjectile());
+    }
+
+    private void Update()
+    {
+        secondToHighSpeed -= Time.deltaTime;
     }
 
     private IEnumerator SpawnProjectile()
@@ -35,41 +53,64 @@ public class ProjectileSpawner : MonoBehaviour
             {
                 //TODO: add proba to event
                 SpawnMeteorRain();
-                
             }
-                
-            
+
             yield return new WaitForSeconds(cooldown);
         }
     }
 
     private void SpawnMeteorRain()
     {
-        int amount = Random.Range(minSpawned, maxSpawned);
+        float speed = slowSpeed;
+        if (secondToHighSpeed <= 0.0f && Random.value <= fastSpeedProbability)
+        {
+            speed = fastSpeed;
+        }
 
-        Vector2 startingPosition = ((Random.insideUnitCircle + Vector2.one) * (Screen.width *.25f));
+        int amount = Random.Range(minSpawned, maxSpawned);
+        
+        Vector3 startingPosition = GetRandomCameraWorldPoint();
+        startingPosition.z = 0f;
+        
+        Vector3 dir = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+        dir.z = 0f;
+        
+        startingPosition += (startingPosition - dir).normalized * 1.25f;
+        startingPosition.z = 0f;
         
         for (int i = 0; i < amount; i++)
         {
-            Vector2 position = startingPosition + (Random.insideUnitCircle * 4f);
-            var proj = Instantiate(prefabToSpawn, new Vector3(position.x, position.y, 0),
-                Quaternion.identity,
+            Vector3 position = Random.insideUnitCircle;
+            position += startingPosition;
+            
+            var proj = Instantiate(prefabToSpawn, position
+                , Quaternion.identity,
                 transform);
-            proj.transform.LookAt(center);
+            proj.transform.LookAt(dir);
             proj.transform.Rotate(0, 0, Random.Range(-5f, 5f));
-            proj.GetComponent<Rigidbody2D>().AddForce(new Vector2(speed, 0));
+            proj.GetComponent<Rigidbody2D>().AddForce(-(position - dir).normalized * speed);
         }
     }
 
-    private void SpawnMeteorBelt()
+    private Vector3 GetRandomCameraWorldPoint()
     {
-        int amount = Random.Range(minSpawned, maxSpawned);
+        int corner = Random.Range(0, 4);
 
-        Vector2 startingPosition = ((Random.insideUnitCircle + Vector2.one) * (Screen.width *.25f));
-
-        for (int i = 0; i < amount; i++)
+        switch (corner)
         {
-            
+            case 0: 
+                return cam.ViewportToWorldPoint(Vector3.zero);
+
+            case 1: 
+                return cam.ViewportToWorldPoint(Vector3.up);
+
+            case 2:
+                return cam.ViewportToWorldPoint(Vector3.one);
+
+            case 3:
+                return cam.ViewportToWorldPoint(Vector3.right);
         }
+        
+        return Vector3.zero;
     }
 }
