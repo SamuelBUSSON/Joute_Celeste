@@ -141,7 +141,6 @@ public class Displacement : MonoBehaviour
                 isDashing = true;
 
                 PlayerZone pl = GetComponentInChildren<PlayerZone>();
-                pl.RemoveNull();
                 pl.ChangeSpeedObjectInZone(true);
                 
                 dash_FX.SendEvent("OnDash");
