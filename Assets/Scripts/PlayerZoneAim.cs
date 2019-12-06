@@ -41,19 +41,29 @@ public class PlayerZoneAim : MonoBehaviour
     }
 
     private void SortList()
+    {       
+        objectInZone.Sort((t1, t2) => SortFunction(t1, t2));
+    }
+
+    private int SortFunction(Transform t1, Transform t2)
     {
-        int i = 0;
-        foreach (var item in objectInZone)
+        bool testNull = false;
+        if (!t1)
         {
-            if (!item)
-            {
-                objectInZone.RemoveAt(i);
-            }
-            i++;
+            testNull = true;
+            objectInZone.Remove(t1);
+        }
+        if (!t2)
+        {
+            testNull = true;
+            objectInZone.Remove(t2);
         }
 
+        if (testNull)
+        {
+            return 0;
+        }
 
-        if(objectInZone.Count > 1)
-            objectInZone.Sort((t1, t2) => Vector3.Distance(t1.position, player.position).CompareTo(Vector3.Distance(t2.position, player.position)));
+        return Vector3.Distance(t1.position, player.position).CompareTo(Vector3.Distance(t2.position, player.position));
     }
 }

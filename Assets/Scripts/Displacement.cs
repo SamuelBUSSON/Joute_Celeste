@@ -11,20 +11,20 @@ public class Displacement : MonoBehaviour
 
     public float speed = 0.1f;
     public float maxVelocityChange = 10.0f;
+    public float soapStrength = 10f;
 
     [Header("Dash")]   
     public C_Dash[] dashs;
     [Tooltip("The time you have to do the next dash")]
     public float dashCoolDown = 1.0f;
+    public VisualEffect dash_FX;
 
     [Header("Dash Stun")]
     public float stunTime = 2.0f;
     public float onStunSpeedDivide = 5.0f;
 
     [Header("Zone Slow")]
-    public float slowStrength = 3.0f;
-
-    public VisualEffect dashEffect;
+    public float slowStrength = 3.0f;    
 
 
     private float dashCoolDownTimer = 0.0f;
@@ -46,7 +46,7 @@ public class Displacement : MonoBehaviour
         
         input.actions.Enable();
         input.currentActionMap["Movement"].performed += context => OnMovement(context);
-        input.currentActionMap["Movement"].canceled += context => OnMovement(context);
+        input.currentActionMap["Movement"].canceled += context => OnMovementCancel(context);
 
         input.currentActionMap["Dash"].started += context => OnDash(context);
     }
@@ -59,13 +59,18 @@ public class Displacement : MonoBehaviour
     private void OnMovement(InputAction.CallbackContext obj)
     {
         //Reads input
-       movement = obj.ReadValue<Vector2>();
+       movement = obj.ReadValue<Vector2>();      
+    }
+
+    private void OnMovementCancel(InputAction.CallbackContext obj)
+    {
+        movement = obj.ReadValue<Vector2>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
+        Move(false);
 
         DashTimer();
     }
@@ -84,7 +89,7 @@ public class Displacement : MonoBehaviour
         }
     }
 
-    private void Move()
+    private void Move(bool isCancel)
     {
         if (!isDashing)
         {
@@ -136,8 +141,10 @@ public class Displacement : MonoBehaviour
                 isDashing = true;
 
                 PlayerZone pl = GetComponentInChildren<PlayerZone>();
-                pl.RemoveNull();
                 pl.ChangeSpeedObjectInZone(true);
+                
+                dash_FX.SendEvent("OnDash");
+                dash_FX.SetFloat("RotateAngle", Mathf.Atan2(-movement.normalized.x, -movement.normalized.y));
 
                 rigidbody2d.DOMove(transform.position + movement * dashs[currentDash].dashStrength, dashs[currentDash].timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(dashs[currentDash].easeDash);
 

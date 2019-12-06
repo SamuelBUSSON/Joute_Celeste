@@ -32,6 +32,7 @@ public class ObjectHandler : MonoBehaviour
     {
         input = GetComponent<PlayerInput>();
 
+
         input.actions.Enable();
 
         input.currentActionMap["Fire"].canceled += context => OnFire(context);
@@ -141,23 +142,26 @@ public class ObjectHandler : MonoBehaviour
         {
             if (coolDownTimer >= coolDown)
             {
+                CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
+                CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, input.playerIndex );
 
+                /*
                 AkSoundEngine.SetSwitch("Choix_Astres", "Planete", gameObject);
-                AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
-
+                AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);*/
 
                 coolDownTimer = 0.0f;
                 handledObject.SetParent(null);
 
                 Projectile projectile = handledObject.GetComponent<Projectile>();
                 projectile.isLaunched = true;
+                projectile.tag = "Untagged";
 
                 Vector3 heading = handledObject.transform.position - transform.position;
                 handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
 
-                handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
+                handledObject.GetComponentInChildren<VisualEffect>().enabled = true;                
 
-                GetComponent<Rigidbody2D>().AddForce(-heading.normalized * knockbackForce * 15, ForceMode2D.Force);
+                transform.DOMove(transform.position - heading.normalized * knockbackForce, 0.05f);
 
                 handledObject = null;
             }

@@ -60,6 +60,14 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "Hold(duration=1)"
+                },
+                {
+                    "name": "TestAction",
+                    "type": "Button",
+                    "id": "ad2ec385-8e18-4d3a-97cb-41ca2c985f10",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold(duration=1)"
                 }
             ],
             "bindings": [
@@ -247,6 +255,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "HoldLv2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ef6d0f18-fa30-4a36-95eb-d8dc56295a77",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TestAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
