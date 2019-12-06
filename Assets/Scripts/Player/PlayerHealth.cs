@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
@@ -12,7 +13,8 @@ public class PlayerHealth : MonoBehaviour
     public class SHealthThreshold //TODO: maybe add a range to enlarge the entity
     {
         public float health;
-        public float speed;
+        public float speedMultiplier;
+        public float damageMultiplier;
     }
 
     public List<SHealthThreshold> thresholds;
@@ -27,6 +29,7 @@ public class PlayerHealth : MonoBehaviour
     private Slider healthSlider;
 
     private PlayerController playerController;
+    private ObjectHandler _objectHandler;
 
     private void Awake()
     {
@@ -55,6 +58,7 @@ public class PlayerHealth : MonoBehaviour
         healthSlider.value = Health;
 
         playerMovement = GetComponent<Displacement>();
+        _objectHandler = GetComponent<ObjectHandler>();
     }
 
     public void TakeDamage(float amount)
@@ -70,8 +74,9 @@ public class PlayerHealth : MonoBehaviour
                 {
                     if (++indexThreshold < thresholds.Count)
                     {
-                        playerMovement.speed *= thresholds[indexThreshold].speed;
-
+                        playerMovement.speed *= thresholds[indexThreshold].speedMultiplier;
+                        _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;
+                        
                         if (indexThreshold == 1)
                         {
                             AttractZone.transform.localScale *= attractRange;

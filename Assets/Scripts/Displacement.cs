@@ -140,6 +140,7 @@ public class Displacement : MonoBehaviour
             {
                 isDashing = true;
 
+                
                 PlayerZone pl = GetComponentInChildren<PlayerZone>();
                 pl.ChangeSpeedObjectInZone(true);
                 

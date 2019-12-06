@@ -67,7 +67,7 @@ public class Projectile : MonoBehaviour
                 proj.Die(other.contacts[0].point);
             }
         }
-        else
+        else if(isLaunched)
         {
             PlayerHealth player = other.transform.GetComponent<PlayerHealth>();
 

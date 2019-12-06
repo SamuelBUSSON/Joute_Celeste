@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -12,6 +13,7 @@ public class ObjectHandler : MonoBehaviour
     public float coolDown = 0.2f;
 
     public float launchStrength = 2.0f;
+    [NonSerialized] public float damageMultiplier = 1f;
 
     public float knockbackForce = 2.0f;
 
@@ -142,7 +144,9 @@ public class ObjectHandler : MonoBehaviour
         {
             if (coolDownTimer >= coolDown)
             {
+                //input.
                 CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
+                
                 CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, input.playerIndex );
 
                 /*
@@ -155,6 +159,7 @@ public class ObjectHandler : MonoBehaviour
                 Projectile projectile = handledObject.GetComponent<Projectile>();
                 projectile.isLaunched = true;
                 projectile.tag = "Untagged";
+                projectile.currentDamage *= damageMultiplier;
 
                 Vector3 heading = handledObject.transform.position - transform.position;
                 handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;

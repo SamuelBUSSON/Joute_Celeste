@@ -148,11 +148,14 @@ public class PlayerZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Projectile") && other.transform != playerObjectHandler.GetObjectHandled())
+        Projectile proj = other.transform.GetComponent<Projectile>();
+        if (proj && other.transform != playerObjectHandler.GetObjectHandled())
         {
             objectInZone.Add(other.transform);
         }
-        objectToSlowOnDash.Add(other.transform);
+
+        if (proj)
+            objectToSlowOnDash.Add(other.transform);
 
         if (player.GetComponent<Displacement>().IsDashing() && objectToSlowOnDash.Contains(other.transform))
         {
@@ -162,6 +165,7 @@ public class PlayerZone : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        SortList();
         if (other.CompareTag("Projectile"))
         {
             objectInZone.Remove(other.transform);
@@ -235,6 +239,7 @@ public class PlayerZone : MonoBehaviour
 
     public void ChangeSpeedObjectInZone(bool isSlow)
     {
+        SortList();
         foreach (var item in objectToSlowOnDash)
         {
             if (item)
