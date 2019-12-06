@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityTemplateProjects.Player;
 
 public class PlayerHealth : MonoBehaviour
 {
     [Serializable]
-    public struct SHealthThreshold //TODO: maybe add a range to enlarge the entity
+    public class SHealthThreshold //TODO: maybe add a range to enlarge the entity
     {
-        public int health;
+        public float health;
+        public float speed;
     }
 
     public List<SHealthThreshold> thresholds;
-    
+
+    public float attractRange;
+    public GameObject AttractZone;
+
     public float Health;
 
     private int indexThreshold;
@@ -53,15 +57,9 @@ public class PlayerHealth : MonoBehaviour
         playerMovement = GetComponent<Displacement>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void TakeDamage(float amount)
     {
-        if (playerMovement.IsDashing())
+        if (!playerMovement.IsDashing())
         {
             Health -= amount;
             healthSlider.value = Health;
@@ -72,7 +70,16 @@ public class PlayerHealth : MonoBehaviour
                 {
                     if (++indexThreshold < thresholds.Count)
                     {
-                        //TODO: change range or whatnot
+                        playerMovement.speed *= thresholds[indexThreshold].speed;
+
+                        if (indexThreshold == 1)
+                        {
+                            AttractZone.transform.localScale *= attractRange;
+                        }
+                        else if (indexThreshold == 2)
+                        {
+                            playerMovement.dashCoolDown /= 2;
+                        }
                     }
                 }
             }

@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityTemplateProjects.Player;
 
 public class GameManager : MonoBehaviour
 {
