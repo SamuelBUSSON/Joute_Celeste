@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class ExplosionEffect : MonoBehaviour
 {
@@ -14,10 +15,13 @@ public class ExplosionEffect : MonoBehaviour
     public float scaleToInstantiate = 20f;
 
     private Vector2 scale;
+    private Material material;
 
     private void Start()
     {
         scale = transform.localScale;
+
+        material = GetComponent<SpriteRenderer>().material;
     }
 
     // Update is called once per frame
@@ -34,9 +38,11 @@ public class ExplosionEffect : MonoBehaviour
         if(transform.localScale.x <= 0)
         {
             Destroy(gameObject);
-        }
+        }                
 
-        if(scale.x >= scaleToInstantiate)
+        material.DOFloat(1.0f, "_DistorsionStrenth", 0.2f);
+
+        if (scale.x >= scaleToInstantiate)
         {
             if (objectAfter)
             {

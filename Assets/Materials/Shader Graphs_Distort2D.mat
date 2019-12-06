@@ -33,7 +33,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Boolean_9E0C0DC4: 0
     - Vector1_4B597126: 0
+    - _DistorsionStrenth: 0
     - _Speed: 0
     m_Colors:
     - Vector2_FB628A27: {r: 1, g: 1, b: 0, a: 0}
