@@ -22,6 +22,9 @@ public class Projectile : MonoBehaviour
     }
     
     public EProjectileType type;
+
+    public GameObject ExplosionFX;
+
     [NonSerialized]
     public int playerIndex;
     public float startingDamage;
@@ -48,20 +51,20 @@ public class Projectile : MonoBehaviour
             if (proj.type > type)
             {
                 if (thresholdLevels.Count - 1 != thresholdIndex || type + 1 != proj.type || proj.type == EProjectileType.PLANET)
-                    Die();
+                    Die(other.contacts[0].point);
             }
             else if(proj.type < type)
             {
                 if (proj.thresholdLevels.Count - 1 == proj.thresholdIndex && proj.type + 1 == type || type == EProjectileType.PLANET)
-                    proj.Die();
+                    proj.Die(other.contacts[0].point);
             }
             else if(proj.thresholdIndex > thresholdIndex)
             {
-                Die();
+                Die(other.contacts[0].point);
             }
             else if(proj.thresholdIndex < thresholdIndex)
             {
-                proj.Die();
+                proj.Die(other.contacts[0].point);
             }
         }
         else
@@ -72,7 +75,7 @@ public class Projectile : MonoBehaviour
             if (player && player.GetComponent<PlayerController>().playerIndex != playerIndex)
             {
                 player.TakeDamage(currentDamage);
-                Die();
+                Die(other.contacts[0].point);
             }
         }
     }
@@ -85,9 +88,10 @@ public class Projectile : MonoBehaviour
         currentDamage = startingDamage * thresholdLevels[thresholdIndex].damage;
     }
 
-    public void Die()
+    public void Die(Vector2 contactPoint)
     {
         //TODO: add kaboom
+        Instantiate(ExplosionFX, contactPoint, Quaternion.identity);
         Destroy(gameObject);
     }
 }

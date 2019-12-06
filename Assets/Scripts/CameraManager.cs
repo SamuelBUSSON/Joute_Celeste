@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Cinemachine;
 
 public class CameraManager : MonoBehaviour
@@ -36,6 +37,12 @@ public class CameraManager : MonoBehaviour
         StartCoroutine(StartScreenShake(timeInSeconds));
     }
 
+    public void Vibrate(float low_frequency, float high_frequency, float timeInSeconds)
+    {
+        Gamepad.current.SetMotorSpeeds(low_frequency, high_frequency);
+        StartCoroutine(StartVibrateController(timeInSeconds));
+    }
+
     IEnumerator StartScreenShake(float timeInSeconds)
     {
         yield return new WaitForSeconds(timeInSeconds);
@@ -43,5 +50,9 @@ public class CameraManager : MonoBehaviour
         noiseSettings.m_FrequencyGain = 0;
     }
 
-
+    IEnumerator StartVibrateController(float timeInSeconds)
+    {
+        yield return new WaitForSeconds(timeInSeconds);
+        Gamepad.current.SetMotorSpeeds(0, 0);
+    }
 }

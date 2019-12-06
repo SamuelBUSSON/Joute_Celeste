@@ -142,9 +142,11 @@ public class ObjectHandler : MonoBehaviour
             if (coolDownTimer >= coolDown)
             {
                 CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
+                CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f);
 
+                /*
                 AkSoundEngine.SetSwitch("Choix_Astres", "Planete", gameObject);
-                AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
+                AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);*/
 
                 coolDownTimer = 0.0f;
                 handledObject.SetParent(null);
