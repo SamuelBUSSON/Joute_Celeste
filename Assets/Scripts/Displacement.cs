@@ -59,8 +59,7 @@ public class Displacement : MonoBehaviour
     private void OnMovement(InputAction.CallbackContext obj)
     {
         //Reads input
-       movement = obj.ReadValue<Vector2>();
-
+       movement = obj.ReadValue<Vector2>();      
     }
 
     private void OnMovementCancel(InputAction.CallbackContext obj)

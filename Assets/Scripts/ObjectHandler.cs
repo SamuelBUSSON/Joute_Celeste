@@ -32,6 +32,7 @@ public class ObjectHandler : MonoBehaviour
     {
         input = GetComponent<PlayerInput>();
 
+
         input.actions.Enable();
 
         input.currentActionMap["Fire"].canceled += context => OnFire(context);
@@ -142,7 +143,7 @@ public class ObjectHandler : MonoBehaviour
             if (coolDownTimer >= coolDown)
             {
                 CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
-                CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f);
+                CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, input.playerIndex );
 
                 /*
                 AkSoundEngine.SetSwitch("Choix_Astres", "Planete", gameObject);

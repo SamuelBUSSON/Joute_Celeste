@@ -37,10 +37,10 @@ public class CameraManager : MonoBehaviour
         StartCoroutine(StartScreenShake(timeInSeconds));
     }
 
-    public void Vibrate(float low_frequency, float high_frequency, float timeInSeconds)
+    public void Vibrate(float low_frequency, float high_frequency, float timeInSeconds, int playerIndex)
     {
-        Gamepad.current.SetMotorSpeeds(low_frequency, high_frequency);
-        StartCoroutine(StartVibrateController(timeInSeconds));
+        Gamepad.all[playerIndex].SetMotorSpeeds(low_frequency, high_frequency);
+        StartCoroutine(StartVibrateController(timeInSeconds, playerIndex));
     }
 
     IEnumerator StartScreenShake(float timeInSeconds)
@@ -50,9 +50,9 @@ public class CameraManager : MonoBehaviour
         noiseSettings.m_FrequencyGain = 0;
     }
 
-    IEnumerator StartVibrateController(float timeInSeconds)
+    IEnumerator StartVibrateController(float timeInSeconds, int playerIndex)
     {
         yield return new WaitForSeconds(timeInSeconds);
-        Gamepad.current.SetMotorSpeeds(0, 0);
+        Gamepad.all[playerIndex].SetMotorSpeeds(0, 0);
     }
 }
