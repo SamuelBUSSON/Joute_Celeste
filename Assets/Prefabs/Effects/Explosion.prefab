@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mini: 0
-  speed: 1.2
+  speed: 0.3
   scaleSizeDestroy: 20
   objectAfter: {fileID: 0}
   scaleToInstantiate: 20

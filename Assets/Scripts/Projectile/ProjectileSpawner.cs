@@ -86,7 +86,7 @@ public class ProjectileSpawner : MonoBehaviour
             var proj = Instantiate(prefabToSpawn, position
                 , Quaternion.identity,
                 transform);
-            proj.transform.LookAt(dir);
+            //proj.transform.LookAt(dir);
             proj.transform.Rotate(0, 0, Random.Range(-5f, 5f));
             proj.GetComponent<Rigidbody2D>().AddForce(-(position - dir).normalized * speed);
         }
