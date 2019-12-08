@@ -18,6 +18,7 @@ public class Displacement : MonoBehaviour
     [Tooltip("The time you have to do the next dash")]
     public float dashCoolDown = 1.0f;
     public VisualEffect dash_FX;
+    public float impusleStrength = 10.0f;
 
     [Header("Dash Stun")]
     public float stunTime = 2.0f;
@@ -128,7 +129,9 @@ public class Displacement : MonoBehaviour
 
     private void DashCanceled()
     {
-           GetComponentInChildren<PlayerZone>().ChangeSpeedObjectInZone(false);
+
+        GetComponentInChildren<PointEffector2D>().forceMagnitude = -10;
+        GetComponentInChildren<PlayerZone>().ChangeSpeedObjectInZone(false);
            isDashing = false;        
     }
 
@@ -146,6 +149,15 @@ public class Displacement : MonoBehaviour
                 
                 dash_FX.SendEvent("OnDash");
                 dash_FX.SetFloat("RotateAngle", Mathf.Atan2(-movement.normalized.x, -movement.normalized.y));
+
+                /*
+                foreach (var item in GetComponentInChildren<PlayerZone>().GetAllObjectInZone())
+                {
+                    Debug.Log("sdfsdf");
+                    item.GetComponent<Rigidbody2D>().AddForce(-movement.normalized * impusleStrength * 100);
+                }*/
+
+                GetComponentInChildren<PointEffector2D>().forceMagnitude = 100;
 
                 rigidbody2d.DOMove(transform.position + movement * dashs[currentDash].dashStrength, dashs[currentDash].timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(dashs[currentDash].easeDash);
 

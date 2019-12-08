@@ -53,10 +53,11 @@ public class PlayerZone : MonoBehaviour
     {
          GetNearestElement();         
 
-        if(nearestElement && Vector2.Distance(nearestElement.position, transform.position) <= distanceToCatch)
+       /* if(nearestElement && Vector2.Distance(nearestElement.position, transform.position) <= distanceToCatch)
         {
             CaughtObject(nearestElement);
-        }        
+        }    
+        */    
     }
 
     private void OnCaughtObject(InputAction.CallbackContext obj)
@@ -87,6 +88,11 @@ public class PlayerZone : MonoBehaviour
 
             element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));            
         }
+    }
+
+    public List<Transform> GetAllObjectInZone()
+    {
+        return objectInZone;
     }
 
     private void CaughtEffect(Transform element)
@@ -148,14 +154,17 @@ public class PlayerZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Projectile proj = other.transform.GetComponent<Projectile>();
-        if (proj && other.transform != playerObjectHandler.GetObjectHandled())
+        if (other.CompareTag("Projectile") && other.transform != playerObjectHandler.GetObjectHandled())
         {
-            objectInZone.Add(other.transform);
+            if (!objectInZone.Contains(other.transform))
+            {
+                objectInZone.Add(other.transform);
+            }
         }
-
-        if (proj)
-            objectToSlowOnDash.Add(other.transform);
+        if (!objectToSlowOnDash.Contains(other.transform) && (other.CompareTag("Projectile") || other.gameObject.layer == 10))
+        {
+            objectToSlowOnDash.Add(other.transform);    
+        }
 
         if (player.GetComponent<Displacement>().IsDashing() && objectToSlowOnDash.Contains(other.transform))
         {
@@ -165,7 +174,6 @@ public class PlayerZone : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        SortList();
         if (other.CompareTag("Projectile"))
         {
             objectInZone.Remove(other.transform);
@@ -176,6 +184,7 @@ public class PlayerZone : MonoBehaviour
         }
         if (player.GetComponent<Displacement>().IsDashing() && objectToSlowOnDash.Contains(other.transform))
         {
+            SortList();
             other.GetComponent<Rigidbody2D>().velocity *= player.GetComponent<Displacement>().slowStrength;
         }
         objectToSlowOnDash.Remove(other.transform);
@@ -237,9 +246,23 @@ public class PlayerZone : MonoBehaviour
         return null;
     }
 
+    public Transform GetNearestObjectInZone()
+    {
+        if (nearestElement)
+        {
+            Transform elementToReturn = nearestElement;
+            objectInZone.Remove(nearestElement);
+            nearestElement = null;
+            return elementToReturn;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public void ChangeSpeedObjectInZone(bool isSlow)
     {
-        SortList();
         foreach (var item in objectToSlowOnDash)
         {
             if (item)
@@ -253,8 +276,8 @@ public class PlayerZone : MonoBehaviour
     {
         if (nearestElement)
         {
-            nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(190, 27, 0) / 255 * 2, "Color_15CF1060", 1.0f);
-            nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(100, 13, 25) / 255 * 2, "Color_B93BCC95", 1.0f);
+           // nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(190, 27, 0) / 255 * 2, "Color_15CF1060", 1.0f);
+           // nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(100, 13, 25) / 255 * 2, "Color_B93BCC95", 1.0f);
         }
 
     }

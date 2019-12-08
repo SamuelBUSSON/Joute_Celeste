@@ -10,7 +10,6 @@ public class ObjectHandler : MonoBehaviour
 {
 
     public float distance = 1.0f;
-    public float coolDown = 0.2f;
 
     public float launchStrength = 2.0f;
     [NonSerialized] public float damageMultiplier = 1f;
@@ -30,6 +29,7 @@ public class ObjectHandler : MonoBehaviour
     private bool autoAim = false;
 
     private Displacement playerMovement;
+    private PlayerZone playerZone;
     private void Awake()
     {
         input = GetComponent<PlayerInput>();
@@ -49,6 +49,7 @@ public class ObjectHandler : MonoBehaviour
 
 
     }
+    
 
     private void OnHoldLv2(InputAction.CallbackContext obj)
     {
@@ -86,6 +87,8 @@ public class ObjectHandler : MonoBehaviour
         displaceAngleVector = new Vector3();
 
         playerMovement = GetComponent<Displacement>();
+
+        playerZone = GetComponentInChildren<PlayerZone>();
     }
 
 
@@ -99,10 +102,7 @@ public class ObjectHandler : MonoBehaviour
                 Aim(Vector2.zero, true);
             }
             handledObject.transform.position = transform.position + displaceAngleVector;
-
-        }
-
-
+        }        
         coolDownTimer += Time.deltaTime;       
     }
 
@@ -111,7 +111,7 @@ public class ObjectHandler : MonoBehaviour
         if (handledObject)
         {
             handledObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        }
+        }        
     }
 
     private void OnFire(InputAction.CallbackContext obj)
@@ -142,35 +142,48 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
-            if (coolDownTimer >= coolDown)
+            /*
+            AkSoundEngine.SetSwitch("Choix_Astres", "Planete", gameObject);
+            AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);*/
+            FireObject();
+        }
+        else
+        {
+            handledObject = playerZone.GetNearestObjectInZone();
+            if (handledObject)
             {
-                //input.
-                CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
-                
-                CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, input.playerIndex );
+                SetObjectHandled(handledObject);
+                handledObject.gameObject.layer = 10;
+                FireObject();
+            }
+        }
+    }
 
-                /*
-                AkSoundEngine.SetSwitch("Choix_Astres", "Planete", gameObject);
-                AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);*/
+    private void FireObject()
+    {
+        CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
+        CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, input.playerIndex);
 
-                coolDownTimer = 0.0f;
-                handledObject.SetParent(null);
+        handledObject.SetParent(null);
 
                 Projectile projectile = handledObject.GetComponent<Projectile>();
                 projectile.isLaunched = true;
                 projectile.tag = "Untagged";
                 projectile.currentDamage *= damageMultiplier;
 
-                Vector3 heading = handledObject.transform.position - transform.position;
-                handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
+        Projectile projectile = handledObject.GetComponent<Projectile>();
+        projectile.isLaunched = true;
+        projectile.tag = "Untagged";
 
-                handledObject.GetComponentInChildren<VisualEffect>().enabled = true;                
+        Vector3 heading = (handledObject.transform.position - transform.position).normalized;
 
-                transform.DOMove(transform.position - heading.normalized * knockbackForce, 0.05f);
+        handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
 
-                handledObject = null;
-            }
-        }
+        handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
+
+        transform.DOMove(transform.position - heading * knockbackForce, 0.05f);
+
+        handledObject = null;
     }
 
     private void Aim(Vector2 aimDirection, bool autoAim)
