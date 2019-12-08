@@ -166,10 +166,11 @@ public class ObjectHandler : MonoBehaviour
 
         handledObject.SetParent(null);
 
-                Projectile projectile = handledObject.GetComponent<Projectile>();
-                projectile.isLaunched = true;
-                projectile.tag = "Untagged";
-                projectile.currentDamage *= damageMultiplier;
+        Projectile projectile = handledObject.GetComponent<Projectile>();
+        projectile.isLaunched = true;
+        projectile.tag = "Untagged";
+        projectile.currentDamage *= damageMultiplier;
+
 
         Projectile projectile = handledObject.GetComponent<Projectile>();
         projectile.isLaunched = true;
