@@ -171,11 +171,6 @@ public class ObjectHandler : MonoBehaviour
         projectile.tag = "Untagged";
         projectile.currentDamage *= damageMultiplier;
 
-
-        Projectile projectile = handledObject.GetComponent<Projectile>();
-        projectile.isLaunched = true;
-        projectile.tag = "Untagged";
-
         Vector3 heading = (handledObject.transform.position - transform.position).normalized;
 
         handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
