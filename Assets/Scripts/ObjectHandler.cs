@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -11,6 +12,7 @@ public class ObjectHandler : MonoBehaviour
     public float distance = 1.0f;
 
     public float launchStrength = 2.0f;
+    [NonSerialized] public float damageMultiplier = 1f;
 
     public float knockbackForce = 2.0f;
 
@@ -164,10 +166,10 @@ public class ObjectHandler : MonoBehaviour
 
         handledObject.SetParent(null);
 
-
         Projectile projectile = handledObject.GetComponent<Projectile>();
         projectile.isLaunched = true;
         projectile.tag = "Untagged";
+        projectile.currentDamage *= damageMultiplier;
 
         Vector3 heading = (handledObject.transform.position - transform.position).normalized;
 

@@ -1,21 +1,33 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
-using UnityTemplateProjects.Player;
 
 public class PlayerHealth : MonoBehaviour
 {
     [Serializable]
-    public struct SHealthThreshold //TODO: maybe add a range to enlarge the entity
+    public class SHealthThreshold //TODO: maybe add a range to enlarge the entity
     {
-        public int health;
+        public float health;
+        public float speedMultiplier;
+        public float damageMultiplier;
     }
 
+    [Header("Thresholds")]
     public List<SHealthThreshold> thresholds;
-    
+
+    public float attractRange;
+    public GameObject AttractZone;
+
+    [Header("Death")]
+    public float deathRange;
+    public float deathDamage;
+
+    [Header("Health")]
     public float Health;
 
     private int indexThreshold;
@@ -23,13 +35,13 @@ public class PlayerHealth : MonoBehaviour
     private Slider healthSlider;
 
     private PlayerController playerController;
+    private ObjectHandler _objectHandler;
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
     }
-
-    private int playerIndex;
+    
 
     private Displacement playerMovement;
 
@@ -51,17 +63,17 @@ public class PlayerHealth : MonoBehaviour
         healthSlider.value = Health;
 
         playerMovement = GetComponent<Displacement>();
+        _objectHandler = GetComponent<ObjectHandler>();
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Handles damage, threshold changes and death
+    /// </summary>
+    /// <param name="amount">Amount of damage received</param>
+    /// <returns></returns>
+    public bool TakeDamage(float amount)
     {
-        
-    }
-
-    public void TakeDamage(float amount)
-    {
-        if (playerMovement.IsDashing())
+        if (!playerMovement.IsDashing())
         {
             Health -= amount;
             healthSlider.value = Health;
@@ -72,19 +84,53 @@ public class PlayerHealth : MonoBehaviour
                 {
                     if (++indexThreshold < thresholds.Count)
                     {
-                        //TODO: change range or whatnot
+                        playerMovement.speed *= thresholds[indexThreshold].speedMultiplier;
+                        _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;
+                        
+                        if (indexThreshold == 1)
+                        {
+                            AttractZone.transform.localScale *= attractRange;
+                        }
+                        else if (indexThreshold == 2)
+                        {
+                            playerMovement.dashCoolDown /= 2;
+                        }
                     }
                 }
             }
             else
             {
                 Die();
+                return true;
             }
         }
+
+        return false;
     }
 
+    /// <summary>
+    /// Circle ray cast to inflict damage to the other enemy, checks if draw
+    /// </summary>
     private void Die()
     {
-        //TODO
+        Vector2 position = transform.position;
+        var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            PlayerController playerCtrl = hit.transform.GetComponent<PlayerController>();
+
+            if (playerCtrl && playerCtrl.playerIndex != playerController.playerIndex)
+            {
+                if (playerCtrl.GetComponent<PlayerHealth>().TakeDamage(deathDamage))
+                {
+                    GameManager.Instance.Draw();
+                }
+                else
+                {
+                    GameManager.Instance.WinLoose(playerController.playerIndex);
+                }
+            }
+        }
     }
 }

@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityTemplateProjects.Player;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,5 +49,15 @@ public class GameManager : MonoBehaviour
             player2 = obj.GetComponent<PlayerController>();
         }
         playerIndex++;
+    }
+
+    public void Draw()
+    {
+        
+    }
+
+    public void WinLoose(int looserIndex)
+    {
+        
     }
 }

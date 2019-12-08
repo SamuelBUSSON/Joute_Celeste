@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityTemplateProjects.Player;
 
 public enum EProjectileType
 {
@@ -67,7 +67,7 @@ public class Projectile : MonoBehaviour
                 proj.Die(other.contacts[0].point);
             }
         }
-        else
+        else if(isLaunched)
         {
             PlayerHealth player = other.transform.GetComponent<PlayerHealth>();
 
