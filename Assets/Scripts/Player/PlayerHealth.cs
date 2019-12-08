@@ -17,11 +17,17 @@ public class PlayerHealth : MonoBehaviour
         public float damageMultiplier;
     }
 
+    [Header("Thresholds")]
     public List<SHealthThreshold> thresholds;
 
     public float attractRange;
     public GameObject AttractZone;
 
+    [Header("Death")]
+    public float deathRange;
+    public float deathDamage;
+
+    [Header("Health")]
     public float Health;
 
     private int indexThreshold;
@@ -35,8 +41,7 @@ public class PlayerHealth : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
     }
-
-    private int playerIndex;
+    
 
     private Displacement playerMovement;
 
@@ -61,7 +66,12 @@ public class PlayerHealth : MonoBehaviour
         _objectHandler = GetComponent<ObjectHandler>();
     }
 
-    public void TakeDamage(float amount)
+    /// <summary>
+    /// Handles damage, threshold changes and death
+    /// </summary>
+    /// <param name="amount">Amount of damage received</param>
+    /// <returns></returns>
+    public bool TakeDamage(float amount)
     {
         if (!playerMovement.IsDashing())
         {
@@ -91,12 +101,36 @@ public class PlayerHealth : MonoBehaviour
             else
             {
                 Die();
+                return true;
             }
         }
+
+        return false;
     }
 
+    /// <summary>
+    /// Circle ray cast to inflict damage to the other enemy, checks if draw
+    /// </summary>
     private void Die()
     {
-        //TODO
+        Vector2 position = transform.position;
+        var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);
+
+        foreach (RaycastHit2D hit in hits)
+        {
+            PlayerController playerCtrl = hit.transform.GetComponent<PlayerController>();
+
+            if (playerCtrl && playerCtrl.playerIndex != playerController.playerIndex)
+            {
+                if (playerCtrl.GetComponent<PlayerHealth>().TakeDamage(deathDamage))
+                {
+                    GameManager.Instance.Draw();
+                }
+                else
+                {
+                    GameManager.Instance.WinLoose(playerController.playerIndex);
+                }
+            }
+        }
     }
 }

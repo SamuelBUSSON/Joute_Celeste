@@ -50,4 +50,14 @@ public class GameManager : MonoBehaviour
         }
         playerIndex++;
     }
+
+    public void Draw()
+    {
+        
+    }
+
+    public void WinLoose(int looserIndex)
+    {
+        
+    }
 }
