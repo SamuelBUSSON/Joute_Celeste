@@ -78,7 +78,7 @@ public class PlayerZone : MonoBehaviour
 
     public void CaughtObject(Transform element)
     {        
-        if (!playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch)
+        if (!playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch && !element.GetComponent<Projectile>().isLaunched)
         {
             canCatch = false;
             ChangeNearestElementColor(false);

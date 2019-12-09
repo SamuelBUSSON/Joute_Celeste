@@ -32,9 +32,9 @@ Material:
     - Boolean_1DD3A34A: 1
     - Boolean_9E0C0DC4: 0
     - Vector1_2FDF87BA: 1.25
-    - Vector1_8B32303E: 0.354
+    - Vector1_8B32303E: 1
     - Vector1_E4EF36DC: 3
-    - Vector1_F959B41F: 0.8
+    - Vector1_F959B41F: 0.096
     - _Speed: 0
     m_Colors:
     - Vector2_FB628A27: {r: 1, g: 1, b: 0, a: 0}

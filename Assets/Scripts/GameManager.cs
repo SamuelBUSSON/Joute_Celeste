@@ -47,8 +47,15 @@ public class GameManager : MonoBehaviour
         else
         {
             player2 = obj.GetComponent<PlayerController>();
+            SetupPlayers();
         }
         playerIndex++;
+    }
+
+    private void SetupPlayers()
+    {
+        player1.GetComponent<ObjectHandler>().SetEnemyPos(player2.transform);
+        player2.GetComponent<ObjectHandler>().SetEnemyPos(player1.transform);
     }
 
     public void Draw()

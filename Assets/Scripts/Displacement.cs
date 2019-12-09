@@ -115,8 +115,7 @@ public class Displacement : MonoBehaviour
                 stunTimer = 0.0f;
                 isStun = false;
             }
-        }
-        
+        }        
     }
 
     private void OnDash(InputAction.CallbackContext obj)
@@ -129,10 +128,9 @@ public class Displacement : MonoBehaviour
 
     private void DashCanceled()
     {
-
         GetComponentInChildren<PointEffector2D>().forceMagnitude = -10;
         GetComponentInChildren<PlayerZone>().ChangeSpeedObjectInZone(false);
-           isDashing = false;        
+        isDashing = false;
     }
 
     private void Dash()
@@ -147,8 +145,7 @@ public class Displacement : MonoBehaviour
                 PlayerZone pl = GetComponentInChildren<PlayerZone>();
                 pl.ChangeSpeedObjectInZone(true);
                 
-                dash_FX.SendEvent("OnDash");
-                dash_FX.SetFloat("RotateAngle", Mathf.Atan2(-movement.normalized.x, -movement.normalized.y));
+                
 
                 /*
                 foreach (var item in GetComponentInChildren<PlayerZone>().GetAllObjectInZone())
@@ -159,7 +156,7 @@ public class Displacement : MonoBehaviour
 
                 GetComponentInChildren<PointEffector2D>().forceMagnitude = 100;
 
-                rigidbody2d.DOMove(transform.position + movement * dashs[currentDash].dashStrength, dashs[currentDash].timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(dashs[currentDash].easeDash);
+                rigidbody2d.DOMove(transform.position + movement * dashs[currentDash].dashStrength, dashs[currentDash].timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(dashs[currentDash].easeDash).OnStart(() => DashEffect());
 
                 dashCoolDownTimer = 0.0f;
                 ++currentDash;
@@ -170,6 +167,12 @@ public class Displacement : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void DashEffect()
+    {
+        dash_FX.SendEvent("OnDash");
+        dash_FX.SetFloat("RotateAngle", Mathf.Atan2(-movement.normalized.x, -movement.normalized.y));
     }
 
     public bool IsDashing()

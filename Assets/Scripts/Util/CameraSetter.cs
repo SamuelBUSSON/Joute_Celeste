@@ -9,6 +9,6 @@ public class CameraSetter : MonoBehaviour
    private void Awake()
    {
       var cam = GetComponent<CinemachineVirtualCamera>();
-      cam.GetCinemachineComponent<CinemachineGroupComposer>().m_MaximumOrthoSize = Screen.width * 0.5f;
+     // cam.GetCinemachineComponent<CinemachineGroupComposer>().m_MaximumOrthoSize = Screen.width * 0.5f;
    }
 }
