@@ -83,7 +83,12 @@ public class Projectile : MonoBehaviour
                     Die(other.contacts[0].point);
                 }
             }
+            
+            if(proj.type == EProjectileType.STAR)
+                Die(other.contacts[0].point);
         }
+        else if(proj && proj.type == EProjectileType.STAR)
+            Die(other.contacts[0].point);
     }
 
     public void SetThresholdLevel(int level)
