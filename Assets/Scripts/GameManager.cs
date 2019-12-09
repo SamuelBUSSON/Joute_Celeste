@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
         }
         playerIndex++;
     }
+    
 
     private void SetupPlayers()
     {
@@ -58,13 +59,32 @@ public class GameManager : MonoBehaviour
         player2.GetComponent<ObjectHandler>().SetEnemyPos(player1.transform);
     }
 
+    public void TimeUp()
+    {
+        PlayerHealth p1 = player1.GetComponent<PlayerHealth>();
+        PlayerHealth p2 = player2.GetComponent<PlayerHealth>();
+
+        if (p1.Health > p2.Health)
+        { 
+            p1.Die();
+        }
+        else if (p1.Health < p2.Health)
+        { 
+            p2.Die();
+        }
+        else
+        {
+            Draw();
+        }
+    }
+
     public void Draw()
     {
-        
+        Debug.Log("Draw");
     }
 
     public void WinLoose(int looserIndex)
     {
-        
+        Debug.Log("Player " + looserIndex + " looses !");
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RoundTimer : MonoBehaviour
 {
-
     public float timerInSecond = 10;
     private float timer = 0.0f;
 
@@ -15,7 +14,7 @@ public class RoundTimer : MonoBehaviour
 
         if(timer >= timerInSecond)
         {
-            Debug.Log("Time Over !!");
+            GameManager.Instance.TimeUp();
         }
     }
 }

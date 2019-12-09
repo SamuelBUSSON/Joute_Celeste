@@ -30,6 +30,9 @@ public class PlayerHealth : MonoBehaviour
     [Header("Health")]
     public float Health;
 
+    [NonSerialized]
+    public float maxHealth;
+
     private int indexThreshold;
 
     private Slider healthSlider;
@@ -48,6 +51,8 @@ public class PlayerHealth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        maxHealth = Health;
+        
         if(playerController?.playerIndex == 1)
         {
             GameObject p0 = GameManager.Instance.player2.gameObject;
@@ -59,11 +64,21 @@ public class PlayerHealth : MonoBehaviour
             ? GameManager.Instance.PlayerSliderHealth1
             : GameManager.Instance.PlayerSliderHealth2;
 
-        healthSlider.maxValue = Health;
+        healthSlider.maxValue = maxHealth;
         healthSlider.value = Health;
 
         playerMovement = GetComponent<Displacement>();
         _objectHandler = GetComponent<ObjectHandler>();
+    }
+
+    public void GiveHealth(float amount)
+    {
+        Health += amount;
+
+        if (Health > maxHealth)
+            Health = maxHealth;
+
+        healthSlider.value = Health;
     }
 
     /// <summary>
@@ -73,8 +88,10 @@ public class PlayerHealth : MonoBehaviour
     /// <returns></returns>
     public bool TakeDamage(float amount)
     {
+        
         if (!playerMovement.IsDashing())
         {
+            print(amount);
             Health -= amount;
             healthSlider.value = Health;
 
@@ -111,7 +128,7 @@ public class PlayerHealth : MonoBehaviour
     /// <summary>
     /// Circle ray cast to inflict damage to the other enemy, checks if draw
     /// </summary>
-    private void Die()
+    public void Die()
     {
         Vector2 position = transform.position;
         var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);
@@ -122,7 +139,7 @@ public class PlayerHealth : MonoBehaviour
 
             if (playerCtrl && playerCtrl.playerIndex != playerController.playerIndex)
             {
-                if (playerCtrl.GetComponent<PlayerHealth>().TakeDamage(deathDamage))
+                if (playerCtrl.GetComponent<PlayerHealth>().Health - deathDamage <= 0)
                 {
                     GameManager.Instance.Draw();
                 }

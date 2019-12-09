@@ -42,6 +42,11 @@ public class Projectile : MonoBehaviour
 
     [NonSerialized] public bool isLaunched;
 
+    private void Awake()
+    {
+        currentDamage = startingDamage;
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         Projectile proj = other.transform.GetComponent<Projectile>();
@@ -70,14 +75,20 @@ public class Projectile : MonoBehaviour
         else if(isLaunched)
         {
             PlayerHealth player = other.transform.GetComponent<PlayerHealth>();
-
-            //TODO: check if it's the creator
-            if (player && player.GetComponent<PlayerController>().playerIndex != playerIndex)
+            if (player) 
             {
-                player.TakeDamage(currentDamage);
-                Die(other.contacts[0].point);
+                if (type == EProjectileType.STAR || player.GetComponent<PlayerController>().playerIndex != playerIndex)
+                {
+                    player.TakeDamage(currentDamage);
+                    Die(other.contacts[0].point);
+                }
             }
+            
+            if(proj.type == EProjectileType.STAR)
+                Die(other.contacts[0].point);
         }
+        else if(proj && proj.type == EProjectileType.STAR)
+            Die(other.contacts[0].point);
     }
 
     public void SetThresholdLevel(int level)
