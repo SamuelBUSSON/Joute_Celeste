@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_NotificationBehavior: 3
-  m_MaxPlayerCount: -1
+  m_MaxPlayerCount: 2
   m_AllowJoining: 1
   m_JoinBehavior: 0
   m_PlayerJoinedEvent:
@@ -101,3 +101,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerSliderHealth1: {fileID: 0}
   PlayerSliderHealth2: {fileID: 0}
+  targetGroup: {fileID: 0}

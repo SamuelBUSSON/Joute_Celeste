@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Player;
 using UnityEngine.VFX;
 using UnityEngine.InputSystem;
 
@@ -30,6 +31,8 @@ public class ObjectHandler : MonoBehaviour
 
     private Displacement playerMovement;
     private PlayerZone playerZone;
+
+    private PlayerController controller;
     private void Awake()
     {
         input = GetComponent<PlayerInput>();
@@ -46,15 +49,12 @@ public class ObjectHandler : MonoBehaviour
         input.currentActionMap["HoldLv2"].performed += OnHoldLv2;
 
         enemyPos = transform;
-
-
+        controller = GetComponent<PlayerController>();
     }
     
 
     private void OnHoldLv2(InputAction.CallbackContext obj)
     {
-        print("HoldLv2");
-        
         if (handledObject)
         {
             Projectile proj = handledObject.GetComponent<Projectile>();
@@ -68,8 +68,6 @@ public class ObjectHandler : MonoBehaviour
 
     private void OnHoldLv1(InputAction.CallbackContext obj)
     {
-        print("HoldLv1");
-
         if (handledObject)
         {
             Projectile proj = handledObject.GetComponent<Projectile>();
@@ -162,7 +160,8 @@ public class ObjectHandler : MonoBehaviour
     private void FireObject()
     {
         CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
-        CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, input.playerIndex);
+        //TODO: check findgamepad id
+        CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, FindGamePadId(input.user.pairedDevices[0]));
 
         handledObject.SetParent(null);
 
@@ -180,6 +179,19 @@ public class ObjectHandler : MonoBehaviour
         transform.DOMove(transform.position - heading * knockbackForce, 0.05f);
 
         handledObject = null;
+    }
+
+    private int FindGamePadId(InputDevice pairedDevice)
+    {
+        int index = -1;
+
+        for (int i = 0; i < Gamepad.all.Count; i++)
+        {
+            if (Gamepad.all[i].description.Equals(pairedDevice.description))
+                return i;
+        }
+
+        return index;
     }
 
     private void Aim(Vector2 aimDirection, bool autoAim)
