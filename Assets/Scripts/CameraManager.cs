@@ -39,7 +39,6 @@ public class CameraManager : MonoBehaviour
 
     public void Vibrate(float low_frequency, float high_frequency, float timeInSeconds, int playerIndex)
     {
-        print(playerIndex);
         Gamepad.all[playerIndex].SetMotorSpeeds(low_frequency, high_frequency);
         StartCoroutine(StartVibrateController(timeInSeconds, playerIndex));
     }

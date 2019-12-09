@@ -158,6 +158,7 @@ MonoBehaviour:
     timeToReachDashPosition: 0.2
   dashCoolDown: 1
   dash_FX: {fileID: 4169734386117698243}
+  impusleStrength: 10
   stunTime: 2
   onStunSpeedDivide: 5
   slowStrength: 5
@@ -174,7 +175,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 1
-  coolDown: 1
   launchStrength: 5
   knockbackForce: 2
   enemyPos: {fileID: 0}
@@ -251,6 +251,8 @@ MonoBehaviour:
     damageMultiplier: 2
   attractRange: 2
   AttractZone: {fileID: 2758839450924294534}
+  deathRange: 0
+  deathDamage: 0
   Health: 5
 --- !u!114 &3428629715616182282
 MonoBehaviour:
@@ -469,6 +471,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091391847767522252, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1600
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091391847767522252, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1600
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091391847767522252, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 1091391847767522253, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
