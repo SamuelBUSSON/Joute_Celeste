@@ -42,6 +42,11 @@ public class Projectile : MonoBehaviour
 
     [NonSerialized] public bool isLaunched;
 
+    private void Awake()
+    {
+        currentDamage = startingDamage;
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         Projectile proj = other.transform.GetComponent<Projectile>();

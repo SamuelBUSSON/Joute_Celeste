@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.InputSystem;
@@ -16,6 +15,7 @@ public class PlayerZone : MonoBehaviour
 
     private Transform player;
     private ObjectHandler playerObjectHandler;
+    private PlayerHealth playerHealth;
 
     private List<Transform> objectInZone;
     private List<Transform> objectToSlowOnDash;
@@ -45,7 +45,8 @@ public class PlayerZone : MonoBehaviour
         objectToSlowOnDash = new List<Transform>();
 
         player = GetComponentInParent<Displacement>().transform;
-        playerObjectHandler = player.GetComponent<ObjectHandler>();        
+        playerObjectHandler = player.GetComponent<ObjectHandler>();
+        playerHealth = player.GetComponent<PlayerHealth>();
     }
 
     // Update is called once per frame
@@ -80,14 +81,28 @@ public class PlayerZone : MonoBehaviour
     {        
         if (!playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch)
         {
-            canCatch = false;
-            ChangeNearestElementColor(false);
-            Vector3 heading = element.transform.position - transform.position;
+            Projectile proj = element.GetComponent<Projectile>();
+            if (proj.type == EProjectileType.STAR)
+            {
+                DrainStar(proj);
+            }
+            else
+            {
+                canCatch = false;
+                ChangeNearestElementColor(false);
+                Vector3 heading = element.transform.position - transform.position;
 
-            AimCanceled();            
+                AimCanceled();            
 
-            element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));            
+                element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));  
+            }
         }
+    }
+
+    private void DrainStar(Projectile proj)
+    {
+        playerHealth.GiveHealth(playerHealth.maxHealth / 3);
+        Destroy(proj.gameObject);
     }
 
     public List<Transform> GetAllObjectInZone()
