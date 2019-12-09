@@ -75,12 +75,13 @@ public class Projectile : MonoBehaviour
         else if(isLaunched)
         {
             PlayerHealth player = other.transform.GetComponent<PlayerHealth>();
-
-            //TODO: check if it's the creator
-            if (player && player.GetComponent<PlayerController>().playerIndex != playerIndex)
+            if (player) 
             {
-                player.TakeDamage(currentDamage);
-                Die(other.contacts[0].point);
+                if (type == EProjectileType.STAR || player.GetComponent<PlayerController>().playerIndex != playerIndex)
+                {
+                    player.TakeDamage(currentDamage);
+                    Die(other.contacts[0].point);
+                }
             }
         }
     }
