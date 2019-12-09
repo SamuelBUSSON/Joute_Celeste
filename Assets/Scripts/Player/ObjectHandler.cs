@@ -168,7 +168,8 @@ public class ObjectHandler : MonoBehaviour
         Projectile projectile = handledObject.GetComponent<Projectile>();
         projectile.isLaunched = true;
         projectile.tag = "Untagged";
-        projectile.currentDamage *= damageMultiplier;        
+        projectile.currentDamage *= damageMultiplier;
+        projectile.playerIndex = controller.playerIndex;
 
         Vector3 heading = (handledObject.transform.position - transform.position).normalized;
 

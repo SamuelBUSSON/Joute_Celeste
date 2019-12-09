@@ -82,9 +82,8 @@ public class Projectile : MonoBehaviour
                     player.TakeDamage(currentDamage);
                     Die(other.contacts[0].point);
                 }
-            }
-            
-            if(proj.type == EProjectileType.STAR)
+            } 
+            else if(proj.type == EProjectileType.STAR)
                 Die(other.contacts[0].point);
         }
         else if(proj && proj.type == EProjectileType.STAR)

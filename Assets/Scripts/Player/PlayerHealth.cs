@@ -88,10 +88,8 @@ public class PlayerHealth : MonoBehaviour
     /// <returns></returns>
     public bool TakeDamage(float amount)
     {
-        
         if (!playerMovement.IsDashing())
         {
-            print(amount);
             Health -= amount;
             healthSlider.value = Health;
 
