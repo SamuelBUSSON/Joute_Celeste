@@ -52,13 +52,7 @@ public class PlayerZone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         GetNearestElement();         
-
-       /* if(nearestElement && Vector2.Distance(nearestElement.position, transform.position) <= distanceToCatch)
-        {
-            CaughtObject(nearestElement);
-        }    
-        */    
+         GetNearestElement();      
     }
 
     private void OnCaughtObject(InputAction.CallbackContext obj)
@@ -287,12 +281,11 @@ public class PlayerZone : MonoBehaviour
         }
     }
 
-    private void ChangeNearestElementColor(bool isBlack)
+    private void ChangeNearestElementColor(bool isColor)
     {
         if (nearestElement)
         {
-           // nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(190, 27, 0) / 255 * 2, "Color_15CF1060", 1.0f);
-           // nearestElement?.GetComponent<MeshRenderer>().material.DOColor(isBlack ? new Color(0, 0, 0) : new Color(100, 13, 25) / 255 * 2, "Color_B93BCC95", 1.0f);
+            nearestElement?.GetComponent<SpriteRenderer>().material.DOFloat(isColor ? 10f : 0f, "_OutlineStrength", 1.0f);
         }
 
     }

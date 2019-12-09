@@ -59,6 +59,8 @@ public class ObjectHandler : MonoBehaviour
         {
             Projectile proj = handledObject.GetComponent<Projectile>();
 
+            proj?.GetComponent<SpriteRenderer>().material.DOColor((proj.GetComponent<SpriteRenderer>().material.GetColor("_Color") * 1.5f), 0.3f);
+
             if (proj.type != EProjectileType.PLANET)
             {
                 proj.SetThresholdLevel(1);
@@ -70,7 +72,9 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
-            Projectile proj = handledObject.GetComponent<Projectile>();
+            Projectile proj = handledObject.GetComponent<Projectile>();            
+
+            proj?.GetComponent<SpriteRenderer>().material.DOColor( (proj.GetComponent<SpriteRenderer>().material.GetColor("_Color") * 1.5f), 0.3f);
 
             if (proj.type != EProjectileType.PLANET)
             {
@@ -99,7 +103,7 @@ public class ObjectHandler : MonoBehaviour
             {
                 Aim(Vector2.zero, true);
             }
-            handledObject.transform.position = transform.position + displaceAngleVector;
+               handledObject.transform.position = transform.position + displaceAngleVector * handledObject.GetComponent<Projectile>().size; ;
         }        
         coolDownTimer += Time.deltaTime;       
     }

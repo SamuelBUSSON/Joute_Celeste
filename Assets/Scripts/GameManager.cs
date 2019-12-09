@@ -48,14 +48,15 @@ public class GameManager : MonoBehaviour
         else
         {
             player2 = obj.GetComponent<PlayerController>();
-            SetupPlayers();
+            StartCoroutine(SetupPlayers());
         }
         playerIndex++;
     }
     
 
-    private void SetupPlayers()
+    private IEnumerator SetupPlayers()
     {
+        yield return new WaitForFixedUpdate();
         player1.GetComponent<ObjectHandler>().SetEnemyPos(player2.transform);
         player2.GetComponent<ObjectHandler>().SetEnemyPos(player1.transform);
     }

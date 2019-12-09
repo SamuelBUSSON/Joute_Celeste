@@ -25,6 +25,8 @@ public class Projectile : MonoBehaviour
 
     public GameObject ExplosionFX;
 
+    public float size = 1.0f;
+
     [NonSerialized]
     public int playerIndex;
     public float startingDamage;
@@ -104,4 +106,5 @@ public class Projectile : MonoBehaviour
         Instantiate(ExplosionFX, contactPoint, Quaternion.identity);
         Destroy(gameObject);
     }
+    
 }
