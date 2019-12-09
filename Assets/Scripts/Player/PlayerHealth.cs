@@ -128,7 +128,7 @@ public class PlayerHealth : MonoBehaviour
     /// <summary>
     /// Circle ray cast to inflict damage to the other enemy, checks if draw
     /// </summary>
-    private void Die()
+    public void Die()
     {
         Vector2 position = transform.position;
         var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);
@@ -139,7 +139,7 @@ public class PlayerHealth : MonoBehaviour
 
             if (playerCtrl && playerCtrl.playerIndex != playerController.playerIndex)
             {
-                if (playerCtrl.GetComponent<PlayerHealth>().TakeDamage(deathDamage))
+                if (playerCtrl.GetComponent<PlayerHealth>().Health - deathDamage <= 0)
                 {
                     GameManager.Instance.Draw();
                 }
