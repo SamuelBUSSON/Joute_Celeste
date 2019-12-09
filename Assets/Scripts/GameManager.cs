@@ -6,6 +6,7 @@ using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -86,5 +87,13 @@ public class GameManager : MonoBehaviour
     public void WinLoose(int looserIndex)
     {
         Debug.Log("Player " + looserIndex + " looses !");
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
