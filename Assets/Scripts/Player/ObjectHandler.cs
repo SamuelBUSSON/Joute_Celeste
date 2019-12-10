@@ -165,7 +165,13 @@ public class ObjectHandler : MonoBehaviour
     {
         CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
         //TODO: check findgamepad id
-        CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, FindGamePadId(input.user.pairedDevices[0]));
+
+        if (input.user.pairedDevices[0] is Gamepad pad)
+        {
+            CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, pad);
+        }
+
+        
 
         handledObject.SetParent(null);
 
@@ -187,19 +193,6 @@ public class ObjectHandler : MonoBehaviour
         transform.DOMove(v1 - v2 * knockbackForce, 0.05f);
 
         handledObject = null;
-    }
-
-    private int FindGamePadId(InputDevice pairedDevice)
-    {
-        int index = -1;
-
-        for (int i = 0; i < Gamepad.all.Count; i++)
-        {
-            if (Gamepad.all[i].description.Equals(pairedDevice.description))
-                return i;
-        }
-
-        return index;
     }
 
     private void Aim(Vector2 aimDirection, bool autoAim)
