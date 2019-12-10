@@ -108,6 +108,7 @@ public class PlayerZone : MonoBehaviour
     {
         canCatch = true;
         playerObjectHandler.SetObjectHandled(element);
+        element.GetComponent<SpriteRenderer>().material.SetInt("_HighLigth", 0);
         objectInZone.Remove(element);
         nearestElement = element == nearestElement ? null : nearestElement ;
     }
@@ -285,7 +286,8 @@ public class PlayerZone : MonoBehaviour
     {
         if (nearestElement)
         {
-            nearestElement?.GetComponent<SpriteRenderer>().material.DOFloat(isColor ? 10f : 0f, "_OutlineStrength", 1.0f);
+           nearestElement?.GetComponent<SpriteRenderer>().material.DOFloat(isColor ? 1f : 0f, "_OutlineStrength", 0.3f);
+            nearestElement?.GetComponent<SpriteRenderer>().material.SetInt("_HighLigth", isColor ? 1 : 0);
         }
 
     }

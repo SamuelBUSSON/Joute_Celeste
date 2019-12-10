@@ -59,7 +59,13 @@ public class ObjectHandler : MonoBehaviour
         {
             Projectile proj = handledObject.GetComponent<Projectile>();
 
-            proj?.GetComponent<SpriteRenderer>().material.DOColor((proj.GetComponent<SpriteRenderer>().material.GetColor("_Color") * 1.5f), 0.3f);
+            VisualEffect fx = proj.GetComponentInChildren<VisualEffect>();
+
+            fx.SetFloat("Radius", proj.size);
+            fx.SendEvent("OnCast");
+
+
+            proj?.GetComponent<SpriteRenderer>().material.DOFloat((proj.GetComponent<SpriteRenderer>().material.GetFloat("_PowerColor") * 1.5f), "_PowerColor", 0.3f);
 
             if (proj.type != EProjectileType.PLANET)
             {
@@ -72,9 +78,11 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
-            Projectile proj = handledObject.GetComponent<Projectile>();            
+            Projectile proj = handledObject.GetComponent<Projectile>();
 
-            proj?.GetComponent<SpriteRenderer>().material.DOColor( (proj.GetComponent<SpriteRenderer>().material.GetColor("_Color") * 1.5f), 0.3f);
+            proj.GetComponentInChildren<VisualEffect>().SendEvent("OnCast");
+
+            proj?.GetComponent<SpriteRenderer>().material.DOFloat( (proj.GetComponent<SpriteRenderer>().material.GetFloat("_PowerColor") * 1.5f), "_PowerColor" ,0.3f);
 
             if (proj.type != EProjectileType.PLANET)
             {
@@ -178,6 +186,10 @@ public class ObjectHandler : MonoBehaviour
         Vector3 heading = (handledObject.transform.position - transform.position).normalized;
 
         handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
+
+        VisualEffect fx = handledObject.GetComponentInChildren<VisualEffect>();
+
+        fx.SetBool("SpawnRate", false);
 
         handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
 
