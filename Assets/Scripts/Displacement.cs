@@ -46,6 +46,7 @@ public class Displacement : MonoBehaviour
         input = GetComponent<PlayerInput>();
         
         input.actions.Enable();
+        input.currentActionMap["Movement"].started += context => OnStartMovement(context);
         input.currentActionMap["Movement"].performed += context => OnMovement(context);
         input.currentActionMap["Movement"].canceled += context => OnMovementCancel(context);
 
@@ -54,7 +55,12 @@ public class Displacement : MonoBehaviour
 
     private void Start()
     {
-        rigidbody2d = GetComponent<Rigidbody2D>();        
+        rigidbody2d = GetComponent<Rigidbody2D>();   
+    }
+
+    private void OnStartMovement(InputAction.CallbackContext obj)
+    {
+        AkSoundEngine.PostEvent("Play_Player_Move_Solo", gameObject);
     }
 
     private void OnMovement(InputAction.CallbackContext obj)
@@ -65,7 +71,8 @@ public class Displacement : MonoBehaviour
 
     private void OnMovementCancel(InputAction.CallbackContext obj)
     {
-        movement = obj.ReadValue<Vector2>();
+        movement = obj.ReadValue<Vector2>();     
+        AkSoundEngine.PostEvent("Stop_Player_Move_Solo", gameObject);
     }
 
     // Update is called once per frame
@@ -94,6 +101,8 @@ public class Displacement : MonoBehaviour
     {
         if (!isDashing)
         {
+
+
             Vector2 targetVelocity = movement;
             targetVelocity = transform.TransformDirection(targetVelocity);
             targetVelocity *=  isStun ? speed/onStunSpeedDivide : speed ;
@@ -141,18 +150,15 @@ public class Displacement : MonoBehaviour
             {
                 isDashing = true;
 
-                
+                AkSoundEngine.PostEvent("Play_Player_Dash", gameObject);
+
                 PlayerZone pl = GetComponentInChildren<PlayerZone>();
                 pl.ChangeSpeedObjectInZone(true);
-                
-                
 
-                /*
-                foreach (var item in GetComponentInChildren<PlayerZone>().GetAllObjectInZone())
+                if(currentDash >= 1)
                 {
-                    Debug.Log("sdfsdf");
-                    item.GetComponent<Rigidbody2D>().AddForce(-movement.normalized * impusleStrength * 100);
-                }*/
+                    AkSoundEngine.PostEvent("Play_Player_Dash2", gameObject);
+                }
 
                 GetComponentInChildren<PointEffector2D>().forceMagnitude = 100;
 

@@ -64,6 +64,8 @@ public class ObjectHandler : MonoBehaviour
         {
             Projectile proj = handledObject.GetComponent<Projectile>();
 
+            AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
+
             VisualEffect fx = proj.GetComponentInChildren<VisualEffect>();
 
             fx.SetFloat("Radius", proj.size + 0.5f);
@@ -100,6 +102,8 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
+            AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
+
             Projectile proj = handledObject.GetComponent<Projectile>();
 
             proj.GetComponentInChildren<VisualEffect>().SendEvent("OnCast");
@@ -174,14 +178,12 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
-            /*
-            AkSoundEngine.SetSwitch("Choix_Astres", "Planete", gameObject);
-            AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);*/
             FireObject();
         }
         else
         {
             handledObject = playerZone.GetNearestObjectInZone();
+
             if (handledObject)
             {
                 SetObjectHandled(handledObject);
@@ -210,6 +212,11 @@ public class ObjectHandler : MonoBehaviour
         projectile.tag = "Untagged";
         projectile.currentDamage *= damageMultiplier;
         projectile.playerIndex = controller.playerIndex;
+
+
+        AkSoundEngine.SetSwitch("Choix_Astres", projectile.type == EProjectileType.PLANET ? "Planete" : projectile.type == EProjectileType.STAR ? "Etoile" : "Comete", gameObject);
+        AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
+
 
         Vector3 heading = (handledObject.transform.position - transform.position).normalized;
 
@@ -244,6 +251,10 @@ public class ObjectHandler : MonoBehaviour
 
     public void SetObjectHandled(Transform objectToThrow)
     {
+
+
+            objectToThrow?.GetComponent<SpriteRenderer>().material.SetInt("_HighLigth", 0);
+
             handledObject = objectToThrow;
 
             handledObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;

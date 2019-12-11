@@ -102,8 +102,24 @@ public class Projectile : MonoBehaviour
 
     public void Die(Vector2 contactPoint)
     {
+
+        switch (type)
+        {
+            case EProjectileType.STAR:
+                AkSoundEngine.PostEvent("Play_Explosion_Comete", gameObject);
+                break;
+
+            case EProjectileType.PLANET:
+                AkSoundEngine.PostEvent("Play_Explosion_Etoile", gameObject);
+                break;
+
+            case EProjectileType.ASTEROID:
+                AkSoundEngine.PostEvent("Play_Explosion_Planete", gameObject);
+                break;
+        }
+
         //TODO: add kaboom
-        Instantiate(ExplosionFX, contactPoint, Quaternion.identity);
+        Instantiate(ExplosionFX, new Vector3(contactPoint.x, contactPoint.y, -2), Quaternion.identity);
         Destroy(gameObject);
     }
     

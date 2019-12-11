@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -71,9 +72,22 @@ public class PlayerHealth : MonoBehaviour
         _objectHandler = GetComponent<ObjectHandler>();
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            TakeDamage(1.0f);
+        }
+    }
+
     public void GiveHealth(float amount)
     {
         Health += amount;
+
+        //AkSoundEngine.SetSwitch("Witch_Aura", playerController?.playerIndex == 1 ? "Aura1" : "Aura2", gameObject);
+
+
+        AkSoundEngine.PostEvent("Play_Player_Heal", gameObject);
 
         if (Health > maxHealth)
             Health = maxHealth;
@@ -93,6 +107,10 @@ public class PlayerHealth : MonoBehaviour
             Health -= amount;
             healthSlider.value = Health;
 
+            AkSoundEngine.SetSwitch("Witch_Aura", playerController?.playerIndex == 1  ? "Aura1" : "Aura2", gameObject);
+
+            AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
+
             if (Health >= 0)
             {
                 if (thresholds[indexThreshold].health >= Health)
@@ -104,13 +122,16 @@ public class PlayerHealth : MonoBehaviour
                         
                         if (indexThreshold == 1)
                         {
-                            AttractZone.transform.localScale *= attractRange;
+                            AkSoundEngine.SetSwitch("Aura_State", "State1to2", gameObject);
+                           AttractZone.transform.DOScale(AttractZone.transform.localScale * attractRange, 0.5f);
                         }
                         else if (indexThreshold == 2)
                         {
+                            AkSoundEngine.SetSwitch("Aura_State", "State2to3", gameObject);
                             playerMovement.dashCoolDown /= 2;
                         }
                     }
+                    AkSoundEngine.PostEvent("Play_Aura1_or_2", gameObject);
                 }
             }
             else

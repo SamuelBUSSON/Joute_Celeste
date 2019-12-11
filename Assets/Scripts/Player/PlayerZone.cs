@@ -100,8 +100,10 @@ public class PlayerZone : MonoBehaviour
     private void CaughtEffect(Transform element)
     {
         canCatch = true;
+
+        AkSoundEngine.PostEvent("Play_Player_Attrack", gameObject);
+
         playerObjectHandler.SetObjectHandled(element);
-        element.GetComponent<SpriteRenderer>().material.SetInt("_HighLigth", 0);
         objectInZone.Remove(element);
         nearestElement = element == nearestElement ? null : nearestElement ;
     }

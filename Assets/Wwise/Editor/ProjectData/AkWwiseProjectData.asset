@@ -24,14 +24,14 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 0fcc13c57297d24b8a35bed7e8af5bb2
     GuidInternal: 
-    m_lastTime: -8586261544291528300
+    m_lastTime: -8586255458376336608
     List: []
   BankWwu:
   - PhysicalPath: SoundBanks\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 174613c4b638834d82e6e1c733e21d14
     GuidInternal: 
-    m_lastTime: -8586261544290459276
+    m_lastTime: -8586255458375619028
     List:
     - name: Son_General
       guid: aea6cb949070b44c817cff3d4c5b6d0b
@@ -47,33 +47,17 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: d797f9769f5a1349bc7d8f150177038f
     GuidInternal: 
-    m_lastTime: -8586261544292567197
+    m_lastTime: -8586255364767970456
     List:
-    - name: Down
-      guid: f5ea12268449ac49b4a105d964fb4815
-      id: 2280510569
+    - name: Play_Aura1_or_2
+      guid: 25dea11f219dda418a71594e44122a72
+      id: 586774143
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Player_move
-        ObjectType: 4
-      - ElementName: Down
+      - ElementName: Play_Aura1_or_2
         ObjectType: 3
-      Path: Default Work Unit\Player_move\Down
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
-    - name: Left_Right
-      guid: 7a4ca158b5295f408fde541ee15d060e
-      id: 189100965
-      PathAndIcons:
-      - ElementName: Default Work Unit
-        ObjectType: 12
-      - ElementName: Player_move
-        ObjectType: 4
-      - ElementName: Left_Right
-        ObjectType: 3
-      Path: Default Work Unit\Player_move\Left_Right
+      Path: Default Work Unit\Play_Aura1_or_2
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -149,6 +133,18 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: Play_Player_Attrack
+      guid: 4496df1d430bee4a83ed7012775b6084
+      id: 319966612
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Attrack
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Attrack
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: Play_Player_Charge
       guid: 726d47fa7fab864c8e164ea00038068b
       id: 2363478948
@@ -161,18 +157,6 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: Play_Player_Contact
-      guid: 6d8a385b56c7d94fb9ae261731d00a25
-      id: 2512253940
-      PathAndIcons:
-      - ElementName: Default Work Unit
-        ObjectType: 12
-      - ElementName: Play_Player_Contact
-        ObjectType: 3
-      Path: Default Work Unit\Play_Player_Contact
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
     - name: Play_Player_Dash
       guid: 5f8854099a6db14384181c671aafd914
       id: 2175711460
@@ -182,6 +166,18 @@ MonoBehaviour:
       - ElementName: Play_Player_Dash
         ObjectType: 3
       Path: Default Work Unit\Play_Player_Dash
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Dash2
+      guid: 60ead8944adb2d4f95685a2a3053b8bf
+      id: 168627934
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Dash2
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Dash2
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -221,41 +217,39 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: Play_Player_Life
-      guid: 8f7c379778d1fb4b936e36f334c6acf1
-      id: 4116265926
-      PathAndIcons:
-      - ElementName: Default Work Unit
-        ObjectType: 12
-      - ElementName: Play_Player_Life
-        ObjectType: 3
-      Path: Default Work Unit\Play_Player_Life
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
-    - name: Play_Player_Touch
+    - name: Play_Player_Hit
       guid: 11a15bec58cf0645872f4ea84ae032ae
-      id: 1289724125
+      id: 1864892471
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Play_Player_Touch
+      - ElementName: Play_Player_Hit
         ObjectType: 3
-      Path: Default Work Unit\Play_Player_Touch
+      Path: Default Work Unit\Play_Player_Hit
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: Up
-      guid: 254531508260734a836a095a0468e428
-      id: 1551306158
+    - name: Play_Player_Move_Solo
+      guid: 385fdb00f7aa5345b8d5bd2738266086
+      id: 365655931
       PathAndIcons:
       - ElementName: Default Work Unit
         ObjectType: 12
-      - ElementName: Player_move
-        ObjectType: 4
-      - ElementName: Up
+      - ElementName: Play_Player_Move_Solo
         ObjectType: 3
-      Path: Default Work Unit\Player_move\Up
+      Path: Default Work Unit\Play_Player_Move_Solo
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Stop_Player_Move_Solo
+      guid: 95efe13067babb4ca57f641451199d98
+      id: 2405542185
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Stop_Player_Move_Solo
+        ObjectType: 3
+      Path: Default Work Unit\Stop_Player_Move_Solo
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -287,8 +281,45 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 2ea1b818b045414286d7285a8b7539c2
     GuidInternal: 
-    m_lastTime: -8586261544290439330
+    m_lastTime: -8586255458375599080
     List:
+    - name: Aura_State
+      guid: 21f5af6f3309e6498079c3cd2cbe9ecf
+      id: 2139179158
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Aura_State
+        ObjectType: 11
+      Path: Default Work Unit\Aura_State
+      values:
+      - name: State1to2
+        guid: 3fd8ac0c8dd98a48b74cb5b3c045bd36
+        id: 784629068
+        PathAndIcons:
+        - ElementName: State1to2
+          ObjectType: 10
+      - name: State2to1
+        guid: 308bec46cfe7f44b83283cc799db45b8
+        id: 3142087114
+        PathAndIcons:
+        - ElementName: State2to1
+          ObjectType: 10
+      - name: State2to3
+        guid: 5f221fe9e0ba1e4a9a050aac20a5e91d
+        id: 3142087112
+        PathAndIcons:
+        - ElementName: State2to3
+          ObjectType: 10
+      - name: State3to2
+        guid: 9cf89dec41e77f438c79988c54e25e3f
+        id: 670254010
+        PathAndIcons:
+        - ElementName: State3to2
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
     - name: Choix_Astres
       guid: a96cbf15ef5d30459cff9c637d637bde
       id: 1901131985
@@ -320,6 +351,62 @@ MonoBehaviour:
       ValueGuids: []
       ValueIcons: []
       valuesInternal: []
+    - name: Player_Move
+      guid: b41429396083ab4f9bf38029d4f40048
+      id: 2248092158
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Player_Move
+        ObjectType: 11
+      Path: Default Work Unit\Player_Move
+      values:
+      - name: Down
+        guid: d0039dae36823f4c84f8b586231304af
+        id: 2280510569
+        PathAndIcons:
+        - ElementName: Down
+          ObjectType: 10
+      - name: Right_Left
+        guid: a5323821dee593499521a35e1fff75e7
+        id: 3951975711
+        PathAndIcons:
+        - ElementName: Right_Left
+          ObjectType: 10
+      - name: Up
+        guid: 214ccf308d57024fafd53a50aa3f5d8e
+        id: 1551306158
+        PathAndIcons:
+        - ElementName: Up
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: Witch_Aura
+      guid: 95487fe139e0ac40a30ee4e34a532ea7
+      id: 4013159664
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Witch_Aura
+        ObjectType: 11
+      Path: Default Work Unit\Witch_Aura
+      values:
+      - name: Aura1
+        guid: d28d8554726f3e4988d7e685250b838f
+        id: 1269569029
+        PathAndIcons:
+        - ElementName: Aura1
+          ObjectType: 10
+      - name: Aura2
+        guid: 95423729f2c30146abd7f69195f540fe
+        id: 1269569030
+        PathAndIcons:
+        - ElementName: Aura2
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
   TriggerWwu:
   - PhysicalPath: Triggers\Default Work Unit.wwu
     ParentPhysicalPath: 
@@ -329,5 +416,9 @@ MonoBehaviour:
     List: []
   ExpandedItems:
   - /Joute_Celeste_WwiseProject
+  - /Joute_Celeste_WwiseProject/Events
+  - /Joute_Celeste_WwiseProject/Switches
+  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit
+  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Choix_Astres
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

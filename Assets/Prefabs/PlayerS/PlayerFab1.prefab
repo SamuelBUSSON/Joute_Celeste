@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!95 &1307525660
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2758839450924294534}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1adc060b1b11c3b4289e7fd8ea29bdfe, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2758839452218953968
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,11 +269,10 @@ MonoBehaviour:
     speedMultiplier: 2
     damageMultiplier: 2
   attractRange: 2
-  AttractZone: {fileID: 2758839450924294534, guid: fce0a363bd790644dac54d6958945130,
-    type: 3}
+  AttractZone: {fileID: 2758839450924294534}
   deathRange: 0
   deathDamage: 0
-  Health: 5
+  Health: 10
 --- !u!114 &3428629715616182282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,7 +437,7 @@ PrefabInstance:
     - target: {fileID: 1091391847767521840, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
       propertyPath: m_Radius
-      value: 0.0882312
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1091391847767522252, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
@@ -476,6 +494,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1091391847767522252, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091391847767522252, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1091391847767522253, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
       propertyPath: m_Name
@@ -488,16 +516,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1091391847767522254, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1091391847767522254, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
       propertyPath: m_Size.x
       value: -0.02
       objectReference: {fileID: 0}
+    - target: {fileID: 1713135705431466982, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_Radius
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ebad5be1c8cad5409c4d64c07630d7c, type: 3}
+--- !u!1 &2758839450924294534 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1091391847767522253, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+    type: 3}
+  m_PrefabInstance: {fileID: 2984825281499208267}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2758839450924294535 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1091391847767522252, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
