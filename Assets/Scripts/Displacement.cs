@@ -163,7 +163,7 @@ public class Displacement : MonoBehaviour
                 GetComponentInChildren<PointEffector2D>().forceMagnitude = 100;
 
                 rigidbody2d.DOMove(transform.position + movement * dashs[currentDash].dashStrength, dashs[currentDash].timeToReachDashPosition).OnComplete(() => DashCanceled()).SetEase(dashs[currentDash].easeDash).OnStart(() => DashEffect());
-
+                
                 dashCoolDownTimer = 0.0f;
                 ++currentDash;
                 if(currentDash == dashs.Length)

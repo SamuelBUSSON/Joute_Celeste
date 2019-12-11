@@ -106,7 +106,7 @@ public class @InputController : IInputActionCollection, IDisposable
                 {
                     ""name"": ""up"",
                     ""id"": ""e8521969-6a15-4409-9120-f25b7bd4d24c"",
-                    ""path"": ""<Keyboard>/upArrow"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -117,7 +117,7 @@ public class @InputController : IInputActionCollection, IDisposable
                 {
                     ""name"": ""down"",
                     ""id"": ""a5ce2c77-64e4-4d5b-b396-954da01fbd81"",
-                    ""path"": ""<Keyboard>/downArrow"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -128,7 +128,7 @@ public class @InputController : IInputActionCollection, IDisposable
                 {
                     ""name"": ""left"",
                     ""id"": ""84fbd08e-a13c-46af-836f-0d518caa4f06"",
-                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -139,7 +139,7 @@ public class @InputController : IInputActionCollection, IDisposable
                 {
                     ""name"": ""right"",
                     ""id"": ""07c250b7-3f09-4224-af37-201f74406ad8"",
-                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -206,6 +206,17 @@ public class @InputController : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""a77d042f-1c27-4b2e-97a9-78f160ab8afc"",
                     ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e31b1e8-2abe-49ff-9a4e-92a508b46cd0"",
+                    ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

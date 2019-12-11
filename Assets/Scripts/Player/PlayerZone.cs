@@ -147,8 +147,7 @@ public class PlayerZone : MonoBehaviour
 
     public void OnAimCanceled(InputAction.CallbackContext obj)
     {
-        AimCanceled();
-       
+        AimCanceled();       
     }
 
     private void AimCanceled()

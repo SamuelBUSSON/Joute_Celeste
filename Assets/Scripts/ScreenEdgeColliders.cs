@@ -26,8 +26,30 @@ using System.Collections;
 
             // add or use existing EdgeCollider2D
             var edge = GetComponent<EdgeCollider2D>() == null ? gameObject.AddComponent<EdgeCollider2D>() : GetComponent<EdgeCollider2D>();
+            edge.edgeRadius = 3.0f;
 
             var edgePoints = new[] { bottomLeft, topLeft, topRight, bottomRight, bottomLeft };
+        
+            for (int i = 0; i < edgePoints.Length; i++)
+            {
+                if(edgePoints[i].x < 0)
+                {
+                    edgePoints[i].x -= edge.edgeRadius;
+                }
+                else
+                {
+                    edgePoints[i].x += edge.edgeRadius;
+
+                }
+                if (edgePoints[i].y < 0)
+                {
+                    edgePoints[i].y -= edge.edgeRadius;
+                }
+                else
+                {
+                    edgePoints[i].y += edge.edgeRadius;
+                }
+        }
             edge.points = edgePoints;
         }
     }

@@ -260,12 +260,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thresholds:
   - health: 7
-    speedMultiplier: 1
-    damageMultiplier: 1
-  - health: 5
     speedMultiplier: 1.25
     damageMultiplier: 1.25
-  - health: 2
+  - health: 3
     speedMultiplier: 2
     damageMultiplier: 2
   attractRange: 2
