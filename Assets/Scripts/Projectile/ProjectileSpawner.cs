@@ -89,7 +89,7 @@ public class ProjectileSpawner : MonoBehaviour
                 , Quaternion.identity,
                 transform);
             //proj.transform.LookAt(dir);
-            proj.transform.Rotate(0, 0, Random.Range(-5f, 5f));
+            proj.transform.Rotate(0, 0, Random.Range(-360f, 360.0f));
             proj.GetComponent<Rigidbody2D>().AddForce(-(position - dir).normalized * speed);
         }
     }
