@@ -128,7 +128,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
-    dashStrength: 2
+    dashStrength: 7
     timeToReachDashPosition: 0.2
   - easeDash:
       serializedVersion: 2
@@ -154,7 +154,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
-    dashStrength: 4
+    dashStrength: 12
     timeToReachDashPosition: 0.2
   dashCoolDown: 1
   dash_FX: {fileID: 3872819554724585126}

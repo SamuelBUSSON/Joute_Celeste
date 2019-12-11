@@ -87,7 +87,7 @@ public class Displacement : MonoBehaviour
                 currentDash = 0;
                 dashCoolDownTimer = 0.0f;
             }
-        }
+        }        
     }
 
     private void Move(bool isCancel)

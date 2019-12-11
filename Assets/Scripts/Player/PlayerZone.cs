@@ -75,13 +75,6 @@ public class PlayerZone : MonoBehaviour
     {        
         if (!playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch && !element.GetComponent<Projectile>().isLaunched)
         {
-            Projectile proj = element.GetComponent<Projectile>();
-            if (proj.type == EProjectileType.STAR)
-            {
-                DrainStar(proj);
-            }
-            else
-            {
                 canCatch = false;
                 ChangeNearestElementColor(false);
                 Vector3 heading = element.transform.position - transform.position;
@@ -89,7 +82,7 @@ public class PlayerZone : MonoBehaviour
                 AimCanceled();            
 
                 element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));  
-            }
+            
         }
     }
 
@@ -286,7 +279,7 @@ public class PlayerZone : MonoBehaviour
     {
         if (nearestElement)
         {
-           nearestElement?.GetComponent<SpriteRenderer>().material.DOFloat(isColor ? 1f : 0f, "_OutlineStrength", 0.3f);
+            //nearestElement?.GetComponent<SpriteRenderer>().material.DOFloat(isColor ? 1f : 0f, "_OutlineStrength", 0.3f);
             nearestElement?.GetComponent<SpriteRenderer>().material.SetInt("_HighLigth", isColor ? 1 : 0);
         }
 

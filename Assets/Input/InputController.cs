@@ -75,6 +75,14 @@ public class @InputController : IInputActionCollection, IDisposable
                     ""interactions"": ""Hold(duration=1)""
                 },
                 {
+                    ""name"": ""CaugthLv1"",
+                    ""type"": ""Button"",
+                    ""id"": ""17f9f7a6-2637-41d3-8543-1f7fb3ec79e3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.5)""
+                },
+                {
                     ""name"": ""TestAction"",
                     ""type"": ""Button"",
                     ""id"": ""ad2ec385-8e18-4d3a-97cb-41ca2c985f10"",
@@ -281,6 +289,28 @@ public class @InputController : IInputActionCollection, IDisposable
                     ""action"": ""TestAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e243ebbc-f4e3-4d70-ab8d-f0b34ca0f028"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CaugthLv1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f950a2a-b469-4740-88f7-f0071e2dedfd"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CaugthLv1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -296,6 +326,7 @@ public class @InputController : IInputActionCollection, IDisposable
         m_Character_Dash = m_Character.FindAction("Dash", throwIfNotFound: true);
         m_Character_HoldLv1 = m_Character.FindAction("HoldLv1", throwIfNotFound: true);
         m_Character_HoldLv2 = m_Character.FindAction("HoldLv2", throwIfNotFound: true);
+        m_Character_CaugthLv1 = m_Character.FindAction("CaugthLv1", throwIfNotFound: true);
         m_Character_TestAction = m_Character.FindAction("TestAction", throwIfNotFound: true);
     }
 
@@ -353,6 +384,7 @@ public class @InputController : IInputActionCollection, IDisposable
     private readonly InputAction m_Character_Dash;
     private readonly InputAction m_Character_HoldLv1;
     private readonly InputAction m_Character_HoldLv2;
+    private readonly InputAction m_Character_CaugthLv1;
     private readonly InputAction m_Character_TestAction;
     public struct CharacterActions
     {
@@ -365,6 +397,7 @@ public class @InputController : IInputActionCollection, IDisposable
         public InputAction @Dash => m_Wrapper.m_Character_Dash;
         public InputAction @HoldLv1 => m_Wrapper.m_Character_HoldLv1;
         public InputAction @HoldLv2 => m_Wrapper.m_Character_HoldLv2;
+        public InputAction @CaugthLv1 => m_Wrapper.m_Character_CaugthLv1;
         public InputAction @TestAction => m_Wrapper.m_Character_TestAction;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
@@ -396,6 +429,9 @@ public class @InputController : IInputActionCollection, IDisposable
                 @HoldLv2.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnHoldLv2;
                 @HoldLv2.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnHoldLv2;
                 @HoldLv2.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnHoldLv2;
+                @CaugthLv1.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnCaugthLv1;
+                @CaugthLv1.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnCaugthLv1;
+                @CaugthLv1.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnCaugthLv1;
                 @TestAction.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnTestAction;
                 @TestAction.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnTestAction;
                 @TestAction.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnTestAction;
@@ -424,6 +460,9 @@ public class @InputController : IInputActionCollection, IDisposable
                 @HoldLv2.started += instance.OnHoldLv2;
                 @HoldLv2.performed += instance.OnHoldLv2;
                 @HoldLv2.canceled += instance.OnHoldLv2;
+                @CaugthLv1.started += instance.OnCaugthLv1;
+                @CaugthLv1.performed += instance.OnCaugthLv1;
+                @CaugthLv1.canceled += instance.OnCaugthLv1;
                 @TestAction.started += instance.OnTestAction;
                 @TestAction.performed += instance.OnTestAction;
                 @TestAction.canceled += instance.OnTestAction;
@@ -440,6 +479,7 @@ public class @InputController : IInputActionCollection, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnHoldLv1(InputAction.CallbackContext context);
         void OnHoldLv2(InputAction.CallbackContext context);
+        void OnCaugthLv1(InputAction.CallbackContext context);
         void OnTestAction(InputAction.CallbackContext context);
     }
 }

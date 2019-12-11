@@ -31,6 +31,7 @@ public class ObjectHandler : MonoBehaviour
 
     private Displacement playerMovement;
     private PlayerZone playerZone;
+    private PlayerHealth playerHealth;
 
     private PlayerController controller;
     private void Awake()
@@ -48,8 +49,12 @@ public class ObjectHandler : MonoBehaviour
         input.currentActionMap["HoldLv1"].performed += OnHoldLv1;
         input.currentActionMap["HoldLv2"].performed += OnHoldLv2;
 
+        input.currentActionMap["CaugthLv1"].performed += OnDrainStar;
+
         enemyPos = transform;
         controller = GetComponent<PlayerController>();
+
+        playerHealth = GetComponent<PlayerHealth>();
     }
     
 
@@ -61,7 +66,7 @@ public class ObjectHandler : MonoBehaviour
 
             VisualEffect fx = proj.GetComponentInChildren<VisualEffect>();
 
-            fx.SetFloat("Radius", proj.size);
+            fx.SetFloat("Radius", proj.size + 0.5f);
             fx.SendEvent("OnCast");
 
 
@@ -72,6 +77,23 @@ public class ObjectHandler : MonoBehaviour
                 proj.SetThresholdLevel(1);
             }
         }
+    }
+
+    private void OnDrainStar(InputAction.CallbackContext obj)
+    {
+        Projectile proj = handledObject.GetComponent<Projectile>();
+        if (proj.type == EProjectileType.STAR)
+        {
+            DrainStar(proj);
+        }
+    }
+
+
+    private void DrainStar(Projectile proj)
+    {
+        handledObject = null;
+        playerHealth.GiveHealth(playerHealth.maxHealth / 3);
+        Destroy(proj.gameObject);
     }
 
     private void OnHoldLv1(InputAction.CallbackContext obj)
@@ -187,11 +209,10 @@ public class ObjectHandler : MonoBehaviour
 
         handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
 
-        VisualEffect fx = handledObject.GetComponentInChildren<VisualEffect>();
-
+        VisualEffect fx = handledObject.GetComponent<VisualEffect>();
         fx.SetBool("SpawnRate", false);
 
-        handledObject.GetComponentInChildren<VisualEffect>().enabled = true;
+        handledObject.GetComponentsInChildren<VisualEffect>()[1].enabled = true;
 
         Vector2 v1 = transform.position;
         Vector2 v2 = heading;
