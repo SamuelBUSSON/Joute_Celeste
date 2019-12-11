@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class ProjectileSpawner : MonoBehaviour
 {
-    public Projectile prefabToSpawn;
+    public Projectile[] prefabsToSpawn;
     
     [Header("Propriétés des projectiles lents")]
     [Range(0, 1f)]
@@ -82,6 +82,8 @@ public class ProjectileSpawner : MonoBehaviour
         {
             Vector3 position = Random.insideUnitCircle;
             position += startingPosition;
+
+            var prefabToSpawn = prefabsToSpawn[Random.Range(0, prefabsToSpawn.Length)];
             
             var proj = Instantiate(prefabToSpawn, position
                 , Quaternion.identity,
