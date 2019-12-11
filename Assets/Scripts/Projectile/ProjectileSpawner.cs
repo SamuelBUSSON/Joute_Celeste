@@ -8,6 +8,8 @@ public class ProjectileSpawner : MonoBehaviour
 {
     public Projectile[] prefabsToSpawn;
     
+    public float spawnRadius;
+    
     [Header("Propriétés des projectiles lents")]
     [Range(0, 1f)]
     public float probability;
@@ -75,12 +77,12 @@ public class ProjectileSpawner : MonoBehaviour
         Vector3 dir = cam.ViewportToWorldPoint(new Vector3( Random.Range(0.2f, 0.8f), Random.Range(0.2f, 0.8f), 0));
         dir.z = 0f;
         
-        startingPosition += (startingPosition - dir).normalized * 1.25f;
+        startingPosition += (startingPosition - dir).normalized * spawnRadius;
         startingPosition.z = 0f;
         
         for (int i = 0; i < amount; i++)
         {
-            Vector3 position = Random.insideUnitCircle;
+            Vector3 position = Random.insideUnitCircle * spawnRadius;
             position += startingPosition;
 
             var prefabToSpawn = prefabsToSpawn[Random.Range(0, prefabsToSpawn.Length)];
