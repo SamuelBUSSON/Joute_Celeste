@@ -17,21 +17,21 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: df9e64862ca8a042b3ec5a621d57e7db
     GuidInternal: 
-    m_lastTime: -8586261544290429335
+    m_lastTime: -8586260532115442171
     List: []
   AuxBusWwu:
   - PhysicalPath: Master-Mixer Hierarchy\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 0fcc13c57297d24b8a35bed7e8af5bb2
     GuidInternal: 
-    m_lastTime: -8586255458376336608
+    m_lastTime: -8586255355797549806
     List: []
   BankWwu:
   - PhysicalPath: SoundBanks\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 174613c4b638834d82e6e1c733e21d14
     GuidInternal: 
-    m_lastTime: -8586255458375619028
+    m_lastTime: -8586255355797400208
     List:
     - name: Son_General
       guid: aea6cb949070b44c817cff3d4c5b6d0b
@@ -47,7 +47,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: d797f9769f5a1349bc7d8f150177038f
     GuidInternal: 
-    m_lastTime: -8586255364767970456
+    m_lastTime: -8586254501260396208
     List:
     - name: Play_Aura1_or_2
       guid: 25dea11f219dda418a71594e44122a72
@@ -241,6 +241,18 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: Play_Titre_jap
+      guid: bc08f38f9c0c30409171c323d20410b9
+      id: 1506832986
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Titre_jap
+        ObjectType: 3
+      Path: Default Work Unit\Play_Titre_jap
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: Stop_Player_Move_Solo
       guid: 95efe13067babb4ca57f641451199d98
       id: 2405542185
@@ -258,7 +270,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 3b02738d29f06b45ae3659bb54f2c823
     GuidInternal: 
-    m_lastTime: -8586261544292557216
+    m_lastTime: -8586260532116658899
     List:
     - name: Life_Bar
       guid: a40e23a4203dc8458111d8d76d8c2e2b
@@ -274,14 +286,14 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: e763a5e66753094c97102f11f2cacc20
     GuidInternal: 
-    m_lastTime: -8586261544290449263
+    m_lastTime: -8586260532115531933
     List: []
   SwitchWwu:
   - PhysicalPath: Switches\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 2ea1b818b045414286d7285a8b7539c2
     GuidInternal: 
-    m_lastTime: -8586255458375599080
+    m_lastTime: -8586255355797400208
     List:
     - name: Aura_State
       guid: 21f5af6f3309e6498079c3cd2cbe9ecf
@@ -412,7 +424,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: e953f878e8cf3644b57972f441eeaaaf
     GuidInternal: 
-    m_lastTime: -8586261544290439330
+    m_lastTime: -8586260532115472088
     List: []
   ExpandedItems:
   - /Joute_Celeste_WwiseProject

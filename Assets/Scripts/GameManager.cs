@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using AI;
 using Cinemachine;
 using Player;
 using UnityEngine;
@@ -12,6 +13,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    /// <summary>
+    /// Decides whether there is an ai, and stop the second player to join
+    /// </summary>
+    public bool hasAI;
+
     [NonSerialized]
     public PlayerController player1;
     
@@ -22,6 +28,8 @@ public class GameManager : MonoBehaviour
     public Slider PlayerSliderHealth2;
 
     public CinemachineTargetGroup targetGroup;
+
+    public AIController ai;
 
     [NonSerialized]
     public int playerIndex = -1;
@@ -39,12 +47,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetAiMode()
+    {
+        hasAI = true;
+    }
+
     private void OnPlayerJoin(PlayerInput obj)
     {
         targetGroup.AddMember(obj.transform, 1, 1);
-        
+
         if (playerIndex == -1)
+        {
             player1 = obj.GetComponent<PlayerController>();
+
+            if (hasAI)
+            {
+                player2 = Instantiate(ai).GetComponent<PlayerController>();
+                PlayerInputManager.instance.DisableJoining();
+            }
+        }
+            
         else
         {
             player2 = obj.GetComponent<PlayerController>();
@@ -83,11 +105,17 @@ public class GameManager : MonoBehaviour
     public void Draw()
     {
         Debug.Log("Draw");
+        
+        hasAI = false;
+        PlayerInputManager.instance.EnableJoining();
     }
 
     public void WinLoose(int looserIndex)
     {
         Debug.Log("Player " + looserIndex + " looses !");
+        
+        hasAI = false;
+        PlayerInputManager.instance.EnableJoining();
     }
 
     public void Update()

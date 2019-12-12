@@ -9,5 +9,5 @@
   <SoundbankPath>Audio/GeneratedSoundBanks</SoundbankPath>
   <WwiseInstallationPathMac />
   <WwiseInstallationPathWindows>D:\Program Files (x86)\Audiokinetic\Wwise 2019.1.5.7093</WwiseInstallationPathWindows>
-  <WwiseProjectPath>../../Joute_Celeste/Assets/Joute_Celeste_Wwise/Joute_Celeste_WwiseProject/Joute_Celeste_WwiseProject.wproj</WwiseProjectPath>
+  <WwiseProjectPath>Joute_Celeste_Wwise/Joute_Celeste_WwiseProject/Joute_Celeste_WwiseProject.wproj</WwiseProjectPath>
 </WwiseSettings>
