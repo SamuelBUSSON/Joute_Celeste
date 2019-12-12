@@ -108,15 +108,15 @@ public class Projectile : MonoBehaviour
         switch (type)
         {
             case EProjectileType.STAR:
-                AkSoundEngine.PostEvent("Play_Explosion_Comete", gameObject);
+                AkSoundEngine.PostEvent("Play_Explosion_Etoile", gameObject); 
                 break;
 
             case EProjectileType.PLANET:
-                AkSoundEngine.PostEvent("Play_Explosion_Etoile", gameObject);
-                break;
+                AkSoundEngine.PostEvent("Play_Explosion_Planete", gameObject);
+                break; 
 
             case EProjectileType.ASTEROID:
-                AkSoundEngine.PostEvent("Play_Explosion_Planete", gameObject);
+                AkSoundEngine.PostEvent("Play_Explosion_Comete", gameObject);
                 break;
         }
 

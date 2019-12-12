@@ -76,7 +76,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            TakeDamage(1.0f);
+            TakeDamage(10.0f);
         }
     }
 
@@ -105,7 +105,11 @@ public class PlayerHealth : MonoBehaviour
         if (!playerMovement.IsDashing())
         {
             Health -= amount;
-            healthSlider.value = Health;
+            healthSlider.value = Health;            
+
+            float shakeValue = Mathf.Lerp(2.0f, 20.0f, Mathf.InverseLerp(5, 50, amount));
+
+            CameraManager.Instance.Shake(shakeValue, shakeValue, 0.1f);            
 
             AkSoundEngine.SetSwitch("Witch_Aura", playerController?.playerIndex == 1  ? "Aura1" : "Aura2", gameObject);
 

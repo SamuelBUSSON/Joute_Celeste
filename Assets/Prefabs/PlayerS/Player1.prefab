@@ -178,6 +178,9 @@ MonoBehaviour:
   launchStrength: 30
   knockbackForce: 1
   enemyPos: {fileID: 0}
+  isHoldingStar: 0
+  isStarChargLv1: 0
+  isHoldingObject: 0
 --- !u!114 &2758839452218953963
 MonoBehaviour:
   m_ObjectHideFlags: 0

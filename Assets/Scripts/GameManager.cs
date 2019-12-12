@@ -52,7 +52,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
             player2 = obj.GetComponent<PlayerController>();
             StartCoroutine(SetupPlayers());
         }

@@ -77,7 +77,7 @@ public class PlayerZone : MonoBehaviour
                 ChangeNearestElementColor(false);
                 Vector3 heading = element.transform.position - transform.position;
 
-                AimCanceled();            
+                //AimCanceled();            
 
                 element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));  
             
@@ -121,7 +121,7 @@ public class PlayerZone : MonoBehaviour
 
     public void Aim(Vector2 v)
     {
-        triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = true;
+        //triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = true;
 
         int angle = Mathf.RoundToInt( Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg);        
 
@@ -151,7 +151,7 @@ public class PlayerZone : MonoBehaviour
     private void AimCanceled()
     {
         isAiming = false;
-        triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = false;
+       // triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

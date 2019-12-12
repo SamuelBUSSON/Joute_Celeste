@@ -19,6 +19,10 @@ public class ObjectHandler : MonoBehaviour
 
     public Transform enemyPos;
 
+    public bool isHoldingStar = false;
+    public bool isStarChargLv1 = false;
+    public bool isHoldingObject = false;
+
     private Transform handledObject;
     private float angle = 0.0f;
     private Vector3 displaceAngleVector;
@@ -65,26 +69,35 @@ public class ObjectHandler : MonoBehaviour
             Projectile proj = handledObject.GetComponent<Projectile>();
 
             AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
-
+            
             VisualEffect fx = proj.GetComponentInChildren<VisualEffect>();
 
             fx.SetFloat("Radius", proj.size + 0.5f);
             fx.SendEvent("OnCast");
 
+            proj.GetComponentInChildren<VisualEffect>().SendEvent("OnCast");
 
             proj?.GetComponent<SpriteRenderer>().material.DOFloat((proj.GetComponent<SpriteRenderer>().material.GetFloat("_PowerColor") * 1.5f), "_PowerColor", 0.3f);
 
-            if (proj.type != EProjectileType.PLANET)
+            proj.SetThresholdLevel(1);
+
+            if(proj.type == EProjectileType.STAR)
             {
-                proj.SetThresholdLevel(1);
+                isHoldingStar = true;
             }
+            else
+            {
+                isHoldingObject = true;
+            }
+
+            
         }
     }
 
     private void OnDrainStar(InputAction.CallbackContext obj)
     {
         Projectile proj = handledObject.GetComponent<Projectile>();
-        if (proj.type == EProjectileType.STAR)
+        if (proj.type == EProjectileType.STAR && !isStarChargLv1)
         {
             DrainStar(proj);
         }
@@ -102,17 +115,19 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
-            AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
-
             Projectile proj = handledObject.GetComponent<Projectile>();
 
             proj.GetComponentInChildren<VisualEffect>().SendEvent("OnCast");
 
-            proj?.GetComponent<SpriteRenderer>().material.DOFloat( (proj.GetComponent<SpriteRenderer>().material.GetFloat("_PowerColor") * 1.5f), "_PowerColor" ,0.3f);
+            AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
 
-            if (proj.type != EProjectileType.PLANET)
+            proj?.GetComponent<SpriteRenderer>().material.DOFloat((proj.GetComponent<SpriteRenderer>().material.GetFloat("_PowerColor") * 1.5f), "_PowerColor", 0.3f);
+
+            proj.SetThresholdLevel(0);
+
+            if(proj.type == EProjectileType.STAR)
             {
-                proj.SetThresholdLevel(0);
+                isStarChargLv1 = true;
             }
         }
     }
@@ -138,8 +153,31 @@ public class ObjectHandler : MonoBehaviour
                 Aim(Vector2.zero, true);
             }
                handledObject.transform.position = transform.position + displaceAngleVector * handledObject.GetComponent<Projectile>().size; ;
-        }        
-        coolDownTimer += Time.deltaTime;       
+        }
+
+        
+    }
+
+    private void FixedUpdate()
+    {
+        if (isHoldingStar)
+        {
+            CameraManager.Instance.Shake(2.0f, 2.0f, Time.fixedTime);
+
+            if (input.user.pairedDevices[0] is Gamepad pad)
+            {
+                CameraManager.Instance.Vibrate(0.2f, 0.0f, Time.fixedTime, pad);
+            }
+        }
+        if (isHoldingObject)
+        {
+            CameraManager.Instance.Shake(0.1f, 0.1f, Time.fixedTime);
+
+            if (input.user.pairedDevices[0] is Gamepad pad)
+            {
+                CameraManager.Instance.Vibrate(0f, 0.05f, Time.fixedTime, pad);
+            }
+        }
     }
 
     private void LateUpdate()
@@ -171,9 +209,7 @@ public class ObjectHandler : MonoBehaviour
     {
         autoAim = true;
     }
-
-
-
+    
     private void Fire()
     {
         if (handledObject)
@@ -229,14 +265,10 @@ public class ObjectHandler : MonoBehaviour
             projectile.currentDamage *= damageMultiplier;
             projectile.playerIndex = controller.playerIndex;
 
-
             handledObject.gameObject.layer = 10;
 
-
             AkSoundEngine.SetSwitch("Choix_Astres", projectile.type == EProjectileType.PLANET ? "Planete" : projectile.type == EProjectileType.STAR ? "Etoile" : "Comete", gameObject);
-            AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
-
-           
+            AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);           
 
             Vector3 heading = aimingToPlayer ? -(handledObject.transform.position - enemyPos.position).normalized : (handledObject.transform.position - transform.position).normalized;
 
@@ -253,6 +285,10 @@ public class ObjectHandler : MonoBehaviour
             transform.DOMove(v1 - v2 * knockbackForce, 0.05f);
 
             handledObject = null;
+
+            isHoldingStar = false;
+            isHoldingObject = false;
+            isStarChargLv1 = false;
         }
     }
 
