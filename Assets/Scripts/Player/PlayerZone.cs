@@ -179,6 +179,7 @@ public class PlayerZone : MonoBehaviour
         if (other.CompareTag("Projectile"))
         {
             objectInZone.Remove(other.transform);
+
             if(nearestElement && other.transform == nearestElement.transform)
             {
                 ChangeNearestElementColor(false);

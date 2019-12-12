@@ -184,7 +184,7 @@ public class ObjectHandler : MonoBehaviour
         {
             Transform objectToLaunch = playerZone.GetNearestObjectInZone(true);
 
-            if (objectToLaunch)
+            if (objectToLaunch && objectToLaunch.GetComponent<Projectile>().isChopable)
             {
                 handledObject = objectToLaunch;
 
@@ -275,6 +275,8 @@ public class ObjectHandler : MonoBehaviour
             objectToThrow?.GetComponent<SpriteRenderer>().material.SetInt("_HighLigth", 0);
 
             handledObject = objectToThrow;
+
+            handledObject.GetComponent<Projectile>().isChopable = false;
 
             handledObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             handledObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
