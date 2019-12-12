@@ -27,6 +27,8 @@ public class Projectile : MonoBehaviour
 
     public float size = 1.0f;
 
+    public bool isChopable = true;
+
     [NonSerialized]
     public int playerIndex;
     public float startingDamage;

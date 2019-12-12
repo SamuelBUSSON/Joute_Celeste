@@ -60,7 +60,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Health
-    m_EventTreshold: 7.1
+    m_EventTreshold: 74.9
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3855481224831786656}
   m_Solo: 0
@@ -85,7 +85,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Health
-    m_EventTreshold: 3.1
+    m_EventTreshold: 24.9
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 365451189817608766}
   m_Solo: 0
@@ -110,7 +110,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Health
-    m_EventTreshold: 4.9
+    m_EventTreshold: 25.1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6353072998081947204}
   m_Solo: 0
@@ -131,12 +131,12 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AnimatorEtat01
+  m_Name: AnimatorPlayer1
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Health
     m_Type: 1
-    m_DefaultFloat: 10
+    m_DefaultFloat: 100
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
@@ -190,7 +190,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Health
-    m_EventTreshold: 7.5
+    m_EventTreshold: 75.1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3855481224831786656}
   m_Solo: 0
@@ -242,7 +242,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Health
-    m_EventTreshold: 3.1
+    m_EventTreshold: 24.9
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6353072998081947204}
   m_Solo: 0
@@ -295,7 +295,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Health
-    m_EventTreshold: 4.9
+    m_EventTreshold: 25.1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7464222157005001395}
   m_Solo: 0
@@ -357,7 +357,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Health
-    m_EventTreshold: 7.5
+    m_EventTreshold: 75.1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1652910132989116980}
   m_Solo: 0
@@ -464,7 +464,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Health
-    m_EventTreshold: 7.1
+    m_EventTreshold: 74.9
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7464222157005001395}
   m_Solo: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 552627837783187440}
   - component: {fileID: 552627837783187441}
   - component: {fileID: 552627837783187443}
+  - component: {fileID: 552627838740391027}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -76,7 +77,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
     m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 4186474034313119863, guid: 31509c9a6db65ed4986bd850e951e8ec,
+  m_PlayerPrefab: {fileID: 2758839452218953968, guid: 159a96b5af092b34bb0c799aa924aaf7,
     type: 3}
   m_SplitScreen: 0
   m_MaintainAspectRatioInSplitScreen: 0
@@ -102,3 +103,16 @@ MonoBehaviour:
   PlayerSliderHealth1: {fileID: 0}
   PlayerSliderHealth2: {fileID: 0}
   targetGroup: {fileID: 0}
+--- !u!114 &552627838740391027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552627837783187214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c45b76083ae8d44894be0c917b4fd9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vmCam: {fileID: 0}

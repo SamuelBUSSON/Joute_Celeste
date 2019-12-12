@@ -3,12 +3,21 @@
 
 using UnityEngine;
 using System.Collections;
-
+using Cinemachine;
 
     public class ScreenEdgeColliders : MonoBehaviour
     {
+
+        public GameObject objectToInstantiate;
+        private CinemachineVirtualCamera vmCam;
+
         void Awake()
         {
+            vmCam = GetComponent<CinemachineVirtualCamera>();
+            vmCam.m_Lens.OrthographicSize = 10.5f;
+            vmCam.enabled = false;
+
+
             AddCollider();
         }
 
@@ -24,12 +33,20 @@ using System.Collections;
             var topRight = (Vector2)cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, cam.pixelHeight, cam.nearClipPlane));
             var bottomRight = (Vector2)cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, 0, cam.nearClipPlane));
 
+
+            GameObject instaniateObject = Instantiate(objectToInstantiate, transform.position, Quaternion.identity);
+            instaniateObject.layer = 13;
             // add or use existing EdgeCollider2D
-            var edge = GetComponent<EdgeCollider2D>() == null ? gameObject.AddComponent<EdgeCollider2D>() : GetComponent<EdgeCollider2D>();
+            var edge = instaniateObject.GetComponent<EdgeCollider2D>() == null ? instaniateObject.AddComponent<EdgeCollider2D>() : instaniateObject.GetComponent<EdgeCollider2D>();
             edge.edgeRadius = 3.0f;
 
             var edgePoints = new[] { bottomLeft, topLeft, topRight, bottomRight, bottomLeft };
-        
+
+            var confiner = instaniateObject.AddComponent<PolygonCollider2D>();
+            confiner.isTrigger = true;
+            confiner.points = edgePoints;
+            vmCam.GetComponent<CinemachineConfiner>().m_BoundingShape2D = confiner;
+
             for (int i = 0; i < edgePoints.Length; i++)
             {
                 if(edgePoints[i].x < 0)
@@ -51,5 +68,8 @@ using System.Collections;
                 }
         }
             edge.points = edgePoints;
+
+            vmCam.enabled = true;
+            vmCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_MinimumOrthoSize = 7;
         }
     }

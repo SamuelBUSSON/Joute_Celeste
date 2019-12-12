@@ -24,9 +24,7 @@ public class PlayerZone : MonoBehaviour
     private PlayerInput input;
 
     private bool isAiming = false;
-    private bool canCatch = true;
-    
-
+    private bool canCatch = true;   
 
 
     // Start is called before the first frame update
@@ -38,8 +36,8 @@ public class PlayerZone : MonoBehaviour
 
         input.currentActionMap["CaughtObject"].performed += context => OnCaughtObject(context);
 
-        input.currentActionMap["Aim"].performed += context => OnAim(context);
-        input.currentActionMap["Aim"].canceled += context => OnAimCanceled(context);
+        //input.currentActionMap["Aim"].performed += context => OnAim(context);
+        //input.currentActionMap["Aim"].canceled += context => OnAimCanceled(context);
         
         objectInZone = new List<Transform>();
         objectToSlowOnDash = new List<Transform>();
@@ -73,7 +71,7 @@ public class PlayerZone : MonoBehaviour
 
     public void CaughtObject(Transform element)
     {        
-        if (!playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch && !element.GetComponent<Projectile>().isLaunched)
+        if (element && !playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch && !element.GetComponent<Projectile>().isLaunched)
         {
                 canCatch = false;
                 ChangeNearestElementColor(false);
@@ -160,7 +158,7 @@ public class PlayerZone : MonoBehaviour
     {
         if (other.CompareTag("Projectile") && other.transform != playerObjectHandler.GetObjectHandled())
         {
-            if (!objectInZone.Contains(other.transform))
+            if (!objectInZone.Contains(other.transform) && other.GetComponent<Projectile>().isChopable)
             {
                 objectInZone.Add(other.transform);
             }
@@ -250,14 +248,28 @@ public class PlayerZone : MonoBehaviour
         return null;
     }
 
-    public Transform GetNearestObjectInZone()
+    public Transform GetNearestObjectInZone(bool isStar = false)
     {
         if (nearestElement)
         {
-            Transform elementToReturn = nearestElement;
-            objectInZone.Remove(nearestElement);
-            nearestElement = null;
-            return elementToReturn;
+            if (isStar)
+            {
+                Transform elementToReturn = nearestElement;
+                if(nearestElement.GetComponent<Projectile>().type == EProjectileType.ASTEROID)
+                {
+                    objectInZone.Remove(nearestElement);
+                    nearestElement = null;
+                    return elementToReturn;
+                }
+                return null;
+            }
+            else
+            {
+                Transform elementToReturn = nearestElement;
+                objectInZone.Remove(nearestElement);
+                nearestElement = null;
+                return elementToReturn;
+            }
         }
         else
         {

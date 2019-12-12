@@ -51,7 +51,7 @@
                     "id": "a14da7a4-e6f4-4021-99ad-dd91a58fa38e",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Hold(duration=0.5)"
+                    "interactions": "Hold(duration=1)"
                 },
                 {
                     "name": "HoldLv2",
@@ -59,7 +59,7 @@
                     "id": "fda40f4c-cf97-4128-8194-a94e2c921263",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Hold(duration=1)"
+                    "interactions": "Hold(duration=2)"
                 },
                 {
                     "name": "CaugthLv1",
@@ -193,17 +193,6 @@
                     "name": "",
                     "id": "a77d042f-1c27-4b2e-97a9-78f160ab8afc",
                     "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8e31b1e8-2abe-49ff-9a4e-92a508b46cd0",
-                    "path": "<Mouse>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40e1c0d19a2fa01459bf7adbae9e5caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  maxVelocityChange: 5000
+  speed: 500
+  maxVelocityChange: 50000
   soapStrength: 10
   dashs:
   - easeDash:
