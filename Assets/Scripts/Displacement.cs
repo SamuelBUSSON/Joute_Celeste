@@ -40,17 +40,23 @@ public class Displacement : MonoBehaviour
     private Vector3 movement;
     private bool isDashing;
 
+    public bool isAi;
+
     // Start is called before the first frame update
     void Awake()
     {
         input = GetComponent<PlayerInput>();
-        
-        input.actions.Enable();
-        input.currentActionMap["Movement"].started += context => OnStartMovement(context);
-        input.currentActionMap["Movement"].performed += context => OnMovement(context);
-        input.currentActionMap["Movement"].canceled += context => OnMovementCancel(context);
 
-        input.currentActionMap["Dash"].started += context => OnDash(context);
+        if (!isAi)
+        {
+            input.actions.Enable();
+            input.currentActionMap["Movement"].started += context => OnStartMovement(context);
+            input.currentActionMap["Movement"].performed += context => OnMovement(context);
+            input.currentActionMap["Movement"].canceled += context => OnMovementCancel(context);
+
+            input.currentActionMap["Dash"].started += context => OnDash(context);
+        }
+        
     }
 
     private void Start()
@@ -61,6 +67,11 @@ public class Displacement : MonoBehaviour
     private void OnStartMovement(InputAction.CallbackContext obj)
     {
         AkSoundEngine.PostEvent("Play_Player_Move_Solo", gameObject);
+    }
+
+    public void SetMovement(Vector3 move)
+    {
+        movement = move;
     }
 
     private void OnMovement(InputAction.CallbackContext obj)
@@ -129,10 +140,8 @@ public class Displacement : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext obj)
     {
-        if (!isStun)
-        {
+
             Dash();
-        }
     }
 
     private void DashCanceled()
@@ -142,9 +151,9 @@ public class Displacement : MonoBehaviour
         isDashing = false;
     }
 
-    private void Dash()
+    public void Dash()
     {
-        if (!isDashing)
+        if (!isDashing && !isStun)
         {
             if(movement.x != 0 || movement.y != 0)
             {

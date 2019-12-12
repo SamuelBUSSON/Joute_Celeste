@@ -8,19 +8,26 @@ using UnityEngine.VFX;
 namespace AI
 {
     
-    public enum States
+    public enum ActionStates
     {
         Init,
         LookForProj,
         ChargeProj,
         Attack
     }
+
+    public enum AttentionStates
+    {
+        Idle,
+        Dodge
+    }
     
     
     public class AIController : MonoBehaviour
     {
-        public States startingState;
-        StateMachine<States> fsm;
+        public ActionStates startingActionState;
+        StateMachine<ActionStates> actionFsm;
+        StateMachine<AttentionStates> attentionFsm;
 
         [Header("Looking for projectile")] 
         public float sightRange;
@@ -31,13 +38,21 @@ namespace AI
         public float knockbackForce;
 
         private PlayerHealth health;
+        private Displacement displacement;
+
+        //used for dodging detection
+        private float radius;
 
         private void Awake()
         {
-            fsm = StateMachine<States>.Initialize(this);
-            fsm.ChangeState(startingState);
+            actionFsm = StateMachine<ActionStates>.Initialize(this);
+            attentionFsm = StateMachine<AttentionStates>.Initialize(this);
+            
+            attentionFsm.ChangeState(AttentionStates.Dodge);
+            actionFsm.ChangeState(startingActionState);
 
             health = GetComponent<PlayerHealth>();
+            displacement = GetComponent<Displacement>();
         }
 
         private void OnDrawGizmos()
@@ -58,7 +73,7 @@ namespace AI
         private IEnumerator WaitABit()
         {
             yield return new WaitForEndOfFrame();
-            fsm.ChangeState(States.LookForProj);
+            actionFsm.ChangeState(ActionStates.LookForProj);
         }
 
         void LookForProj_Enter()
@@ -82,11 +97,13 @@ namespace AI
                 {
                     Projectile proj = hits[i].transform.GetComponent<Projectile>();
 
-                    if (proj)
+                    //TODO: enlève le !
+                    if (proj && !proj.isChopable)
                     {
                         inHand = proj;
+                        inHand.isChopable = false;
                         
-                        fsm.ChangeState(States.Attack);
+                        actionFsm.ChangeState(ActionStates.Attack);
                     }
                 }
             }
@@ -94,6 +111,45 @@ namespace AI
             {
                 print("shit");
             }
+        }
+
+        void Dodge_Update()
+        {
+            print("Dodging");
+            var hits = Physics2D.CircleCastAll(transform.position, sightRange * 3f, Vector2.zero);
+
+            if (hits.Length >= 0)
+            {
+                bool found = false;
+                for (int i = 0; i < hits.Length && !found; i++)
+                {
+                    Vector3 dir = hits[i].rigidbody.velocity.normalized;
+                    if (sphereHit(dir, dir * 50))
+                    {
+                        Vector3 dodgingDir = Vector3.Cross(dir, transform.position);
+                        
+                        displacement.SetMovement(dodgingDir);
+                        displacement.Dash();
+                    }
+                }
+            }
+        }
+        
+        private  bool sphereHit(Vector3 va, Vector3 vb)
+        {
+            Vector3 direction = va - transform.position;
+            float a = Vector3.Dot(vb, vb);
+            float b = 2.0f * Vector3.Dot(direction, vb);
+            float c = Vector3.Dot(direction, direction) - radius * radius;
+
+            float discriminant = b * b - 4 * a * c;
+
+            if (discriminant > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         void Attack_Enter()
@@ -128,6 +184,8 @@ namespace AI
             transform.DOMove(v1 - v2 * knockbackForce, 0.05f);
 
             inHand = null;
+            
+            attentionFsm.ChangeState(AttentionStates.Dodge);
         }
     }
 }

@@ -109,7 +109,10 @@ public class PlayerHealth : MonoBehaviour
 
             AkSoundEngine.SetSwitch("Witch_Aura", playerController?.playerIndex == 1  ? "Aura1" : "Aura2", gameObject);
 
-            AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
+            if(!playerMovement.isAi)
+                AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
+            else
+                GetComponent<Animator>().SetFloat("Health", Health);
 
             if (Health >= 0 && indexThreshold < thresholds.Count)
             {
@@ -123,7 +126,8 @@ public class PlayerHealth : MonoBehaviour
                         if (indexThreshold == 1)
                         {
                             AkSoundEngine.SetSwitch("Aura_State", "State1to2", gameObject);
-                           AttractZone.transform.DOScale(AttractZone.transform.localScale * attractRange, 0.5f);
+                            if(!playerMovement.isAi)
+                                AttractZone.transform.DOScale(AttractZone.transform.localScale * attractRange, 0.5f);
                         }
                         else if (indexThreshold == 2)
                         {
