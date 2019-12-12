@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40e1c0d19a2fa01459bf7adbae9e5caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 10
   maxVelocityChange: 5000
   soapStrength: 10
   dashs:
@@ -147,8 +147,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
-    dashStrength: 7
-    timeToReachDashPosition: 0.2
+    dashStrength: 5
+    timeToReachDashPosition: 0.1
   - easeDash:
       serializedVersion: 2
       m_Curve:
@@ -173,13 +173,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 0
-    dashStrength: 12
+    dashStrength: 15
     timeToReachDashPosition: 0.2
   dashCoolDown: 1
   dash_FX: {fileID: 3872819554724585126}
   impusleStrength: 10
   stunTime: 2
-  onStunSpeedDivide: 5
+  onStunSpeedDivide: 3e+10
   slowStrength: 5
 --- !u!114 &2758839452218953962
 MonoBehaviour:
@@ -194,8 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 1
-  launchStrength: 5
-  knockbackForce: 0
+  launchStrength: 30
+  knockbackForce: 1
   enemyPos: {fileID: 0}
 --- !u!114 &2758839452218953963
 MonoBehaviour:
@@ -259,20 +259,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thresholds:
-  - health: 7
-    speedMultiplier: 1
-    damageMultiplier: 1
-  - health: 5
+  - health: 75
     speedMultiplier: 1.25
     damageMultiplier: 1.25
-  - health: 2
+  - health: 25
     speedMultiplier: 2
     damageMultiplier: 2
   attractRange: 2
   AttractZone: {fileID: 2758839450924294534}
   deathRange: 0
   deathDamage: 0
-  Health: 10
+  Health: 100
 --- !u!114 &3428629715616182282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,6 +421,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 1091391847290148656, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1091391847542295414, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
       propertyPath: m_Layer
@@ -517,7 +519,7 @@ PrefabInstance:
     - target: {fileID: 1091391847767522254, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1091391847767522254, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}

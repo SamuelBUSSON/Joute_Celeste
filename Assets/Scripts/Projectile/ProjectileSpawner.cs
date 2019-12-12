@@ -98,7 +98,7 @@ public class ProjectileSpawner : MonoBehaviour
 
     private Vector3 GetRandomCameraWorldPoint()
     {
-        int corner = Random.Range(0, 6);
+        int corner = Random.Range(0, 4);
 
         switch (corner)
         {
@@ -113,13 +113,7 @@ public class ProjectileSpawner : MonoBehaviour
 
             case 3:
                 return cam.ViewportToWorldPoint(Vector3.right);
-
-            case 4:
-                return cam.ViewportToWorldPoint(Vector3.right/2);
-
-            case 5:
-                return cam.ViewportToWorldPoint(Vector3.up / 2);
-
+                
         }
         
         return Vector3.zero;

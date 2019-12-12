@@ -182,77 +182,96 @@ public class ObjectHandler : MonoBehaviour
         }
         else
         {
-            handledObject = playerZone.GetNearestObjectInZone();
+            Transform objectToLaunch = playerZone.GetNearestObjectInZone(true);
 
-            if (handledObject)
+            if (objectToLaunch)
             {
-                SetObjectHandled(handledObject);
-                handledObject.gameObject.layer = 10;
-                FireObject();
+                handledObject = objectToLaunch;
+
+                if (handledObject)
+                {
+                    SetObjectHandled(handledObject);
+                    handledObject.gameObject.layer = 10;
+                    FireObject(true);
+                }
             }
+
         }
     }
 
-    private void FireObject()
-    {
-        CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
-        //TODO: check findgamepad id
+    private void FireObject(bool aimingToPlayer = false)
+    {       
 
-        if (input.user.pairedDevices[0] is Gamepad pad)
+        Projectile proj = handledObject.GetComponent<Projectile>();
+
+        bool canLaunch = true;
+
+        if(proj.type == EProjectileType.STAR && proj.thresholdIndex != 1)
         {
-            CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, pad);
+            canLaunch = false;
         }
 
-        
+        if (canLaunch)
+        {
+            CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
+            //TODO: check findgamepad id
 
-        handledObject.SetParent(null);
+            if (input.user.pairedDevices[0] is Gamepad pad)
+            {
+                CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, pad);
+            }
 
-        Projectile projectile = handledObject.GetComponent<Projectile>();
-        projectile.isLaunched = true;
-        projectile.tag = "Untagged";
-        projectile.currentDamage *= damageMultiplier;
-        projectile.playerIndex = controller.playerIndex;
+            handledObject.SetParent(null);
+
+            Projectile projectile = handledObject.GetComponent<Projectile>();
+            projectile.isLaunched = true;
+            projectile.tag = "Untagged";
+            projectile.currentDamage *= damageMultiplier;
+            projectile.playerIndex = controller.playerIndex;
 
 
-        AkSoundEngine.SetSwitch("Choix_Astres", projectile.type == EProjectileType.PLANET ? "Planete" : projectile.type == EProjectileType.STAR ? "Etoile" : "Comete", gameObject);
-        AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
+            handledObject.gameObject.layer = 10;
 
 
-        Vector3 heading = (handledObject.transform.position - transform.position).normalized;
+            AkSoundEngine.SetSwitch("Choix_Astres", projectile.type == EProjectileType.PLANET ? "Planete" : projectile.type == EProjectileType.STAR ? "Etoile" : "Comete", gameObject);
+            AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
 
-        handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
+           
 
-        VisualEffect fx = handledObject.GetComponent<VisualEffect>();
-        fx.SetBool("SpawnRate", false);
+            Vector3 heading = aimingToPlayer ? -(handledObject.transform.position - enemyPos.position).normalized : (handledObject.transform.position - transform.position).normalized;
 
-        handledObject.GetComponentsInChildren<VisualEffect>()[1].enabled = true;
+            handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
 
-        Vector2 v1 = transform.position;
-        Vector2 v2 = heading;
+            VisualEffect fx = handledObject.GetComponent<VisualEffect>();
+            fx.SetBool("SpawnRate", false);
 
-        transform.DOMove(v1 - v2 * knockbackForce, 0.05f);
+            handledObject.GetComponentsInChildren<VisualEffect>()[1].enabled = true;
 
-        handledObject = null;
+            Vector2 v1 = transform.position;
+            Vector2 v2 = heading;
+
+            transform.DOMove(v1 - v2 * knockbackForce, 0.05f);
+
+            handledObject = null;
+        }
     }
 
     private void Aim(Vector2 aimDirection, bool autoAim)
     {
-            Vector3 heading = enemyPos ? enemyPos.position - transform.position : Vector3.zero;
+        Vector3 heading = enemyPos ? enemyPos.position - transform.position : Vector3.zero;
 
-            float x = aimDirection.x;
-            float y = aimDirection.y;
+        float x = aimDirection.x;
+        float y = aimDirection.y;
 
-            angle = autoAim ? Mathf.Atan2(heading.normalized.x, heading.normalized.y) : Mathf.Atan2(x, y);
+        angle = autoAim ? Mathf.Atan2(heading.normalized.x, heading.normalized.y) : Mathf.Atan2(x, y);
 
-            displaceAngleVector.x = distance * Mathf.Sin(angle);
-            displaceAngleVector.y = distance * Mathf.Cos(angle);            
+        displaceAngleVector.x = distance * Mathf.Sin(angle);
+        displaceAngleVector.y = distance * Mathf.Cos(angle);            
 
     }
 
     public void SetObjectHandled(Transform objectToThrow)
     {
-
-
             objectToThrow?.GetComponent<SpriteRenderer>().material.SetInt("_HighLigth", 0);
 
             handledObject = objectToThrow;
@@ -261,7 +280,7 @@ public class ObjectHandler : MonoBehaviour
             handledObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
             handledObject.GetComponent<Rigidbody2D>().inertia = 0;
 
-            handledObject.gameObject.layer = 10;     
+            handledObject.gameObject.layer = 13;     
 
             handledObject.SetParent(transform);
 

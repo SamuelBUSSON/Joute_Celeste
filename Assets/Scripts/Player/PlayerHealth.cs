@@ -34,7 +34,7 @@ public class PlayerHealth : MonoBehaviour
     [NonSerialized]
     public float maxHealth;
 
-    private int indexThreshold;
+    private int indexThreshold = 0;
 
     private Slider healthSlider;
 
@@ -111,7 +111,7 @@ public class PlayerHealth : MonoBehaviour
 
             AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
 
-            if (Health >= 0)
+            if (Health >= 0 && indexThreshold < thresholds.Count)
             {
                 if (thresholds[indexThreshold].health >= Health)
                 {

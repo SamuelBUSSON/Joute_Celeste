@@ -92,12 +92,12 @@ MonoBehaviour:
   ExplosionFX: {fileID: 3951906006962416370, guid: 5a85f5bdcbe204a4fa48c9a16b7dcf94,
     type: 3}
   size: 2
-  startingDamage: 0
+  startingDamage: 10
   thresholdLevels:
   - speed: 1
-    damage: 1
-  - speed: 1
-    damage: 1
+    damage: 1.25
+  - speed: 1.5
+    damage: 2
 --- !u!50 &-43059019884636479
 Rigidbody2D:
   serializedVersion: 4
@@ -173,7 +173,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 92e22cb4ab4869e4f97df05709e4f6e0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

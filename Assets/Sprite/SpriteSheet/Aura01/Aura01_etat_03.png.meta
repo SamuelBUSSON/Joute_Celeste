@@ -1,28 +1,31 @@
 fileFormatVersion: 2
-guid: 17b1b1b0a7223b44aa54fbd33af843a1
+guid: e3b7aeebfb9e8144a83b791710f3e0bb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9045843614256798669
-    second: Aura02_transition_0
+      213: -8823271967786798437
+    second: Aura01_etat_03_0
   - first:
-      213: 618641941252759804
-    second: Aura02_transition_1
+      213: 7917501537180796243
+    second: Aura01_etat_03_1
   - first:
-      213: 8293831513158252109
-    second: Aura02_transition_2
+      213: 7547452798529935305
+    second: Aura01_etat_03_2
   - first:
-      213: 473246737675091499
-    second: Aura02_transition_3
+      213: 432092795745672904
+    second: Aura01_etat_03_3
   - first:
-      213: 1308799324857376213
-    second: Aura02_transition_4
+      213: 3589765118715906229
+    second: Aura01_etat_03_4
   - first:
-      213: -4752558926078798185
-    second: Aura02_transition_5
+      213: -6028333611791651379
+    second: Aura01_etat_03_5
   - first:
-      213: 7566567473679715889
-    second: Aura02_transition_6
+      213: -9003910571095639963
+    second: Aura01_etat_03_6
+  - first:
+      213: -7173138910862695132
+    second: Aura01_etat_03_7
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -155,7 +158,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Aura02_transition_0
+      name: Aura01_etat_03_0
       rect:
         serializedVersion: 2
         x: 0
@@ -169,14 +172,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 263de455b1368f849999ce242e0a2ce1
-      internalID: 9045843614256798669
+      spriteID: fd9d2b1741ca5b64ba540de8b1fb6c0f
+      internalID: -8823271967786798437
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aura02_transition_1
+      name: Aura01_etat_03_1
       rect:
         serializedVersion: 2
         x: 512
@@ -190,14 +193,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 45318661ceb4d25438c27c9466fd1c8d
-      internalID: 618641941252759804
+      spriteID: ea3acfe75ec5dfa41a1fc5d610c0cc83
+      internalID: 7917501537180796243
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aura02_transition_2
+      name: Aura01_etat_03_2
       rect:
         serializedVersion: 2
         x: 1024
@@ -211,14 +214,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cb119eb1af8c2af4fb8a0f14974af3df
-      internalID: 8293831513158252109
+      spriteID: 735aa5e26bce1c84eb455d5ce435592e
+      internalID: 7547452798529935305
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aura02_transition_3
+      name: Aura01_etat_03_3
       rect:
         serializedVersion: 2
         x: 1536
@@ -232,14 +235,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5df46d17c284394448642e43632df592
-      internalID: 473246737675091499
+      spriteID: fc0564bece269cf4284dbbd64a283f2a
+      internalID: 432092795745672904
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aura02_transition_4
+      name: Aura01_etat_03_4
       rect:
         serializedVersion: 2
         x: 0
@@ -253,14 +256,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 458be208422db6e4fa08e9d939b46120
-      internalID: 1308799324857376213
+      spriteID: 3a15c0033ea77de4e812da24e7ea96a8
+      internalID: 3589765118715906229
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aura02_transition_5
+      name: Aura01_etat_03_5
       rect:
         serializedVersion: 2
         x: 512
@@ -274,14 +277,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 29b0d6dff3da90245ae0d2ff4a69982b
-      internalID: -4752558926078798185
+      spriteID: f3d0a2264aabaed4493d02b4ad286f5b
+      internalID: -6028333611791651379
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aura02_transition_6
+      name: Aura01_etat_03_6
       rect:
         serializedVersion: 2
         x: 1024
@@ -295,8 +298,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57d9370b5255f1b4bb456efc042158a5
-      internalID: 7566567473679715889
+      spriteID: 6ca0ec0a7c2e7cf4ca1925599c674299
+      internalID: -9003910571095639963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aura01_etat_03_7
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d7a5e8ae17815f41a76d8f8a199dce4
+      internalID: -7173138910862695132
       vertices: []
       indices: 
       edges: []
@@ -304,7 +328,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 413a991a30811bd47ad4d99ebc08d6e4
+    spriteID: 0f3d58055d7905f459201df503a1f8de
     internalID: 0
     vertices: []
     indices: 
