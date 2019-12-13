@@ -155,27 +155,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hold_bleu_0
-      rect:
-        serializedVersion: 2
-        x: 55
-        y: 1083
-        width: 424
-        height: 318
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6cff629436d82f74298a516995f8a0a4
-      internalID: -124957534376662068
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: hold_bleu_1
       rect:
         serializedVersion: 2
@@ -184,7 +163,7 @@ TextureImporter:
         width: 424
         height: 318
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -205,7 +184,7 @@ TextureImporter:
         width: 439
         height: 356
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -226,7 +205,7 @@ TextureImporter:
         width: 424
         height: 318
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -247,7 +226,7 @@ TextureImporter:
         width: 439
         height: 356
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -255,27 +234,6 @@ TextureImporter:
       bones: []
       spriteID: 178dc507d1c0daa4b9bfa2ce8dbb1cd3
       internalID: -4684653128094777140
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hold_bleu_5
-      rect:
-        serializedVersion: 2
-        x: 563
-        y: 567
-        width: 439
-        height: 356
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5f45e9159b82dc649b84f363e95d6e0b
-      internalID: -642258913149687087
       vertices: []
       indices: 
       edges: []
@@ -289,7 +247,7 @@ TextureImporter:
         width: 424
         height: 318
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -310,7 +268,7 @@ TextureImporter:
         width: 439
         height: 356
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -331,7 +289,7 @@ TextureImporter:
         width: 424
         height: 318
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -339,27 +297,6 @@ TextureImporter:
       bones: []
       spriteID: 5d0f63d9c7b882c44bd78c1c38bc635e
       internalID: -5595883359060706203
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hold_bleu_9
-      rect:
-        serializedVersion: 2
-        x: 567
-        y: 59
-        width: 424
-        height: 318
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c0d9386fd09460848b94997be2d5ddad
-      internalID: 7925176312248946771
       vertices: []
       indices: 
       edges: []
@@ -373,7 +310,7 @@ TextureImporter:
         width: 439
         height: 356
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

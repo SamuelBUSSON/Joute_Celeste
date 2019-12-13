@@ -116,10 +116,11 @@ public class PlayerHealth : MonoBehaviour
 
             if (Health >= 0)
             {
-                if (++indexThreshold < thresholds.Count)
+                if (thresholds[indexThreshold].health >= Health)
                 {
-                    if (thresholds[indexThreshold].health >= Health)
+                    if (indexThreshold + 1 < thresholds.Count)
                     {
+                        indexThreshold++;
                         playerMovement.speed *= thresholds[indexThreshold].speedMultiplier;
                         _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;
                         

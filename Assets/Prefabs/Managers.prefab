@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 552627837783187440}
   - component: {fileID: 552627837783187441}
   - component: {fileID: 552627837783187443}
+  - component: {fileID: 7121466457540918817}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -102,3 +103,25 @@ MonoBehaviour:
   PlayerSliderHealth1: {fileID: 0}
   PlayerSliderHealth2: {fileID: 0}
   targetGroup: {fileID: 0}
+  spawners: []
+  moveToCenterDuration: 0
+  explosionAnim: {fileID: 0}
+--- !u!95 &7121466457540918817
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552627837783187214}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -155,27 +155,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hold_bleu_etat_3_0
-      rect:
-        serializedVersion: 2
-        x: 55
-        y: 1083
-        width: 424
-        height: 318
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 41c43edc2dccc134b9818792efb441c8
-      internalID: 3648783601687409888
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: hold_bleu_etat_3_1
       rect:
         serializedVersion: 2
@@ -184,7 +163,7 @@ TextureImporter:
         width: 424
         height: 318
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -205,7 +184,7 @@ TextureImporter:
         width: 439
         height: 356
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -226,7 +205,7 @@ TextureImporter:
         width: 424
         height: 318
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -247,7 +226,7 @@ TextureImporter:
         width: 439
         height: 356
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -255,27 +234,6 @@ TextureImporter:
       bones: []
       spriteID: f398d44260a90604bb976648770cd5dc
       internalID: -5465236975609296199
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hold_bleu_etat_3_5
-      rect:
-        serializedVersion: 2
-        x: 563
-        y: 567
-        width: 439
-        height: 356
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2b54fb1a8841a4444ae7e125a17bef3a
-      internalID: -2729468390790580246
       vertices: []
       indices: 
       edges: []
@@ -289,7 +247,7 @@ TextureImporter:
         width: 424
         height: 318
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -310,7 +268,7 @@ TextureImporter:
         width: 439
         height: 356
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -331,7 +289,7 @@ TextureImporter:
         width: 424
         height: 318
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -339,27 +297,6 @@ TextureImporter:
       bones: []
       spriteID: 877ec45d2e408db488c70847c7fdfe46
       internalID: 49102395324763762
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: hold_bleu_etat_3_9
-      rect:
-        serializedVersion: 2
-        x: 567
-        y: 59
-        width: 424
-        height: 318
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9f28db2b9d608d14bbf842fb27a0dc7e
-      internalID: 8326800559684348495
       vertices: []
       indices: 
       edges: []
@@ -373,7 +310,7 @@ TextureImporter:
         width: 439
         height: 356
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
