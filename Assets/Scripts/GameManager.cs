@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using DG.Tweening;
 using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,6 +14,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [NonSerialized]
+    public bool canMove = false;
+    
+    [NonSerialized]
     public PlayerController player1;
     
     [NonSerialized]
@@ -23,8 +27,15 @@ public class GameManager : MonoBehaviour
 
     public CinemachineTargetGroup targetGroup;
 
+    public ProjectileSpawner[] spawners;
+
     [NonSerialized]
     public int playerIndex = -1;
+
+    [Header("Round")] 
+    public float moveToCenterDuration;
+
+    public Animator explosionAnim;
 
     private void Awake()
     {
@@ -32,6 +43,11 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             GetComponent<PlayerInputManager>().onPlayerJoined += OnPlayerJoin;
+
+            for (int i = 0; i < spawners.Length; i++)
+            {
+                spawners[i].gameObject.SetActive(false);
+            }
         }
         else
         {
@@ -42,17 +58,41 @@ public class GameManager : MonoBehaviour
     private void OnPlayerJoin(PlayerInput obj)
     {
         targetGroup.AddMember(obj.transform, 1, 1);
-        
+
         if (playerIndex == -1)
             player1 = obj.GetComponent<PlayerController>();
         else
         {
             player2 = obj.GetComponent<PlayerController>();
             StartCoroutine(SetupPlayers());
+
+            StartPhase();
         }
         playerIndex++;
     }
-    
+
+    private void StartPhase()
+    {
+        StartCoroutine(StartPhaseExplosion());
+        player1.transform.DOMove(new Vector3(0.05f, 0.05f), moveToCenterDuration);
+        player2.transform.DOMove(new Vector3(0.05f, 0.05f), moveToCenterDuration);
+    }
+
+    private IEnumerator StartPhaseExplosion()
+    {
+        yield return new WaitForSeconds(moveToCenterDuration);
+        //play explosion
+        
+        explosionAnim.Play("Boom");
+
+        for (int i = 0; i < spawners.Length; i++)
+        {
+            spawners[i].gameObject.SetActive(true);
+        }
+
+        canMove = true;
+    }
+
 
     private IEnumerator SetupPlayers()
     {

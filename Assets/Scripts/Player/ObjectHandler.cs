@@ -34,6 +34,11 @@ public class ObjectHandler : MonoBehaviour
     private PlayerHealth playerHealth;
 
     private PlayerController controller;
+
+    private Animator animator;
+    private static readonly int Release = Animator.StringToHash("Release");
+    private static readonly int Hold = Animator.StringToHash("Hold");
+
     private void Awake()
     {
         input = GetComponent<PlayerInput>();
@@ -49,12 +54,22 @@ public class ObjectHandler : MonoBehaviour
         input.currentActionMap["HoldLv1"].performed += OnHoldLv1;
         input.currentActionMap["HoldLv2"].performed += OnHoldLv2;
 
+        input.currentActionMap["HoldLv1"].canceled += context => animator.SetBool(Hold, false);
+        input.currentActionMap["HoldLv2"].canceled += context => animator.SetBool(Hold, false);
+
         input.currentActionMap["CaugthLv1"].performed += OnDrainStar;
 
         enemyPos = transform;
         controller = GetComponent<PlayerController>();
 
         playerHealth = GetComponent<PlayerHealth>();
+        
+        displaceAngleVector = new Vector3();
+
+        playerMovement = GetComponent<Displacement>();
+
+        playerZone = GetComponentInChildren<PlayerZone>();
+        animator = GetComponent<Animator>();
     }
     
 
@@ -62,6 +77,7 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
+            animator.SetBool(Hold, true);
             Projectile proj = handledObject.GetComponent<Projectile>();
 
             AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
@@ -102,6 +118,8 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
+            animator.SetBool(Hold, true);
+            
             AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
 
             Projectile proj = handledObject.GetComponent<Projectile>();
@@ -118,15 +136,6 @@ public class ObjectHandler : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
-        displaceAngleVector = new Vector3();
-
-        playerMovement = GetComponent<Displacement>();
-
-        playerZone = GetComponentInChildren<PlayerZone>();
-    }
-
 
     // Update is called once per frame
     void Update()
@@ -137,7 +146,7 @@ public class ObjectHandler : MonoBehaviour
             {
                 Aim(Vector2.zero, true);
             }
-               handledObject.transform.position = transform.position + displaceAngleVector * handledObject.GetComponent<Projectile>().size; ;
+            handledObject.transform.position = transform.position + displaceAngleVector * handledObject.GetComponent<Projectile>().size; ;
         }        
         coolDownTimer += Time.deltaTime;       
     }
@@ -195,6 +204,9 @@ public class ObjectHandler : MonoBehaviour
 
     private void FireObject()
     {
+        animator.SetTrigger(Release);
+        animator.SetBool(Hold, false);
+        
         CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
         //TODO: check findgamepad id
 
@@ -237,16 +249,15 @@ public class ObjectHandler : MonoBehaviour
 
     private void Aim(Vector2 aimDirection, bool autoAim)
     {
-            Vector3 heading = enemyPos ? enemyPos.position - transform.position : Vector3.zero;
+        Vector3 heading = enemyPos ? enemyPos.position - transform.position : Vector3.zero;
 
-            float x = aimDirection.x;
-            float y = aimDirection.y;
+        float x = aimDirection.x;
+        float y = aimDirection.y;
 
-            angle = autoAim ? Mathf.Atan2(heading.normalized.x, heading.normalized.y) : Mathf.Atan2(x, y);
+        angle = autoAim ? Mathf.Atan2(heading.normalized.x, heading.normalized.y) : Mathf.Atan2(x, y);
 
-            displaceAngleVector.x = distance * Mathf.Sin(angle);
-            displaceAngleVector.y = distance * Mathf.Cos(angle);            
-
+        displaceAngleVector.x = distance * Mathf.Sin(angle);
+        displaceAngleVector.y = distance * Mathf.Cos(angle);
     }
 
     public void SetObjectHandled(Transform objectToThrow)

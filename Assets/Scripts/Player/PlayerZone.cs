@@ -26,8 +26,8 @@ public class PlayerZone : MonoBehaviour
     private bool isAiming = false;
     private bool canCatch = true;
     
-
-
+    public Animator animator;
+    private static readonly int Catch = Animator.StringToHash("Catch");
 
     // Start is called before the first frame update
     void Start()
@@ -75,13 +75,13 @@ public class PlayerZone : MonoBehaviour
     {        
         if (!playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch && !element.GetComponent<Projectile>().isLaunched)
         {
-                canCatch = false;
-                ChangeNearestElementColor(false);
-                Vector3 heading = element.transform.position - transform.position;
+            canCatch = false;
+            ChangeNearestElementColor(false);
+            Vector3 heading = element.transform.position - transform.position;
 
-                AimCanceled();            
+            AimCanceled();            
 
-                element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));  
+            element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));  
             
         }
     }
@@ -99,6 +99,7 @@ public class PlayerZone : MonoBehaviour
 
     private void CaughtEffect(Transform element)
     {
+        animator.SetTrigger(Catch);
         canCatch = true;
 
         AkSoundEngine.PostEvent("Play_Player_Attrack", gameObject);

@@ -31,6 +31,8 @@ public class PlayerHealth : MonoBehaviour
     [Header("Health")]
     public float Health;
 
+    public AnimatorOverrideController aura3Controller;
+    
     [NonSerialized]
     public float maxHealth;
 
@@ -40,6 +42,7 @@ public class PlayerHealth : MonoBehaviour
 
     private PlayerController playerController;
     private ObjectHandler _objectHandler;
+    
 
     private void Awake()
     {
@@ -113,9 +116,9 @@ public class PlayerHealth : MonoBehaviour
 
             if (Health >= 0)
             {
-                if (thresholds[indexThreshold].health >= Health)
+                if (++indexThreshold < thresholds.Count)
                 {
-                    if (++indexThreshold < thresholds.Count)
+                    if (thresholds[indexThreshold].health >= Health)
                     {
                         playerMovement.speed *= thresholds[indexThreshold].speedMultiplier;
                         _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;
@@ -129,6 +132,8 @@ public class PlayerHealth : MonoBehaviour
                         {
                             AkSoundEngine.SetSwitch("Aura_State", "State2to3", gameObject);
                             playerMovement.dashCoolDown /= 2;
+
+                            GetComponent<Animator>().runtimeAnimatorController = aura3Controller;
                         }
                     }
                     AkSoundEngine.PostEvent("Play_Aura1_or_2", gameObject);
