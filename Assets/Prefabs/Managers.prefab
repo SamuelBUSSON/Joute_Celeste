@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 552627837783187440}
   - component: {fileID: 552627837783187441}
   - component: {fileID: 552627837783187443}
-  - component: {fileID: 552627838740391027}
+  - component: {fileID: 7121466457540918817}
+  - component: {fileID: 1768310725958877042}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -100,10 +101,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dc1a94f6e1c4c840ace379f2a0955a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player2Prefab: {fileID: 2758839452218953968, guid: df1857c8e71c95f46b834264e9d9cf3f,
+    type: 3}
   PlayerSliderHealth1: {fileID: 0}
   PlayerSliderHealth2: {fileID: 0}
   targetGroup: {fileID: 0}
---- !u!114 &552627838740391027
+  spawners:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  moveToCenterDuration: 0
+  explosionAnim: {fileID: 7121466457540918817}
+--- !u!95 &7121466457540918817
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552627837783187214}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1768310725958877042
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

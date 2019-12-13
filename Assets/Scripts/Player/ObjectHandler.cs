@@ -42,6 +42,10 @@ public class ObjectHandler : MonoBehaviour
     private uint playerCharge;
     private uint playerHeal;
 
+    private Animator animator;
+    private static readonly int Release = Animator.StringToHash("Release");
+    private static readonly int Hold = Animator.StringToHash("Hold");
+
     private void Awake()
     {
         input = GetComponent<PlayerInput>();
@@ -52,7 +56,7 @@ public class ObjectHandler : MonoBehaviour
 
         input.currentActionMap["Aim"].performed += context => OnAim(context);
         input.currentActionMap["Aim"].canceled += context => OnAutoAim(context);
-        
+
         input.currentActionMap["HoldLv1"].performed += OnHoldLv1;
         input.currentActionMap["HoldLv2"].performed += OnHoldLv2;
 
@@ -62,6 +66,9 @@ public class ObjectHandler : MonoBehaviour
         controller = GetComponent<PlayerController>();
 
         playerHealth = GetComponent<PlayerHealth>();
+
+        animator = GetComponent<Animator>();
+
     }
 
 
@@ -96,9 +103,9 @@ public class ObjectHandler : MonoBehaviour
             Projectile proj = handledObject.GetComponent<Projectile>();
 
             AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
-            
+
             VisualEffect fx = proj.GetComponentInChildren<VisualEffect>();
-            
+
 
             fx.SetFloat("Radius", proj.size + 0.5f);
             fx.SendEvent("OnCast");
@@ -109,7 +116,7 @@ public class ObjectHandler : MonoBehaviour
 
             proj.SetThresholdLevel(1);
 
-            if(proj.type == EProjectileType.STAR)
+            if (proj.type == EProjectileType.STAR)
             {
                 isHoldingStar = true;
             }
@@ -140,7 +147,7 @@ public class ObjectHandler : MonoBehaviour
         handledObject = null;
 
         VisualEffect healFx = healObject.GetComponent<VisualEffect>();
-        healFx.SendEvent("OnHeal");                
+        healFx.SendEvent("OnHeal");
 
         playerHealth.GiveHealth(playerHealth.maxHealth / 3);
         proj.transform.DOScale(0, 2f).OnUpdate(() => UpdateHeal(healFx, proj)).OnComplete(() => DestroyStar(healFx, proj));
@@ -148,7 +155,7 @@ public class ObjectHandler : MonoBehaviour
 
     private void UpdateHeal(VisualEffect healFx, Projectile proj)
     {
-        if(proj.transform.localScale.x <= 0.5f)
+        if (proj.transform.localScale.x <= 0.5f)
         {
             healFx.SetFloat("Rate", 0);
         }
@@ -184,9 +191,9 @@ public class ObjectHandler : MonoBehaviour
     {
         displaceAngleVector = new Vector3();
 
-        playerMovement = GetComponent<Displacement>();        
+        playerMovement = GetComponent<Displacement>();
 
-        playerZone = GetComponentInChildren<PlayerZone>();        
+        playerZone = GetComponentInChildren<PlayerZone>();
     }
 
 
@@ -199,10 +206,10 @@ public class ObjectHandler : MonoBehaviour
             {
                 Aim(Vector2.zero, true);
             }
-               handledObject.transform.position = transform.position + displaceAngleVector * handledObject.GetComponent<Projectile>().size; ;
+            handledObject.transform.position = transform.position + displaceAngleVector * handledObject.GetComponent<Projectile>().size; ;
         }
 
-        
+
     }
 
     private void FixedUpdate()
@@ -232,7 +239,7 @@ public class ObjectHandler : MonoBehaviour
         if (handledObject)
         {
             handledObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        }        
+        }
     }
 
     private void OnFire(InputAction.CallbackContext obj)
@@ -256,12 +263,13 @@ public class ObjectHandler : MonoBehaviour
     {
         autoAim = true;
     }
-    
+
     private void Fire()
     {
         if (handledObject)
         {
-            FireObject();
+            animator.SetTrigger(Release);
+            animator.SetBool(Hold, false);
         }
         else
         {
@@ -275,20 +283,34 @@ public class ObjectHandler : MonoBehaviour
                 {
                     SetObjectHandled(handledObject);
                     handledObject.gameObject.layer = 10;
-                    FireObject(true);
+                    animator.SetTrigger(Release);
+                    animator.SetBool(Hold, false);
                 }
             }
         }
     }
 
+    /// <summary>
+    /// CALLED BY THE ANIMATOR
+    /// </summary>
+    public void CallCaught()
+    {
+        playerZone.CaughtObject();
+    }
+
+    public void FireObject()
+    {
+        FireObject(false);
+    }
+
     private void FireObject(bool aimingToPlayer = false)
-    {       
+    {
 
         Projectile proj = handledObject.GetComponent<Projectile>();
 
         bool canLaunch = true;
 
-        if(proj.type == EProjectileType.STAR && proj.thresholdIndex != 1)
+        if (proj.type == EProjectileType.STAR && proj.thresholdIndex != 1)
         {
             canLaunch = false;
         }
@@ -313,7 +335,7 @@ public class ObjectHandler : MonoBehaviour
 
             handledObject.gameObject.layer = 10;
 
-            switch (projectile.type)    
+            switch (projectile.type)
             {
                 case EProjectileType.ASTEROID:
                     AkSoundEngine.PostEvent("Play_Move_Comete", gameObject);
@@ -364,27 +386,27 @@ public class ObjectHandler : MonoBehaviour
         angle = autoAim ? Mathf.Atan2(heading.normalized.x, heading.normalized.y) : Mathf.Atan2(x, y);
 
         displaceAngleVector.x = distance * Mathf.Sin(angle);
-        displaceAngleVector.y = distance * Mathf.Cos(angle);            
+        displaceAngleVector.y = distance * Mathf.Cos(angle);
 
     }
 
     public void SetObjectHandled(Transform objectToThrow)
     {
-            objectToThrow?.GetComponent<SpriteRenderer>().material.SetInt("_HighLigth", 0);
+        objectToThrow?.GetComponent<SpriteRenderer>().material.SetInt("_HighLigth", 0);
 
-            handledObject = objectToThrow;
+        handledObject = objectToThrow;
 
-            handledObject.GetComponent<Projectile>().isChopable = false;
+        handledObject.GetComponent<Projectile>().isChopable = false;
 
-            handledObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            handledObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
-            handledObject.GetComponent<Rigidbody2D>().inertia = 0;
+        handledObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        handledObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
+        handledObject.GetComponent<Rigidbody2D>().inertia = 0;
 
-            handledObject.gameObject.layer = 13;     
+        handledObject.gameObject.layer = 13;
 
-            handledObject.SetParent(transform);
+        handledObject.SetParent(transform);
 
-            Aim(Vector2.zero, true );
+        Aim(Vector2.zero, true);
     }
 
     public Transform GetObjectHandled()

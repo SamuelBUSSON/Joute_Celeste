@@ -60,19 +60,24 @@ public class Displacement : MonoBehaviour
 
     private void OnStartMovement(InputAction.CallbackContext obj)
     {
-        AkSoundEngine.PostEvent("Play_Player_Move_Solo", gameObject);
+        if(GameManager.Instance.canMove)
+            AkSoundEngine.PostEvent("Play_Player_Move_Solo", gameObject);
     }
 
     private void OnMovement(InputAction.CallbackContext obj)
     {
-        //Reads input
-       movement = obj.ReadValue<Vector2>();      
+        if(GameManager.Instance.canMove)
+            movement = obj.ReadValue<Vector2>();      
     }
 
     private void OnMovementCancel(InputAction.CallbackContext obj)
     {
-        movement = obj.ReadValue<Vector2>();     
-        AkSoundEngine.PostEvent("Stop_Player_Move_Solo", gameObject);
+        if (GameManager.Instance.canMove)
+        {
+            movement = obj.ReadValue<Vector2>();     
+            AkSoundEngine.PostEvent("Stop_Player_Move_Solo", gameObject);
+        }
+        
     }
 
     // Update is called once per frame
@@ -129,10 +134,14 @@ public class Displacement : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext obj)
     {
-        if (!isStun)
+        if (GameManager.Instance.canMove)
         {
-            Dash();
+            if (!isStun)
+            {
+                Dash();
+            }
         }
+        
     }
 
     private void DashCanceled()

@@ -24,7 +24,11 @@ public class PlayerZone : MonoBehaviour
     private PlayerInput input;
 
     private bool isAiming = false;
-    private bool canCatch = true;   
+
+    private bool canCatch = true;
+    
+    public Animator animator;
+    private static readonly int Catch = Animator.StringToHash("Catch");
 
 
     // Start is called before the first frame update
@@ -34,7 +38,7 @@ public class PlayerZone : MonoBehaviour
 
         input.actions.Enable();
 
-        input.currentActionMap["CaughtObject"].performed += context => OnCaughtObject(context);
+        input.currentActionMap["CaughtObject"].started += context => OnCaughtObject(context);
 
         //input.currentActionMap["Aim"].performed += context => OnAim(context);
         //input.currentActionMap["Aim"].canceled += context => OnAimCanceled(context);
@@ -55,33 +59,40 @@ public class PlayerZone : MonoBehaviour
 
     private void OnCaughtObject(InputAction.CallbackContext obj)
     {
-        if (isAiming)
+        if (!playerObjectHandler.GetObjectHandled())
         {
-            Transform nearestElem = GetComponentInChildren<PlayerZoneAim>().GetNearestObjectInZone();
-            if (nearestElem)
+            if (isAiming)
             {
-                CaughtObject(nearestElem);
+                Transform nearestElem = GetComponentInChildren<PlayerZoneAim>().GetNearestObjectInZone();
+                if (nearestElem)
+                {
+                    nearestElement = nearestElem;
+                    animator.SetTrigger(Catch);
+                }
+            }
+            else
+            {
+                animator.SetTrigger(Catch);
             }
         }
-        else
-        {
-            CaughtObject(nearestElement);
-        }
+       
     }
 
-    public void CaughtObject(Transform element)
+    /// <summary>
+    /// CALLED BY THE ANIMATOR !
+    /// </summary>
+    public void CaughtObject()
     {        
-        if (element && !playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch && !element.GetComponent<Projectile>().isLaunched)
+
+        if (!playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch && !nearestElement.GetComponent<Projectile>().isLaunched)
         {
-                canCatch = false;
-                ChangeNearestElementColor(false);
-                Vector3 heading = element.transform.position - transform.position;
+            canCatch = false;
+            ChangeNearestElementColor(false);
+            Vector3 heading = nearestElement.transform.position - transform.position;
 
-                //AimCanceled();    
-                
-                //TODO : Hit sound, deplacement astres, loop asteroid
+           // AimCanceled();       
 
-                element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));  
+            nearestElement.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(nearestElement));  
             
         }
     }
