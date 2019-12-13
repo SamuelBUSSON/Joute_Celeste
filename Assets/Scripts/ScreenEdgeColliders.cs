@@ -9,15 +9,9 @@ using Cinemachine;
     {
 
         public GameObject objectToInstantiate;
-        private CinemachineVirtualCamera vmCam;
 
         void Awake()
         {
-            vmCam = GetComponent<CinemachineVirtualCamera>();
-            vmCam.m_Lens.OrthographicSize = 10.5f;
-            vmCam.enabled = false;
-
-
             AddCollider();
         }
 
@@ -45,7 +39,6 @@ using Cinemachine;
             var confiner = instaniateObject.AddComponent<PolygonCollider2D>();
             confiner.isTrigger = true;
             confiner.points = edgePoints;
-            vmCam.GetComponent<CinemachineConfiner>().m_BoundingShape2D = confiner;
 
             for (int i = 0; i < edgePoints.Length; i++)
             {
@@ -68,8 +61,6 @@ using Cinemachine;
                 }
         }
             edge.points = edgePoints;
-
-            vmCam.enabled = true;
-            vmCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_MinimumOrthoSize = 7;
+        
         }
     }

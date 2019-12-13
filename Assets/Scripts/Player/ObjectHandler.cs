@@ -38,10 +38,13 @@ public class ObjectHandler : MonoBehaviour
     private PlayerHealth playerHealth;
 
     private PlayerController controller;
+
+    private uint playerCharge;
+    private uint playerHeal;
+
     private void Awake()
     {
         input = GetComponent<PlayerInput>();
-
 
         input.actions.Enable();
 
@@ -60,7 +63,31 @@ public class ObjectHandler : MonoBehaviour
 
         playerHealth = GetComponent<PlayerHealth>();
     }
-    
+
+
+    private void OnHoldLv1(InputAction.CallbackContext obj)
+    {
+        if (handledObject)
+        {
+            Projectile proj = handledObject.GetComponent<Projectile>();
+
+            proj.GetComponentInChildren<VisualEffect>().SendEvent("OnCast");
+
+            proj.GetComponent<Rigidbody2D>().AddTorque(0.1f, ForceMode2D.Impulse);
+
+            AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
+
+            proj?.GetComponent<SpriteRenderer>().material.DOFloat((proj.GetComponent<SpriteRenderer>().material.GetFloat("_PowerColor") * 2f), "_PowerColor", 0.3f);
+
+            proj.SetThresholdLevel(0);
+
+            if (proj.type == EProjectileType.STAR)
+            {
+                isStarChargLv1 = true;
+            }
+        }
+    }
+
 
     private void OnHoldLv2(InputAction.CallbackContext obj)
     {
@@ -71,6 +98,7 @@ public class ObjectHandler : MonoBehaviour
             AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
             
             VisualEffect fx = proj.GetComponentInChildren<VisualEffect>();
+            
 
             fx.SetFloat("Radius", proj.size + 0.5f);
             fx.SendEvent("OnCast");
@@ -90,7 +118,7 @@ public class ObjectHandler : MonoBehaviour
                 isHoldingObject = true;
             }
 
-            
+            playerCharge = AkSoundEngine.PostEvent("Play_Player_Charge_Loop", gameObject);
         }
     }
 
@@ -99,47 +127,67 @@ public class ObjectHandler : MonoBehaviour
         Projectile proj = handledObject.GetComponent<Projectile>();
         if (proj.type == EProjectileType.STAR && !isStarChargLv1)
         {
-            DrainStar(proj);
+            GameObject healObject = Instantiate(proj.healFx, proj.transform.position, Quaternion.identity);
+            DrainStar(proj, healObject);
+
+            playerHeal = AkSoundEngine.PostEvent("Play_Player_Charge_Loop", gameObject);
         }
     }
 
 
-    private void DrainStar(Projectile proj)
+    private void DrainStar(Projectile proj, GameObject healObject)
     {
         handledObject = null;
+
+        VisualEffect healFx = healObject.GetComponent<VisualEffect>();
+        healFx.SendEvent("OnHeal");                
+
         playerHealth.GiveHealth(playerHealth.maxHealth / 3);
+        proj.transform.DOScale(0, 2f).OnUpdate(() => UpdateHeal(healFx, proj)).OnComplete(() => DestroyStar(healFx, proj));
+    }
+
+    private void UpdateHeal(VisualEffect healFx, Projectile proj)
+    {
+        if(proj.transform.localScale.x <= 0.5f)
+        {
+            healFx.SetFloat("Rate", 0);
+        }
+        healFx.SetVector3("PlayerPosition", transform.position - proj.transform.position);
+    }
+
+    private void DestroyStar(VisualEffect healFx, Projectile proj)
+    {
+        healFx.SetFloat("Radius", 0.1f);
+        healFx.SetFloat("AttractionForce", 5000);
+        healFx.SetFloat("StickForce", 50000);
+        healFx.SetVector3("PlayerPosition", transform.position - proj.transform.position);
+
+        StartCoroutine(UpdatePosFx(healFx, proj.transform.position, proj));
+        AkSoundEngine.StopPlayingID(playerHeal);
+
+    }
+
+    private IEnumerator UpdatePosFx(VisualEffect healFx, Vector3 position, Projectile proj)
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            Debug.Log("SetPos");
+            healFx.SetVector3("PlayerPosition", transform.position - position);
+            yield return new WaitForSeconds(0.1f);
+        }
+
         Destroy(proj.gameObject);
     }
 
-    private void OnHoldLv1(InputAction.CallbackContext obj)
-    {
-        if (handledObject)
-        {
-            Projectile proj = handledObject.GetComponent<Projectile>();
-
-            proj.GetComponentInChildren<VisualEffect>().SendEvent("OnCast");
-
-            AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
-
-            proj?.GetComponent<SpriteRenderer>().material.DOFloat((proj.GetComponent<SpriteRenderer>().material.GetFloat("_PowerColor") * 1.5f), "_PowerColor", 0.3f);
-
-            proj.SetThresholdLevel(0);
-
-            if(proj.type == EProjectileType.STAR)
-            {
-                isStarChargLv1 = true;
-            }
-        }
-    }
 
     // Start is called before the first frame update
     void Start()
     {
         displaceAngleVector = new Vector3();
 
-        playerMovement = GetComponent<Displacement>();
+        playerMovement = GetComponent<Displacement>();        
 
-        playerZone = GetComponentInChildren<PlayerZone>();
+        playerZone = GetComponentInChildren<PlayerZone>();        
     }
 
 
@@ -231,7 +279,6 @@ public class ObjectHandler : MonoBehaviour
                     FireObject(true);
                 }
             }
-
         }
     }
 
@@ -267,8 +314,24 @@ public class ObjectHandler : MonoBehaviour
 
             handledObject.gameObject.layer = 10;
 
+            switch (projectile.type)    
+            {
+                case EProjectileType.ASTEROID:
+                    AkSoundEngine.PostEvent("Play_Move_Comete", gameObject);
+                    break;
+                case EProjectileType.PLANET:
+                    AkSoundEngine.PostEvent("Play_Move_Planete", gameObject);
+                    break;
+                case EProjectileType.STAR:
+                    AkSoundEngine.PostEvent("Play_Move_Etoile", gameObject);
+                    break;
+                default:
+                    break;
+            }
+
             AkSoundEngine.SetSwitch("Choix_Astres", projectile.type == EProjectileType.PLANET ? "Planete" : projectile.type == EProjectileType.STAR ? "Etoile" : "Comete", gameObject);
-            AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);           
+            AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
+            AkSoundEngine.StopPlayingID(playerCharge);
 
             Vector3 heading = aimingToPlayer ? -(handledObject.transform.position - enemyPos.position).normalized : (handledObject.transform.position - transform.position).normalized;
 

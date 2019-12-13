@@ -24,6 +24,7 @@ public class Projectile : MonoBehaviour
     public EProjectileType type;
 
     public GameObject ExplosionFX;
+    public GameObject healFx;
 
     public float size = 1.0f;
 
@@ -119,9 +120,8 @@ public class Projectile : MonoBehaviour
                 AkSoundEngine.PostEvent("Play_Explosion_Comete", gameObject);
                 break;
         }
-
-        //TODO: add kaboom
-        Instantiate(ExplosionFX, new Vector3(contactPoint.x, contactPoint.y, -2), Quaternion.identity);
+        
+        Instantiate(ExplosionFX, new Vector3(contactPoint.x, contactPoint.y, -3.5f), Quaternion.identity);
         Destroy(gameObject);
     }
     

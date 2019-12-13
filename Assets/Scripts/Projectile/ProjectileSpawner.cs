@@ -98,18 +98,18 @@ public class ProjectileSpawner : MonoBehaviour
 
         switch (corner)
         {
-            case 0: 
-                return cam.ViewportToWorldPoint(Vector3.zero);
+            case 0:
+                return cam.ViewportToWorldPoint(Vector3.Lerp(Vector3.zero, Vector3.up, Random.Range(0f,1f)));                
 
-            case 1: 
-                return cam.ViewportToWorldPoint(Vector3.up);
+            case 1:
+                return cam.ViewportToWorldPoint(Vector3.Lerp(Vector3.up, Vector3.one, Random.Range(0f, 1f)));
 
             case 2:
-                return cam.ViewportToWorldPoint(Vector3.one);
+                return cam.ViewportToWorldPoint(Vector3.Lerp(Vector3.one, Vector3.right, Random.Range(0f, 1f)));
 
             case 3:
-                return cam.ViewportToWorldPoint(Vector3.right);
-                
+                return cam.ViewportToWorldPoint(Vector3.Lerp(Vector3.zero, Vector3.right, Random.Range(0f, 1f)));
+
         }
         
         return Vector3.zero;

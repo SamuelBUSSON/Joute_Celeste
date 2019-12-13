@@ -105,7 +105,9 @@ public class PlayerHealth : MonoBehaviour
         if (!playerMovement.IsDashing())
         {
             Health -= amount;
-            healthSlider.value = Health;            
+            healthSlider.value = Health;
+
+            AkSoundEngine.PostEvent("Play_Player_Hit", gameObject);
 
             float shakeValue = Mathf.Lerp(2.0f, 20.0f, Mathf.InverseLerp(5, 50, amount));
 

@@ -77,7 +77,9 @@ public class PlayerZone : MonoBehaviour
                 ChangeNearestElementColor(false);
                 Vector3 heading = element.transform.position - transform.position;
 
-                //AimCanceled();            
+                //AimCanceled();    
+                
+                //TODO : Hit sound, deplacement astres, loop asteroid
 
                 element.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(element));  
             

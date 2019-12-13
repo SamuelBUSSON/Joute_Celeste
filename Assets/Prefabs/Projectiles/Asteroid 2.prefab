@@ -91,7 +91,9 @@ MonoBehaviour:
   type: 0
   ExplosionFX: {fileID: 3951906006962416370, guid: 5a85f5bdcbe204a4fa48c9a16b7dcf94,
     type: 3}
+  healFx: {fileID: 0}
   size: 1.2
+  isChopable: 1
   startingDamage: 1
   thresholdLevels:
   - speed: 1
@@ -157,7 +159,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: ade2bc4c196b6a74790df996b4ffdc16, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
