@@ -171,7 +171,6 @@ public class ObjectHandler : MonoBehaviour
     {
         for (int i = 0; i < 20; i++)
         {
-            Debug.Log("SetPos");
             healFx.SetVector3("PlayerPosition", transform.position - position);
             yield return new WaitForSeconds(0.1f);
         }

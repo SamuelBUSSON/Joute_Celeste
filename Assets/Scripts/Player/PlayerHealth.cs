@@ -84,13 +84,33 @@ public class PlayerHealth : MonoBehaviour
     {
         Health += amount;
 
-        //AkSoundEngine.SetSwitch("Witch_Aura", playerController?.playerIndex == 1 ? "Aura1" : "Aura2", gameObject);
-
-
         AkSoundEngine.PostEvent("Play_Player_Heal", gameObject);
 
         if (Health > maxHealth)
             Health = maxHealth;
+
+        AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
+
+        if(thresholds[indexThreshold].health <= Health)
+        {
+            if (--indexThreshold >= 0)
+            {
+                playerMovement.speed /= thresholds[indexThreshold].speedMultiplier;
+                _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;
+
+                if (indexThreshold == 0)
+                {
+                    AkSoundEngine.SetSwitch("Aura_State", "State2to1", gameObject);
+                    AttractZone.transform.DOScale(AttractZone.transform.localScale / attractRange, 0.5f);
+                }
+                else if (indexThreshold == 1)
+                {
+                    AkSoundEngine.SetSwitch("Aura_State", "State3to2", gameObject);
+                    playerMovement.dashCoolDown *= 2;
+                }
+            }
+        }
+
 
         healthSlider.value = Health;
     }
