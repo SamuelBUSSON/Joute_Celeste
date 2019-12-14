@@ -98,4 +98,9 @@ public class StarSpawner : MonoBehaviour
 
         return Vector3.zero;
     }
+
+    public void ResetTimer()
+    {
+        timer = timerTimeBetweenSpawnStar = blackHoleTimer = 0.0f;
+    }
 }

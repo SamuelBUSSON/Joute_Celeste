@@ -142,7 +142,7 @@ public class ObjectHandler : MonoBehaviour
             GameObject healObject = Instantiate(proj.healFx, proj.transform.position, Quaternion.identity);
             DrainStar(proj, healObject);
 
-            playerHeal = AkSoundEngine.PostEvent("Play_Player_Charge_Loop", gameObject);
+            playerHeal = AkSoundEngine.PostEvent("Play_Player_Heal", gameObject);
         }
     }
 

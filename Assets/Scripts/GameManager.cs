@@ -103,6 +103,8 @@ public class GameManager : MonoBehaviour
             player2 = obj.GetComponent<PlayerController>();
             StartCoroutine(SetupPlayers());
 
+            AkSoundEngine.PostEvent("Play_Musique", gameObject);
+
             StartPhase();
         }
         playerIndex++;
@@ -117,10 +119,7 @@ public class GameManager : MonoBehaviour
 
     private void StartPhase()
     {
-        Debug.Log("start phase");
-
-       // player1.transform.position = player1StartPos;
-       // player2.transform.position = player2StartPos;
+        Debug.Log("start phase");        
 
         Sequence mySequence = DOTween.Sequence();
         mySequence.Append(player1.transform.DOMove(new Vector3(-0.2f, 0.0f), 0.5f));
@@ -267,6 +266,10 @@ public class GameManager : MonoBehaviour
                 if (!spawner.transform.GetChild(i).GetComponent<StarSpawner>())
                 {
                     Destroy(spawner.transform.GetChild(i).gameObject);
+                }
+                else
+                {
+                    spawner.transform.GetChild(i).GetComponent<StarSpawner>().ResetTimer();
                 }
 
             }
