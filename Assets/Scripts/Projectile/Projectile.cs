@@ -24,8 +24,11 @@ public class Projectile : MonoBehaviour
     public EProjectileType type;
 
     public GameObject ExplosionFX;
+    public GameObject healFx;
 
     public float size = 1.0f;
+
+    public bool isChopable = true;
 
     [NonSerialized]
     public int playerIndex;
@@ -106,20 +109,19 @@ public class Projectile : MonoBehaviour
         switch (type)
         {
             case EProjectileType.STAR:
-                AkSoundEngine.PostEvent("Play_Explosion_Comete", gameObject);
+                AkSoundEngine.PostEvent("Play_Explosion_Etoile", gameObject); 
                 break;
 
             case EProjectileType.PLANET:
-                AkSoundEngine.PostEvent("Play_Explosion_Etoile", gameObject);
-                break;
+                AkSoundEngine.PostEvent("Play_Explosion_Planete", gameObject);
+                break; 
 
             case EProjectileType.ASTEROID:
-                AkSoundEngine.PostEvent("Play_Explosion_Planete", gameObject);
+                AkSoundEngine.PostEvent("Play_Explosion_Comete", gameObject);
                 break;
         }
-
-        //TODO: add kaboom
-        Instantiate(ExplosionFX, new Vector3(contactPoint.x, contactPoint.y, -2), Quaternion.identity);
+        
+        Instantiate(ExplosionFX, new Vector3(contactPoint.x, contactPoint.y, -3.5f), Quaternion.identity);
         Destroy(gameObject);
     }
     

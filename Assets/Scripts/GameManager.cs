@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public GameObject player2Prefab;
+
     [NonSerialized]
     public bool canMove = false;
     
@@ -60,7 +62,10 @@ public class GameManager : MonoBehaviour
         targetGroup.AddMember(obj.transform, 1, 1);
 
         if (playerIndex == -1)
+        { 
             player1 = obj.GetComponent<PlayerController>();
+            GetComponent<PlayerInputManager>().playerPrefab = player2Prefab;
+        }
         else
         {
             player2 = obj.GetComponent<PlayerController>();

@@ -162,6 +162,90 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d40fd9e0921753419caf675f74c94cd
+      internalID: -5573688454856860600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aura02_Etat03_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0ac905c615a3484083524d223823f6e
+      internalID: -1633321007149852224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aura02_Etat03_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 760422d04b4d781438d59c0292fabd34
+      internalID: -7575766669295304922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aura02_Etat03_3
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07aed8d4025ebf9438f70f190ddc5036
+      internalID: 8603743256158227576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aura02_Etat03_4
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 0
         width: 512
         height: 512
@@ -172,14 +256,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 22da559217015bb498a5977d22ac11c3
-      internalID: -5573688454856860600
+      spriteID: 5f95fda4c2b55ce4389bef92ae2dfbf4
+      internalID: -201367353056131566
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aura02_Etat03_1
+      name: Aura02_Etat03_5
       rect:
         serializedVersion: 2
         x: 512
@@ -193,14 +277,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 83dbfdc429cebe048b8da5dcb9255a86
-      internalID: -1633321007149852224
+      spriteID: 1bead8251d5bf404188a8313c7b5b18f
+      internalID: 2786265254861297640
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aura02_Etat03_2
+      name: Aura02_Etat03_6
       rect:
         serializedVersion: 2
         x: 1024
@@ -214,14 +298,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f84cf04aca2277a4dafdaca47bb3bcd0
-      internalID: -7575766669295304922
+      spriteID: c34f9d9bd4a05b44592908e642d13f77
+      internalID: 6967022252174925879
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Aura02_Etat03_3
+      name: Aura02_Etat03_7
       rect:
         serializedVersion: 2
         x: 1536
@@ -235,91 +319,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e5ef3c278a66b0147a3554b2331089fc
-      internalID: 8603743256158227576
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Aura02_Etat03_4
-      rect:
-        serializedVersion: 2
-        x: 2048
-        y: 0
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 748a65d77d643774db86556c433d6347
-      internalID: -201367353056131566
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Aura02_Etat03_5
-      rect:
-        serializedVersion: 2
-        x: 2560
-        y: 0
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c17f64c7f3ecab5468ae0c0bb2e017c4
-      internalID: 2786265254861297640
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Aura02_Etat03_6
-      rect:
-        serializedVersion: 2
-        x: 3072
-        y: 0
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 96a5b221b48e0c941969a5ab757c321e
-      internalID: 6967022252174925879
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Aura02_Etat03_7
-      rect:
-        serializedVersion: 2
-        x: 3584
-        y: 0
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ee59c86b228756b4381bc90042796483
+      spriteID: 9d2b36807117fe54c871e7e901c1609c
       internalID: -4147911277251646076
       vertices: []
       indices: 

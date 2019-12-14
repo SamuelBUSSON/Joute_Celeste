@@ -24,14 +24,14 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 0fcc13c57297d24b8a35bed7e8af5bb2
     GuidInternal: 
-    m_lastTime: -8586255458376336608
+    m_lastTime: -8586253604641497509
     List: []
   BankWwu:
   - PhysicalPath: SoundBanks\Default Work Unit.wwu
     ParentPhysicalPath: 
     guid: 174613c4b638834d82e6e1c733e21d14
     GuidInternal: 
-    m_lastTime: -8586255458375619028
+    m_lastTime: -8586255357017567666
     List:
     - name: Son_General
       guid: aea6cb949070b44c817cff3d4c5b6d0b
@@ -47,7 +47,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: d797f9769f5a1349bc7d8f150177038f
     GuidInternal: 
-    m_lastTime: -8586255364767970456
+    m_lastTime: -8586253604646963213
     List:
     - name: Play_Aura1_or_2
       guid: 25dea11f219dda418a71594e44122a72
@@ -130,6 +130,42 @@ MonoBehaviour:
       - ElementName: Play_Explosion_Planete
         ObjectType: 3
       Path: Default Work Unit\Play_Explosion_Planete
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Move_Comete
+      guid: ce7eb81b6a5c8d4397c6bfb1e0262ba1
+      id: 2567610373
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Move_Comete
+        ObjectType: 3
+      Path: Default Work Unit\Play_Move_Comete
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Move_Etoile
+      guid: ab3b335b7caeb94dadf0115eb703a5f6
+      id: 1212569294
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Move_Etoile
+        ObjectType: 3
+      Path: Default Work Unit\Play_Move_Etoile
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Move_Planete
+      guid: ca0d323476e5584dae521584cc58b178
+      id: 3689541843
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Move_Planete
+        ObjectType: 3
+      Path: Default Work Unit\Play_Move_Planete
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -241,6 +277,18 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: Play_Titre_jap
+      guid: bc08f38f9c0c30409171c323d20410b9
+      id: 1506832986
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Titre_jap
+        ObjectType: 3
+      Path: Default Work Unit\Play_Titre_jap
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: Stop_Player_Move_Solo
       guid: 95efe13067babb4ca57f641451199d98
       id: 2405542185
@@ -281,7 +329,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 2ea1b818b045414286d7285a8b7539c2
     GuidInternal: 
-    m_lastTime: -8586255458375599080
+    m_lastTime: -8586255357017557687
     List:
     - name: Aura_State
       guid: 21f5af6f3309e6498079c3cd2cbe9ecf
@@ -416,9 +464,5 @@ MonoBehaviour:
     List: []
   ExpandedItems:
   - /Joute_Celeste_WwiseProject
-  - /Joute_Celeste_WwiseProject/Events
-  - /Joute_Celeste_WwiseProject/Switches
-  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit
-  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Choix_Astres
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

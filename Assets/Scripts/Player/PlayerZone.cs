@@ -24,10 +24,12 @@ public class PlayerZone : MonoBehaviour
     private PlayerInput input;
 
     private bool isAiming = false;
+
     private bool canCatch = true;
     
     public Animator animator;
     private static readonly int Catch = Animator.StringToHash("Catch");
+
 
     // Start is called before the first frame update
     void Start()
@@ -38,8 +40,8 @@ public class PlayerZone : MonoBehaviour
 
         input.currentActionMap["CaughtObject"].started += context => OnCaughtObject(context);
 
-        input.currentActionMap["Aim"].performed += context => OnAim(context);
-        input.currentActionMap["Aim"].canceled += context => OnAimCanceled(context);
+        //input.currentActionMap["Aim"].performed += context => OnAim(context);
+        //input.currentActionMap["Aim"].canceled += context => OnAimCanceled(context);
         
         objectInZone = new List<Transform>();
         objectToSlowOnDash = new List<Transform>();
@@ -81,13 +83,14 @@ public class PlayerZone : MonoBehaviour
     /// </summary>
     public void CaughtObject()
     {        
+
         if (!playerObjectHandler.GetObjectHandled() && objectInZone.Count > 0 && canCatch && !nearestElement.GetComponent<Projectile>().isLaunched)
         {
             canCatch = false;
             ChangeNearestElementColor(false);
             Vector3 heading = nearestElement.transform.position - transform.position;
 
-            AimCanceled();            
+           // AimCanceled();       
 
             nearestElement.DOMove(transform.position + heading.normalized, 0.1f).OnComplete(() => CaughtEffect(nearestElement));  
             
@@ -131,7 +134,7 @@ public class PlayerZone : MonoBehaviour
 
     public void Aim(Vector2 v)
     {
-        triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = true;
+        //triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = true;
 
         int angle = Mathf.RoundToInt( Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg);        
 
@@ -155,21 +158,20 @@ public class PlayerZone : MonoBehaviour
 
     public void OnAimCanceled(InputAction.CallbackContext obj)
     {
-        AimCanceled();
-       
+        AimCanceled();       
     }
 
     private void AimCanceled()
     {
         isAiming = false;
-        triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = false;
+       // triangleAim.GetComponentInChildren<SpriteRenderer>().enabled = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Projectile") && other.transform != playerObjectHandler.GetObjectHandled())
         {
-            if (!objectInZone.Contains(other.transform))
+            if (!objectInZone.Contains(other.transform) && other.GetComponent<Projectile>().isChopable)
             {
                 objectInZone.Add(other.transform);
             }
@@ -190,6 +192,7 @@ public class PlayerZone : MonoBehaviour
         if (other.CompareTag("Projectile"))
         {
             objectInZone.Remove(other.transform);
+
             if(nearestElement && other.transform == nearestElement.transform)
             {
                 ChangeNearestElementColor(false);
@@ -259,14 +262,28 @@ public class PlayerZone : MonoBehaviour
         return null;
     }
 
-    public Transform GetNearestObjectInZone()
+    public Transform GetNearestObjectInZone(bool isStar = false)
     {
         if (nearestElement)
         {
-            Transform elementToReturn = nearestElement;
-            objectInZone.Remove(nearestElement);
-            nearestElement = null;
-            return elementToReturn;
+            if (isStar)
+            {
+                Transform elementToReturn = nearestElement;
+                if(nearestElement.GetComponent<Projectile>().type == EProjectileType.ASTEROID)
+                {
+                    objectInZone.Remove(nearestElement);
+                    nearestElement = null;
+                    return elementToReturn;
+                }
+                return null;
+            }
+            else
+            {
+                Transform elementToReturn = nearestElement;
+                objectInZone.Remove(nearestElement);
+                nearestElement = null;
+                return elementToReturn;
+            }
         }
         else
         {

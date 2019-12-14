@@ -36,7 +36,7 @@ public class PlayerHealth : MonoBehaviour
     [NonSerialized]
     public float maxHealth;
 
-    private int indexThreshold;
+    private int indexThreshold = 0;
 
     private Slider healthSlider;
 
@@ -79,7 +79,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            TakeDamage(1.0f);
+            TakeDamage(10.0f);
         }
     }
 
@@ -87,13 +87,33 @@ public class PlayerHealth : MonoBehaviour
     {
         Health += amount;
 
-        //AkSoundEngine.SetSwitch("Witch_Aura", playerController?.playerIndex == 1 ? "Aura1" : "Aura2", gameObject);
-
-
         AkSoundEngine.PostEvent("Play_Player_Heal", gameObject);
 
         if (Health > maxHealth)
             Health = maxHealth;
+
+        AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
+
+        if(thresholds[indexThreshold].health <= Health)
+        {
+            if (--indexThreshold >= 0)
+            {
+                playerMovement.speed /= thresholds[indexThreshold].speedMultiplier;
+                _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;
+
+                if (indexThreshold == 0)
+                {
+                    AkSoundEngine.SetSwitch("Aura_State", "State2to1", gameObject);
+                    AttractZone.transform.DOScale(AttractZone.transform.localScale / attractRange, 0.5f);
+                }
+                else if (indexThreshold == 1)
+                {
+                    AkSoundEngine.SetSwitch("Aura_State", "State3to2", gameObject);
+                    playerMovement.dashCoolDown *= 2;
+                }
+            }
+        }
+
 
         healthSlider.value = Health;
     }
@@ -110,11 +130,17 @@ public class PlayerHealth : MonoBehaviour
             Health -= amount;
             healthSlider.value = Health;
 
+            AkSoundEngine.PostEvent("Play_Player_Hit", gameObject);
+
+            float shakeValue = Mathf.Lerp(2.0f, 20.0f, Mathf.InverseLerp(5, 50, amount));
+
+            CameraManager.Instance.Shake(shakeValue, shakeValue, 0.1f);            
+
             AkSoundEngine.SetSwitch("Witch_Aura", playerController?.playerIndex == 1  ? "Aura1" : "Aura2", gameObject);
 
             AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
 
-            if (Health >= 0)
+            if (Health >= 0 && indexThreshold < thresholds.Count)
             {
                 if (thresholds[indexThreshold].health >= Health)
                 {
