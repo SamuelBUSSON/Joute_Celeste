@@ -6,16 +6,16 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CharaRoseAura3
+  m_Name: CharaBlu
   m_Controller: {fileID: 9100000, guid: 20a48d21e08df8c42aad205eb9406258, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: d369cc9f5637c9a4a99c5cafd4db706d, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 7905119e8a8e4d04497f7a04e15bbbb4, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 6eed7a776eae71a43890a40f688e195c, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: e9f899fc45725944eaa890ad9a35e965, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6eed7a776eae71a43890a40f688e195c, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 48c004b109b290b49b8107638a8ff73b, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: a27915f475c750340b6ff6c1bf928a8c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 48c004b109b290b49b8107638a8ff73b, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 3f29150d1b7a1ed4b9340b5c97a1ded3, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 6d6c824f5e7215d4b8ecec3dbf7fbaba, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3f29150d1b7a1ed4b9340b5c97a1ded3, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: d369cc9f5637c9a4a99c5cafd4db706d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d369cc9f5637c9a4a99c5cafd4db706d, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 521a75fab3e4c2646b7c0bf33614c7cc, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 521a75fab3e4c2646b7c0bf33614c7cc, type: 2}

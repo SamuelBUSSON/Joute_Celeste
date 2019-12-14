@@ -24,7 +24,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2758839452218953972
 Transform:
   m_ObjectHideFlags: 0
@@ -207,10 +207,12 @@ MonoBehaviour:
     damageMultiplier: 2
   attractRange: 2
   AttractZone: {fileID: 2758839450924294534}
-  deathRange: 0
-  deathDamage: 0
+  deathRange: 2.15
+  deathDamage: 5
+  draw: 0
   Health: 100
   aura3Controller: {fileID: 22100000, guid: a7660ee3114f6ce4c902d7d8019c6014, type: 2}
+  aura1Controller: {fileID: 22100000, guid: d1aaff32e28ebe1468e656d46fb3d659, type: 2}
 --- !u!114 &3428629715616182282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,7 +286,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 10.24, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -300,7 +302,7 @@ Animator:
   m_GameObject: {fileID: 2758839452218953968}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 20a48d21e08df8c42aad205eb9406258, type: 2}
+  m_Controller: {fileID: 22100000, guid: d1aaff32e28ebe1468e656d46fb3d659, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -387,7 +389,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5541661951992198785}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

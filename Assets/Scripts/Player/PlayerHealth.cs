@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEditor.Animations;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -23,15 +24,18 @@ public class PlayerHealth : MonoBehaviour
 
     public float attractRange;
     public GameObject AttractZone;
+    private Vector3 attractZoneStartingScale;
 
     [Header("Death")]
     public float deathRange;
     public float deathDamage;
+    public bool draw;
 
     [Header("Health")]
     public float Health;
 
     public AnimatorOverrideController aura3Controller;
+    public AnimatorOverrideController aura1Controller;
     
     [NonSerialized]
     public float maxHealth;
@@ -42,15 +46,28 @@ public class PlayerHealth : MonoBehaviour
 
     private PlayerController playerController;
     private ObjectHandler _objectHandler;
+
+    [NonSerialized] public bool isDead = false;
     
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        attractZoneStartingScale = AttractZone.transform.localScale;
     }
-    
+
+    private void OnDrawGizmos()
+    {
+        if (draw)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(transform.position, deathRange);
+        }
+       
+    }
 
     private Displacement playerMovement;
+    private static readonly int Death = Animator.StringToHash("Death");
 
     // Start is called before the first frame update
     void Start()
@@ -181,24 +198,59 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     public void Die()
     {
+        GetComponent<Animator>().SetTrigger(Death);
+        isDead = true;
+    }
+
+    /// <summary>
+    /// CALLED BY THE ANIMATOR !
+    /// </summary>
+    public void DieAnimator()
+    {
         Vector2 position = transform.position;
         var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);
 
+        if (hits.Length == 0)
+        {
+            GameManager.Instance.WinLoose(playerController.playerIndex);
+        }
+
         foreach (RaycastHit2D hit in hits)
         {
+            print("hey");
             PlayerController playerCtrl = hit.transform.GetComponent<PlayerController>();
 
             if (playerCtrl && playerCtrl.playerIndex != playerController.playerIndex)
             {
-                if (playerCtrl.GetComponent<PlayerHealth>().Health - deathDamage <= 0)
+                var playerHealth = playerCtrl.GetComponent<PlayerHealth>();
+                if (!playerHealth.isDead)
                 {
-                    GameManager.Instance.Draw();
+                    if (playerHealth.Health - deathDamage <= 0)
+                    {
+                        playerHealth.Die();
+                        GameManager.Instance.Draw();
+                    }
+                    else
+                    {
+                        playerHealth.Die();
+                        GameManager.Instance.WinLoose(playerController.playerIndex);
+                    }
                 }
-                else
-                {
-                    GameManager.Instance.WinLoose(playerController.playerIndex);
-                }
+                
             }
         }
+    }
+
+    public void Reset()
+    {
+        GetComponent<Animator>().runtimeAnimatorController = aura1Controller;
+        Health = maxHealth;
+        AttractZone.transform.localScale = attractZoneStartingScale;
+        indexThreshold = 0;
+        healthSlider.value = Health;
+        
+        AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
+        
+        playerMovement.Reset();
     }
 }

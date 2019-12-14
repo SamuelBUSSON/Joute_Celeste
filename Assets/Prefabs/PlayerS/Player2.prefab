@@ -228,8 +228,10 @@ MonoBehaviour:
   AttractZone: {fileID: 2758839450924294534}
   deathRange: 0
   deathDamage: 0
+  draw: 0
   Health: 100
   aura3Controller: {fileID: 22100000, guid: bb82e92e8eba9254581ab56df7a59f67, type: 2}
+  aura1Controller: {fileID: 22100000, guid: 7b348d287811f454590f5b8a231e8a84, type: 2}
 --- !u!114 &3428629715616182282
 MonoBehaviour:
   m_ObjectHideFlags: 0

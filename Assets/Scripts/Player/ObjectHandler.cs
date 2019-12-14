@@ -57,8 +57,8 @@ public class ObjectHandler : MonoBehaviour
         input.currentActionMap["Aim"].performed += context => OnAim(context);
         input.currentActionMap["Aim"].canceled += context => OnAutoAim(context);
 
-        input.currentActionMap["HoldLv1"].performed += OnHoldLv1;
-        input.currentActionMap["HoldLv2"].performed += OnHoldLv2;
+        input.currentActionMap["HoldLv1"].started += OnHoldLv1;
+        input.currentActionMap["HoldLv2"].started += OnHoldLv2;
 
         input.currentActionMap["CaugthLv1"].performed += OnDrainStar;
 
@@ -77,6 +77,8 @@ public class ObjectHandler : MonoBehaviour
         if (handledObject)
         {
             Projectile proj = handledObject.GetComponent<Projectile>();
+            
+            animator.SetBool(Hold, true);
 
             proj.GetComponentInChildren<VisualEffect>().SendEvent("OnCast");
 
@@ -100,6 +102,8 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
+            animator.SetBool(Hold, true);
+            
             Projectile proj = handledObject.GetComponent<Projectile>();
 
             AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);
