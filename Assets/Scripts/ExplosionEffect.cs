@@ -40,7 +40,7 @@ public class ExplosionEffect : MonoBehaviour
             Destroy(gameObject);
         }                
 
-        material.DOFloat(1.0f, "_DistorsionStrenth", 0.2f);
+        material.DOFloat(1.0f, "_DistorsionStrenth", 0.3f);
 
         if (scale.x >= scaleToInstantiate)
         {
