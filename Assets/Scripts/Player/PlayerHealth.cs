@@ -198,8 +198,9 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     public void Die()
     {
-        GetComponent<Animator>().SetTrigger(Death);
         isDead = true;
+        GetComponent<Animator>().SetTrigger(Death);
+        
     }
 
     /// <summary>
@@ -217,7 +218,6 @@ public class PlayerHealth : MonoBehaviour
 
         foreach (RaycastHit2D hit in hits)
         {
-            print("hey");
             PlayerController playerCtrl = hit.transform.GetComponent<PlayerController>();
 
             if (playerCtrl && playerCtrl.playerIndex != playerController.playerIndex)
@@ -248,9 +248,16 @@ public class PlayerHealth : MonoBehaviour
         AttractZone.transform.localScale = attractZoneStartingScale;
         indexThreshold = 0;
         healthSlider.value = Health;
+        isDead = false;
         
         AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
         
         playerMovement.Reset();
+        var obj = GetComponent<ObjectHandler>();
+        if (obj.handledObject)
+        {
+            Destroy(obj.handledObject.gameObject);
+            obj.handledObject = null;
+        }
     }
 }

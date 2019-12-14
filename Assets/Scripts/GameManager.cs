@@ -50,6 +50,9 @@ public class GameManager : MonoBehaviour
     public int roundTotal;
     private int roundCurrent;
 
+    private int roundPlayer1;
+    private int roundPlayer2;
+
     private RoundManager round;
 
     [NonSerialized]
@@ -66,6 +69,8 @@ public class GameManager : MonoBehaviour
             round = GetComponent<RoundManager>();
 
             roundCurrent = 1;
+
+            roundPlayer1 = roundPlayer2 = 0;
 
             for (int i = 0; i < spawners.Length; i++)
             {
@@ -101,6 +106,7 @@ public class GameManager : MonoBehaviour
 
     private void StartPhase()
     {
+        Debug.Log("start phase");
         player1.transform.DOMove(new Vector3(0.05f, 0.05f), moveToCenterDuration);
         player2.transform.DOMove(new Vector3(0.05f, 0.05f), moveToCenterDuration);
 
@@ -123,8 +129,7 @@ public class GameManager : MonoBehaviour
 
         if (phealth.isDead)
             phealth.GetComponent<Animator>().SetTrigger(Restart);
-
-        phealth.isDead = false;
+        
         phealth.Reset();
     }
 
@@ -174,6 +179,23 @@ public class GameManager : MonoBehaviour
 
     public void WinLoose(int looserIndex)
     {
+        if (looserIndex == player1.playerIndex)
+        {
+            if (player2.GetComponent<PlayerHealth>().isDead)
+            {
+                Draw();
+                return;
+            }
+        }
+        else
+        {
+            if (player1.GetComponent<PlayerHealth>().isDead)
+            {
+                Draw();
+                return;
+            }
+        }
+
         Debug.Log("Player " + looserIndex + " looses !");
         state = EState.Ending;
 
@@ -182,9 +204,14 @@ public class GameManager : MonoBehaviour
         if (player1.playerIndex == looserIndex)
         {
             RespawnPlayer(player1, player1StartPos);
+            roundPlayer2++;
         }
         else
+        {
             RespawnPlayer(player2, player2StartPos);
+            roundPlayer1++;
+        }
+            
 
         StartCoroutine(StartPhaseAfterTime(respawnDuration));
     }
@@ -198,6 +225,14 @@ public class GameManager : MonoBehaviour
     private void NextRound()
     {
         roundCurrent++;
+        
+        foreach (ProjectileSpawner spawner in spawners)
+        {
+            for (int i = 0; i < spawner.transform.childCount; i++)
+            {
+                Destroy(spawner.transform.GetChild(i).gameObject);
+            }
+        }
 
         Debug.Log("Round " + roundCurrent);
         
@@ -205,15 +240,30 @@ public class GameManager : MonoBehaviour
         {
             EndGame();
         }
-        else
-        {
-            //Play sound
-        }
     }
 
     private void EndGame()
     {
+        if (roundPlayer1 > roundPlayer2)
+        {
+            Debug.Log("player 1 win !");
+        }
+        else if (roundPlayer2 > roundPlayer1)
+        {
+            Debug.Log("player 2 win");
+        }
+        else
+        {
+            Debug.Log("Draw");
+        }
+        
+        
         Debug.Log("End of the game !");
+        
+        RespawnPlayer(player1, player1StartPos);
+        RespawnPlayer(player2, player2StartPos);
+        
+        StartPhase();
     }
 
     private void RespawnPlayer(PlayerController player, Vector3 position)

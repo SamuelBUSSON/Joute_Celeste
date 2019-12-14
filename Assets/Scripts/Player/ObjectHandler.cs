@@ -23,7 +23,8 @@ public class ObjectHandler : MonoBehaviour
     public bool isStarChargLv1 = false;
     public bool isHoldingObject = false;
 
-    private Transform handledObject;
+    //[NonSerialized]
+    public Transform handledObject;
     private float angle = 0.0f;
     private Vector3 displaceAngleVector;
 
