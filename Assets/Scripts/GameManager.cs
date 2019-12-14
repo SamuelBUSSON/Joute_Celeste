@@ -106,6 +106,8 @@ public class GameManager : MonoBehaviour
             player2 = obj.GetComponent<PlayerController>();
             StartCoroutine(SetupPlayers());
 
+            AkSoundEngine.PostEvent("Play_Musique", gameObject);
+
             StartPhase();
         }
         playerIndex++;
@@ -120,15 +122,14 @@ public class GameManager : MonoBehaviour
 
     private void StartPhase()
     {
-        Debug.Log("start phase");
+        Debug.Log("start phase");        
 
         Sequence mySequence = DOTween.Sequence();
-        mySequence.Append(player1.transform.DOMove(new Vector3(0.2f, 0.0f), moveToCenterDuration));
-        mySequence.Join(player2.transform.DOMove(new Vector3(-0.2f, 0.0f), moveToCenterDuration));
+        mySequence.Append(player1.transform.DOMove(new Vector3(-0.2f, 0.0f), 0.5f));
+        mySequence.Join(player2.transform.DOMove(new Vector3(0.2f, 0.0f), 0.5f));
         mySequence.Append(DOVirtual.DelayedCall(0, () => PlaySound()));
-        mySequence.Append(player1.transform.DOMove(new Vector3(5.0f, 0.0f), moveToCenterDuration)).SetEase(easeOutCurve);
-        mySequence.Join(player2.transform.DOMove(new Vector3(-5.0f, 0.0f), moveToCenterDuration)).SetEase(easeOutCurve);
-
+        mySequence.Append(player1.transform.DOMove(new Vector3(-5.0f, 0.0f), 1f));
+        mySequence.Join(player2.transform.DOMove(new Vector3(5.0f, 0.0f), 1f));
 
         round.timer = 0;
         round.enabled = true;
@@ -283,6 +284,10 @@ public class GameManager : MonoBehaviour
                 if (!spawner.transform.GetChild(i).GetComponent<StarSpawner>())
                 {
                     Destroy(spawner.transform.GetChild(i).gameObject);
+                }
+                else
+                {
+                    spawner.transform.GetChild(i).GetComponent<StarSpawner>().ResetTimer();
                 }
 
             }

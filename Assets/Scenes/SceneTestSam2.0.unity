@@ -2102,7 +2102,7 @@ MonoBehaviour:
     type: 3}
   timerToSpawnStar: 40
   timeBetweenSpawnStar: 20
-  timerToSpawnBlackHole: 1
+  timerToSpawnBlackHole: 75
   speed: 500
   blackHoleSpeed: 50
 --- !u!1 &1549582281
@@ -2526,37 +2526,37 @@ PrefabInstance:
     - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
       propertyPath: moveToCenterDuration
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
       propertyPath: easeOutCurve.m_Curve.Array.data[1].time
-      value: 0.90811545
+      value: 0.2414427
       objectReference: {fileID: 0}
     - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
       propertyPath: easeOutCurve.m_Curve.Array.data[1].value
-      value: 1.3492317
+      value: 1.6365678
       objectReference: {fileID: 0}
     - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
       propertyPath: easeOutCurve.m_Curve.Array.data[1].inSlope
-      value: 2.2048528
+      value: -1.3305168
       objectReference: {fileID: 0}
     - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
       propertyPath: easeOutCurve.m_Curve.Array.data[1].outSlope
-      value: 2.2048528
+      value: -1.3305168
       objectReference: {fileID: 0}
     - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
       propertyPath: easeOutCurve.m_Curve.Array.data[1].inWeight
-      value: 0.05711381
+      value: 0.10931033
       objectReference: {fileID: 0}
     - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
       propertyPath: easeOutCurve.m_Curve.Array.data[1].outWeight
-      value: 0.33333334
+      value: 0.13487081
       objectReference: {fileID: 0}
     - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
@@ -2568,6 +2568,17 @@ PrefabInstance:
       propertyPath: easeOutCurve.m_Curve.Array.data[2].value
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
+        type: 3}
+      propertyPath: respawnDuration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 552627837783187443, guid: 14c42148b838b1b489713c09516bc792,
+        type: 3}
+      propertyPath: explosionPrefab
+      value: 
+      objectReference: {fileID: 3951906006962416370, guid: 5a85f5bdcbe204a4fa48c9a16b7dcf94,
+        type: 3}
     - target: {fileID: 1768310725958877042, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
       propertyPath: vmCam
