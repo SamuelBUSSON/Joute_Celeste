@@ -67,6 +67,7 @@ public class PlayerHealth : MonoBehaviour
 
     private Displacement playerMovement;
     private static readonly int Death = Animator.StringToHash("Death");
+    private static readonly int Restart = Animator.StringToHash("Restart");
 
     // Start is called before the first frame update
     void Start()
@@ -213,6 +214,8 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     public void DieAnimator()
     {
+        print("Heyoo " + playerController.playerIndex);
+        
         Vector2 position = transform.position;
         var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);        
 
@@ -266,7 +269,17 @@ public class PlayerHealth : MonoBehaviour
 
     public void Reset()
     {
+        if (isDead)
+        {
+            GetComponent<Animator>().SetTrigger(Restart);
+        }
         GetComponent<Animator>().runtimeAnimatorController = aura1Controller;
+
+        if (isDead)
+        {
+            GetComponent<Animator>().SetTrigger(Restart);
+        }
+            
         Health = maxHealth;
         AttractZone.transform.localScale = attractZoneStartingScale;
         indexThreshold = 0;

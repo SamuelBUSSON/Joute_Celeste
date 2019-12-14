@@ -176,12 +176,9 @@ public class GameManager : MonoBehaviour
 
     private void ResetPlayer(PlayerController player)
     {
+        print("reset");
         var phealth = player.GetComponent<PlayerHealth>();        
-
-        // if (phealth.isDead)
-        //     phealth.GetComponent<Animator>().SetTrigger(Restart);
-
-        StartCoroutine(StartReset(phealth));
+        
 
         phealth.Reset();
     }
