@@ -25,7 +25,11 @@ public class Displacement : MonoBehaviour
     public float onStunSpeedDivide = 5.0f;
 
     [Header("Zone Slow")]
-    public float slowStrength = 3.0f;    
+    public float slowStrength = 3.0f;
+
+    [Header("Player Color")]
+    [ColorUsageAttribute(true, true)]
+    public Color color;
 
 
     private float dashCoolDownTimer = 0.0f;
@@ -96,6 +100,10 @@ public class Displacement : MonoBehaviour
 
             if (dashCoolDownTimer > dashCoolDown)
             {
+                foreach (var item in GetComponentsInChildren<TrailRenderer>())
+                {
+                    item.DOTime(0, 0.5f).OnComplete(() => item.enabled = false);                    
+                }
                 currentDash = 0;
                 dashCoolDownTimer = 0.0f;
             }
@@ -106,8 +114,6 @@ public class Displacement : MonoBehaviour
     {
         if (!isDashing)
         {
-
-
             Vector2 targetVelocity = movement;
             targetVelocity = transform.TransformDirection(targetVelocity);
             targetVelocity *=  isStun ? speed/onStunSpeedDivide : speed ;
@@ -160,6 +166,11 @@ public class Displacement : MonoBehaviour
                 isDashing = true;
 
                 AkSoundEngine.PostEvent("Play_Player_Dash", gameObject);
+                
+                foreach (var item in GetComponentsInChildren<TrailRenderer>())
+                {
+                    item.DOTime(0.2f, 0.5f).OnStart(() => item.enabled = true);
+                }                    
 
                 PlayerZone pl = GetComponentInChildren<PlayerZone>();
                 pl.ChangeSpeedObjectInZone(true);
@@ -179,6 +190,10 @@ public class Displacement : MonoBehaviour
                 {
                     isStun = true;
                     currentDash = 0;
+                    foreach (var item in GetComponentsInChildren<TrailRenderer>())
+                    {
+                        item.DOTime(0, 0.5f).OnComplete(() => item.enabled = false);
+                    }
                 }
             }
         }

@@ -131,7 +131,7 @@ public class ObjectHandler : MonoBehaviour
 
     private void OnDrainStar(InputAction.CallbackContext obj)
     {
-        Projectile proj = handledObject.GetComponent<Projectile>();
+        Projectile proj = handledObject?.GetComponent<Projectile>();
         if (proj.type == EProjectileType.STAR && !isStarChargLv1)
         {
             GameObject healObject = Instantiate(proj.healFx, proj.transform.position, Quaternion.identity);
