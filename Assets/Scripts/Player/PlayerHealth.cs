@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEditor.Animations;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -25,16 +26,19 @@ public class PlayerHealth : MonoBehaviour
 
     public float attractRange;
     public GameObject AttractZone;
+    private Vector3 attractZoneStartingScale;
 
     [Header("Death")]
     public float deathRange;
     public float deathDamage;
+    public bool draw;
 
     [Header("Health")]
     public float Health;
 
     public AnimatorOverrideController aura3Controller;
-    
+    public AnimatorOverrideController aura1Controller;
+
     [NonSerialized]
     public float maxHealth;
 
@@ -44,28 +48,41 @@ public class PlayerHealth : MonoBehaviour
 
     private PlayerController playerController;
     private ObjectHandler _objectHandler;
-    
+
+    [NonSerialized] public bool isDead = false;
+
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        attractZoneStartingScale = AttractZone.transform.localScale;
     }
-    
+
+    private void OnDrawGizmos()
+    {
+        if (draw)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(transform.position, deathRange);
+        }
+
+    }
 
     private Displacement playerMovement;
+    private static readonly int Death = Animator.StringToHash("Death");
 
     // Start is called before the first frame update
     void Start()
     {
         maxHealth = Health;
-        
+
         if(playerController?.playerIndex == 1)
         {
             GameObject p0 = GameManager.Instance.player2.gameObject;
             p0.GetComponent<ObjectHandler>().SetEnemyPos(transform);
             GetComponent<ObjectHandler>().SetEnemyPos(p0.transform);
         }
-        
+
         healthSlider = playerController?.playerIndex == 0
             ? GameManager.Instance.PlayerSliderHealth1
             : GameManager.Instance.PlayerSliderHealth2;
@@ -145,11 +162,11 @@ public class PlayerHealth : MonoBehaviour
             }
 
             AkSoundEngine.SetSwitch("Hit_or_Lancer_or_Mort", "Hit", gameObject);
-            AkSoundEngine.PostEvent("Play_Palier_Voix", gameObject);            
+            AkSoundEngine.PostEvent("Play_Palier_Voix", gameObject);
 
             float shakeValue = Mathf.Lerp(2.0f, 20.0f, Mathf.InverseLerp(5, 50, amount));
 
-            CameraManager.Instance.Shake(shakeValue, shakeValue, 0.1f);            
+            CameraManager.Instance.Shake(shakeValue, shakeValue, 0.1f);
 
             AkSoundEngine.SetSwitch("Witch_Aura", playerController?.playerIndex == 1  ? "Aura1" : "Aura2", gameObject);
 
@@ -164,7 +181,7 @@ public class PlayerHealth : MonoBehaviour
                         indexThreshold++;
                         playerMovement.speed *= thresholds[indexThreshold].speedMultiplier;
                         _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;
-                        
+
                         if (indexThreshold == 1)
                         {
                             AkSoundEngine.SetSwitch("Aura_State", "State1to2", gameObject);
@@ -198,12 +215,25 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     public void Die()
     {
-        Vector2 position = transform.position;
-        var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);
+        isDead = true;
+        GetComponent<Animator>().SetTrigger(Death);
 
-        Debug.Break();
+    }
+
+    /// <summary>
+    /// CALLED BY THE ANIMATOR !
+    /// </summary>
+    public void DieAnimator()
+    {
+        Vector2 position = transform.position;
+        var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);        
 
         AkSoundEngine.SetSwitch("Hit_or_Lancer_or_Mort", "Mort", gameObject);
+
+        if (hits.Length == 0)
+        {
+            GameManager.Instance.WinLoose(playerController.playerIndex);
+        }
 
         foreach (RaycastHit2D hit in hits)
         {
@@ -211,17 +241,25 @@ public class PlayerHealth : MonoBehaviour
 
             if (playerCtrl && playerCtrl.playerIndex != playerController.playerIndex)
             {
-                if (playerCtrl.GetComponent<PlayerHealth>().Health - deathDamage <= 0)
+                var playerHealth = playerCtrl.GetComponent<PlayerHealth>();
+                if (!playerHealth.isDead)
                 {
-                    GameManager.Instance.Draw();
+                    if (playerHealth.Health - deathDamage <= 0)
+                    {
+                        playerHealth.Die();
+                        GameManager.Instance.Draw();
+                    }
+                    else
+                    {
+                        playerHealth.Die();
+                        GameManager.Instance.WinLoose(playerController.playerIndex);
+                    }
                 }
-                else
-                {
-                    GameManager.Instance.WinLoose(playerController.playerIndex);
-                }
+
             }
         }
     }
+
 
     private void SetSwitchSound()
     {
@@ -236,6 +274,28 @@ public class PlayerHealth : MonoBehaviour
             case 2:
                 AkSoundEngine.SetSwitch("Aura_Etat", "Etat3", gameObject);
                 break;
+            }
+     }
+
+    public void Reset()
+    {
+        GetComponent<Animator>().runtimeAnimatorController = aura1Controller;
+        Health = maxHealth;
+        AttractZone.transform.localScale = attractZoneStartingScale;
+        indexThreshold = 0;
+        healthSlider.value = Health;
+        isDead = false;
+
+        AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
+
+        GetComponent<SpriteRenderer>().material.SetInt("_IsBlinking", 0);
+
+        playerMovement.Reset();
+        var obj = GetComponent<ObjectHandler>();
+        if (obj.handledObject)
+        {
+            Destroy(obj.handledObject.gameObject);
+            obj.handledObject = null;
         }
     }
 }

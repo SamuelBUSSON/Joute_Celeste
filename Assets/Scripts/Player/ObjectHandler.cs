@@ -23,7 +23,8 @@ public class ObjectHandler : MonoBehaviour
     public bool isStarChargLv1 = false;
     public bool isHoldingObject = false;
 
-    private Transform handledObject;
+    //[NonSerialized]
+    public Transform handledObject;
     private float angle = 0.0f;
     private Vector3 displaceAngleVector;
 
@@ -77,6 +78,8 @@ public class ObjectHandler : MonoBehaviour
         if (handledObject)
         {
             Projectile proj = handledObject.GetComponent<Projectile>();
+            
+            animator.SetBool(Hold, true);
 
             proj.GetComponentInChildren<VisualEffect>().SendEvent("OnCast");
 
@@ -100,6 +103,8 @@ public class ObjectHandler : MonoBehaviour
     {
         if (handledObject)
         {
+            animator.SetBool(Hold, true);
+            
             Projectile proj = handledObject.GetComponent<Projectile>();
 
             AkSoundEngine.PostEvent("Play_Player_Charge", gameObject);

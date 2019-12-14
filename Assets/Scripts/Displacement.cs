@@ -13,10 +13,14 @@ public class Displacement : MonoBehaviour
     public float maxVelocityChange = 10.0f;
     public float soapStrength = 10f;
 
+    private float startingSpeed;
+
     [Header("Dash")]   
     public C_Dash[] dashs;
     [Tooltip("The time you have to do the next dash")]
     public float dashCoolDown = 1.0f;
+
+    private float startingDashCoolDown;
     public VisualEffect dash_FX;
     public float impusleStrength = 10.0f;
 
@@ -48,6 +52,9 @@ public class Displacement : MonoBehaviour
     void Awake()
     {
         input = GetComponent<PlayerInput>();
+
+        startingDashCoolDown = dashCoolDown;
+        startingSpeed = speed;
         
         input.actions.Enable();
         input.currentActionMap["Movement"].started += context => OnStartMovement(context);
@@ -64,19 +71,19 @@ public class Displacement : MonoBehaviour
 
     private void OnStartMovement(InputAction.CallbackContext obj)
     {
-        if(GameManager.Instance.canMove)
+        if(GameManager.Instance.state == GameManager.EState.Starting)
             AkSoundEngine.PostEvent("Play_Player_Move_Solo", gameObject);
     }
 
     private void OnMovement(InputAction.CallbackContext obj)
     {
-        if(GameManager.Instance.canMove)
+        if(GameManager.Instance.state == GameManager.EState.Starting)
             movement = obj.ReadValue<Vector2>();      
     }
 
     private void OnMovementCancel(InputAction.CallbackContext obj)
     {
-        if (GameManager.Instance.canMove)
+        if(GameManager.Instance.state == GameManager.EState.Starting)
         {
             movement = obj.ReadValue<Vector2>();     
             AkSoundEngine.PostEvent("Stop_Player_Move_Solo", gameObject);
@@ -140,7 +147,7 @@ public class Displacement : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext obj)
     {
-        if (GameManager.Instance.canMove)
+        if(GameManager.Instance.state == GameManager.EState.Starting)
         {
             if (!isStun)
             {
@@ -222,5 +229,11 @@ public class Displacement : MonoBehaviour
         public AnimationCurve easeDash;
         public float dashStrength;
         public float timeToReachDashPosition;
+    }
+
+    public void Reset()
+    {
+        speed = startingSpeed;
+        dashCoolDown = startingDashCoolDown;
     }
 }
