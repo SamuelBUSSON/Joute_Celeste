@@ -24,6 +24,8 @@ PluginImporter:
         CPU: x86
         DefaultValueInitialized: true
         OS: Windows
+<<<<<<< HEAD
+=======
   - first:
       Standalone: Linux64
     second:
@@ -48,6 +50,7 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: None
+>>>>>>> F_Dash
   userData: 
   assetBundleName: 
   assetBundleVariant: 
