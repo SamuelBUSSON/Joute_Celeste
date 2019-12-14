@@ -157,31 +157,32 @@ public class PlayerHealth : MonoBehaviour
 
             AkSoundEngine.SetSwitch("Witch_Aura", playerController?.playerIndex == 1  ? "Aura1" : "Aura2", gameObject);
 
-            AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
+            AttractZone.GetComponent<Animator>().SetFloat("Health", Health);            
 
             if (Health >= 0 && indexThreshold < thresholds.Count)
             {
                 if (thresholds[indexThreshold].health >= Health)
                 {
+                    if (indexThreshold == 0)
+                    {
+                        AkSoundEngine.SetSwitch("Aura_State", "State1to2", gameObject);
+                        AttractZone.transform.DOScale(AttractZone.transform.localScale * attractRange, 0.5f);
+                    }
+                    else if (indexThreshold == 1)
+                    {
+                        AkSoundEngine.SetSwitch("Aura_State", "State2to3", gameObject);
+                        playerMovement.dashCoolDown /= 2;
+                        GetComponent<Animator>().runtimeAnimatorController = aura3Controller;
+                    }
+
                     if (indexThreshold + 1 < thresholds.Count)
                     {
                         indexThreshold++;
-                        playerMovement.speed *= thresholds[indexThreshold].speedMultiplier;
-                        _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;
-
-                        if (indexThreshold == 1)
-                        {
-                            AkSoundEngine.SetSwitch("Aura_State", "State1to2", gameObject);
-                           AttractZone.transform.DOScale(AttractZone.transform.localScale * attractRange, 0.5f);
-                        }
-                        else if (indexThreshold == 2)
-                        {
-                            AkSoundEngine.SetSwitch("Aura_State", "State2to3", gameObject);
-                            playerMovement.dashCoolDown /= 2;
-
-                            GetComponent<Animator>().runtimeAnimatorController = aura3Controller;
-                        }
                     }
+
+                    playerMovement.speed *= thresholds[indexThreshold].speedMultiplier;
+                    _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;                    
+
                     AkSoundEngine.PostEvent("Play_Aura1_or_2", gameObject);
                     SetSwitchSound();
                 }
@@ -234,16 +235,14 @@ public class PlayerHealth : MonoBehaviour
                 {
                     if (playerHealth.Health - deathDamage <= 0)
                     {
-                        playerHealth.Die();
+                        playerHealth.isDead = true;
                         GameManager.Instance.Draw();
                     }
                     else
                     {
-                        playerHealth.Die();
                         GameManager.Instance.WinLoose(playerController.playerIndex);
                     }
                 }
-
             }
         }
     }

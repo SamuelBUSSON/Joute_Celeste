@@ -204,8 +204,8 @@ MonoBehaviour:
     speedMultiplier: 1.25
     damageMultiplier: 1.25
   - health: 25
-    speedMultiplier: 2
-    damageMultiplier: 2
+    speedMultiplier: 1.3
+    damageMultiplier: 1.3
   veryLowHealth: 10
   attractRange: 2
   AttractZone: {fileID: 2758839450924294534}

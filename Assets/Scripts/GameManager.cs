@@ -176,15 +176,23 @@ public class GameManager : MonoBehaviour
 
     private void ResetPlayer(PlayerController player)
     {
-        var phealth = player.GetComponent<PlayerHealth>();
+        var phealth = player.GetComponent<PlayerHealth>();        
 
-        if (phealth.isDead)
-            phealth.GetComponent<Animator>().SetTrigger(Restart);
-        
+        // if (phealth.isDead)
+        //     phealth.GetComponent<Animator>().SetTrigger(Restart);
+
+        StartCoroutine(StartReset(phealth));
+
         phealth.Reset();
     }
 
-    private IEnumerator StartPhaseExplosion()
+    private IEnumerator StartReset(PlayerHealth phealth)
+    {
+        yield return new WaitForFixedUpdate();
+        phealth.GetComponent<Animator>().SetTrigger(Restart);
+    }
+
+        private IEnumerator StartPhaseExplosion()
     {
         yield return new WaitForSeconds(moveToCenterDuration);
         //play explosion

@@ -91,6 +91,8 @@ MonoBehaviour:
   type: 0
   ExplosionFX: {fileID: 3951906006962416370, guid: 5a85f5bdcbe204a4fa48c9a16b7dcf94,
     type: 3}
+  healFx: {fileID: 0}
+  trail: {fileID: 0}
   size: 1.2
   isChopable: 1
   startingDamage: 5

@@ -162,7 +162,7 @@ MonoBehaviour:
   trail: {fileID: 0}
   size: 2
   isChopable: 1
-  startingDamage: 0
+  startingDamage: 10
   thresholdLevels:
   - speed: 1
     damage: 1
