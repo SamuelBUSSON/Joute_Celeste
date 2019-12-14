@@ -119,13 +119,15 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("start phase");
 
-        Sequence mySequence = DOTween.Sequence();
-        mySequence.Append(player1.transform.DOMove(new Vector3(0.2f, 0.0f), moveToCenterDuration));
-        mySequence.Join(player2.transform.DOMove(new Vector3(-0.2f, 0.0f), moveToCenterDuration));
-        mySequence.Append(DOVirtual.DelayedCall(0, () => PlaySound()));
-        mySequence.Append(player1.transform.DOMove(new Vector3(5.0f, 0.0f), moveToCenterDuration)).SetEase(easeOutCurve);
-        mySequence.Join(player2.transform.DOMove(new Vector3(-5.0f, 0.0f), moveToCenterDuration)).SetEase(easeOutCurve);
+       // player1.transform.position = player1StartPos;
+       // player2.transform.position = player2StartPos;
 
+        Sequence mySequence = DOTween.Sequence();
+        mySequence.Append(player1.transform.DOMove(new Vector3(-0.2f, 0.0f), 0.5f));
+        mySequence.Join(player2.transform.DOMove(new Vector3(0.2f, 0.0f), 0.5f));
+        mySequence.Append(DOVirtual.DelayedCall(0, () => PlaySound()));
+        mySequence.Append(player1.transform.DOMove(new Vector3(-5.0f, 0.0f), 1f));
+        mySequence.Join(player2.transform.DOMove(new Vector3(5.0f, 0.0f), 1f));
 
         round.timer = 0;
         round.enabled = true;

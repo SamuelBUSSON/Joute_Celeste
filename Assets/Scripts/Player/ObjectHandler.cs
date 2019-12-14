@@ -70,6 +70,7 @@ public class ObjectHandler : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
+        autoAim = true;
     }
 
 
