@@ -148,12 +148,12 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        roundImageCanvas.sprite = roundImage[roundCurrent];
+        roundImageCanvas.sprite = roundImage[roundCurrent - 1];
         roundImageCanvas.gameObject.SetActive(true);
 
         Color c = roundImageCanvas.color;
 
-        DOVirtual.Float(0, 1, 0.5f, value =>
+        DOVirtual.Float(0, 1, 1f, value =>
         {
             c.a = value;
             roundImageCanvas.color = c;

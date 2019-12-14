@@ -43,8 +43,6 @@ public class PlayerHealth : MonoBehaviour
 
     private int indexThreshold = 0;
 
-    private Slider healthSlider;
-
     private PlayerController playerController;
     private ObjectHandler _objectHandler;
 
@@ -81,13 +79,6 @@ public class PlayerHealth : MonoBehaviour
             p0.GetComponent<ObjectHandler>().SetEnemyPos(transform);
             GetComponent<ObjectHandler>().SetEnemyPos(p0.transform);
         }
-
-        healthSlider = playerController?.playerIndex == 0
-            ? GameManager.Instance.PlayerSliderHealth1
-            : GameManager.Instance.PlayerSliderHealth2;
-
-        healthSlider.maxValue = maxHealth;
-        healthSlider.value = Health;
 
         playerMovement = GetComponent<Displacement>();
         _objectHandler = GetComponent<ObjectHandler>();
@@ -139,8 +130,6 @@ public class PlayerHealth : MonoBehaviour
             }
         }
         SetSwitchSound();
-
-        healthSlider.value = Health;
     }
 
     /// <summary>
@@ -153,7 +142,6 @@ public class PlayerHealth : MonoBehaviour
         if (!playerMovement.IsDashing())
         {
             Health -= amount;
-            healthSlider.value = Health;
 
             if(Health <= veryLowHealth)
             {
@@ -283,7 +271,6 @@ public class PlayerHealth : MonoBehaviour
         Health = maxHealth;
         AttractZone.transform.localScale = attractZoneStartingScale;
         indexThreshold = 0;
-        healthSlider.value = Health;
         isDead = false;
 
         AttractZone.GetComponent<Animator>().SetFloat("Health", Health);
