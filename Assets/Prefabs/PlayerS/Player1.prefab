@@ -33,7 +33,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2758839452218953968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 2758839450924294535}
@@ -131,12 +131,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 1
-  launchStrength: 30
+  launchStrength: 45
   knockbackForce: 1
   enemyPos: {fileID: 0}
   isHoldingStar: 0
   isStarChargLv1: 0
   isHoldingObject: 0
+  handledObject: {fileID: 0}
 --- !u!114 &2758839452218953963
 MonoBehaviour:
   m_ObjectHideFlags: 0

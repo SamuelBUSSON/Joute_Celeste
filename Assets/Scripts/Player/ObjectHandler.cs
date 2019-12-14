@@ -111,7 +111,6 @@ public class ObjectHandler : MonoBehaviour
 
             VisualEffect fx = proj.GetComponentInChildren<VisualEffect>();
 
-
             fx.SetFloat("Radius", proj.size + 0.5f);
             fx.SendEvent("OnCast");
 
@@ -375,6 +374,12 @@ public class ObjectHandler : MonoBehaviour
                 if (handledObject.GetComponentsInChildren<VisualEffect>().Length > 1 &&  handledObject.GetComponentsInChildren<VisualEffect>()[1])
                 {
                     handledObject.GetComponentsInChildren<VisualEffect>()[1].enabled = true;
+
+                    if(proj.type == EProjectileType.ASTEROID)
+                    {
+                        handledObject.GetComponentsInChildren<VisualEffect>()[1].SetVector4("Color", new Vector4(GetComponent<Displacement>().color.r, GetComponent<Displacement>().color.g, GetComponent<Displacement>().color.b, GetComponent<Displacement>().color.a));
+                    }
+
                 }
 
                 if (handledObject.GetComponentInChildren<TrailRenderer>())

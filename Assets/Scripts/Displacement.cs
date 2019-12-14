@@ -197,6 +197,12 @@ public class Displacement : MonoBehaviour
                 {
                     isStun = true;
                     currentDash = 0;
+
+                    if (input.user.pairedDevices[0] is Gamepad pad)
+                    {
+                        CameraManager.Instance.Vibrate(0.2f, 0.0f, stunTime, pad);
+                    }
+
                     foreach (var item in GetComponentsInChildren<TrailRenderer>())
                     {
                         item.DOTime(0, 0.5f).OnComplete(() => item.enabled = false);
