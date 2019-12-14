@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Distort2D_Invert 1
+  m_Name: Distort2D_Trail
   m_Shader: {fileID: -6465566751694194690, guid: cbf5b258296a0ce4caf871930f7c6463,
     type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_F1BC6A5A:
-        m_Texture: {fileID: 2800000, guid: 84147787f935ef94e881477b3921da1a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 845b711dc437dac4dbd488deab50ed61, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:

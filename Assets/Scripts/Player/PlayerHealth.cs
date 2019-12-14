@@ -21,6 +21,8 @@ public class PlayerHealth : MonoBehaviour
     [Header("Thresholds")]
     public List<SHealthThreshold> thresholds;
 
+    public float veryLowHealth = 10.0f;
+
     public float attractRange;
     public GameObject AttractZone;
 
@@ -87,6 +89,11 @@ public class PlayerHealth : MonoBehaviour
     {
         Health += amount;
 
+        if (Health > veryLowHealth)
+        {
+            GetComponent<SpriteRenderer>().material.SetInt("_IsBlinking", 0);
+        }
+
         AkSoundEngine.PostEvent("Play_Player_Heal", gameObject);
 
         if (Health > maxHealth)
@@ -96,8 +103,9 @@ public class PlayerHealth : MonoBehaviour
 
         if(thresholds[indexThreshold].health <= Health)
         {
-            if (--indexThreshold >= 0)
+            if (indexThreshold - 1 >= 0)
             {
+                --indexThreshold;
                 playerMovement.speed /= thresholds[indexThreshold].speedMultiplier;
                 _objectHandler.damageMultiplier = thresholds[indexThreshold].damageMultiplier;
 
@@ -110,10 +118,11 @@ public class PlayerHealth : MonoBehaviour
                 {
                     AkSoundEngine.SetSwitch("Aura_State", "State3to2", gameObject);
                     playerMovement.dashCoolDown *= 2;
+
                 }
             }
         }
-
+        SetSwitchSound();
 
         healthSlider.value = Health;
     }
@@ -130,7 +139,13 @@ public class PlayerHealth : MonoBehaviour
             Health -= amount;
             healthSlider.value = Health;
 
-            AkSoundEngine.PostEvent("Play_Player_Hit", gameObject);
+            if(Health <= veryLowHealth)
+            {
+                GetComponent<SpriteRenderer>().material.SetInt("_IsBlinking", 1);
+            }
+
+            AkSoundEngine.SetSwitch("Hit_or_Lancer_or_Mort", "Hit", gameObject);
+            AkSoundEngine.PostEvent("Play_Palier_Voix", gameObject);            
 
             float shakeValue = Mathf.Lerp(2.0f, 20.0f, Mathf.InverseLerp(5, 50, amount));
 
@@ -164,10 +179,12 @@ public class PlayerHealth : MonoBehaviour
                         }
                     }
                     AkSoundEngine.PostEvent("Play_Aura1_or_2", gameObject);
+                    SetSwitchSound();
                 }
             }
             else
             {
+                SetSwitchSound();
                 Die();
                 return true;
             }
@@ -184,6 +201,10 @@ public class PlayerHealth : MonoBehaviour
         Vector2 position = transform.position;
         var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);
 
+        Debug.Break();
+
+        AkSoundEngine.SetSwitch("Hit_or_Lancer_or_Mort", "Mort", gameObject);
+
         foreach (RaycastHit2D hit in hits)
         {
             PlayerController playerCtrl = hit.transform.GetComponent<PlayerController>();
@@ -199,6 +220,22 @@ public class PlayerHealth : MonoBehaviour
                     GameManager.Instance.WinLoose(playerController.playerIndex);
                 }
             }
+        }
+    }
+
+    private void SetSwitchSound()
+    {
+        switch (indexThreshold)
+        {
+            case 0:
+                AkSoundEngine.SetSwitch("Aura_Etat", "Etat1", gameObject);
+                break;
+            case 1:
+                AkSoundEngine.SetSwitch("Aura_Etat", "Etat2", gameObject);
+                break;
+            case 2:
+                AkSoundEngine.SetSwitch("Aura_Etat", "Etat3", gameObject);
+                break;
         }
     }
 }

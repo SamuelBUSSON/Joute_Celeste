@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
-  ExplosionFX: {fileID: 3951906006962416370, guid: 5a85f5bdcbe204a4fa48c9a16b7dcf94,
+  ExplosionFX: {fileID: 3951906006962416370, guid: 5b94c67dd3ff38d4e9cb16c9772b51eb,
     type: 3}
   healFx: {fileID: 6231195229866764667, guid: b0de326c8ff91b145a4ccce0d2863296, type: 3}
   size: 3.1

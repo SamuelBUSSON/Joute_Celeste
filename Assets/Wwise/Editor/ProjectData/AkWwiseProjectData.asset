@@ -47,8 +47,20 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: d797f9769f5a1349bc7d8f150177038f
     GuidInternal: 
-    m_lastTime: -8586253604646963213
+    m_lastTime: -8586252870705034951
     List:
+    - name: Play_Astral_Music_Menu
+      guid: c28fd27f2308fe44ad758883e9d5a66b
+      id: 541273363
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Astral_Music_Menu
+        ObjectType: 3
+      Path: Default Work Unit\Play_Astral_Music_Menu
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: Play_Aura1_or_2
       guid: 25dea11f219dda418a71594e44122a72
       id: 586774143
@@ -58,42 +70,6 @@ MonoBehaviour:
       - ElementName: Play_Aura1_or_2
         ObjectType: 3
       Path: Default Work Unit\Play_Aura1_or_2
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
-    - name: Play_Contact_for_Comete
-      guid: 35807f761d6aa44ea50dbe352adb78b8
-      id: 1722544548
-      PathAndIcons:
-      - ElementName: Default Work Unit
-        ObjectType: 12
-      - ElementName: Play_Contact_for_Comete
-        ObjectType: 3
-      Path: Default Work Unit\Play_Contact_for_Comete
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
-    - name: Play_Contact_for_Etoile
-      guid: f5792c0045e3ea42b04457aa2d8ca0b7
-      id: 3099463575
-      PathAndIcons:
-      - ElementName: Default Work Unit
-        ObjectType: 12
-      - ElementName: Play_Contact_for_Etoile
-        ObjectType: 3
-      Path: Default Work Unit\Play_Contact_for_Etoile
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
-    - name: Play_Contact_for_Planete
-      guid: 4391595bb75f56478830b9b2ef9fea07
-      id: 3938359640
-      PathAndIcons:
-      - ElementName: Default Work Unit
-        ObjectType: 12
-      - ElementName: Play_Contact_for_Planete
-        ObjectType: 3
-      Path: Default Work Unit\Play_Contact_for_Planete
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -169,6 +145,18 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: Play_Palier_Voix
+      guid: 00b7a0d254b7dd439995444272090788
+      id: 2508961772
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Palier_Voix
+        ObjectType: 3
+      Path: Default Work Unit\Play_Palier_Voix
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: Play_Player_Attrack
       guid: 4496df1d430bee4a83ed7012775b6084
       id: 319966612
@@ -190,6 +178,18 @@ MonoBehaviour:
       - ElementName: Play_Player_Charge
         ObjectType: 3
       Path: Default Work Unit\Play_Player_Charge
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Player_Charge_Loop
+      guid: b49a0cebc1765647bb07f3c9a9b89880
+      id: 3578254717
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Player_Charge_Loop
+        ObjectType: 3
+      Path: Default Work Unit\Play_Player_Charge_Loop
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -289,6 +289,18 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: Play_Trou_Noir
+      guid: 6324aff5db53974c808e3b15d6581b4e
+      id: 1876111215
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Trou_Noir
+        ObjectType: 3
+      Path: Default Work Unit\Play_Trou_Noir
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: Stop_Player_Move_Solo
       guid: 95efe13067babb4ca57f641451199d98
       id: 2405542185
@@ -329,8 +341,39 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: 2ea1b818b045414286d7285a8b7539c2
     GuidInternal: 
-    m_lastTime: -8586255357017557687
+    m_lastTime: -8586252870688061980
     List:
+    - name: Aura_Etat
+      guid: 10eeaef4a3d3e9449fefb358affc3dcf
+      id: 4167553167
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Aura_Etat
+        ObjectType: 11
+      Path: Default Work Unit\Aura_Etat
+      values:
+      - name: Etat1
+        guid: eee1ffd1bda275458d7544355db3ece0
+        id: 2383369050
+        PathAndIcons:
+        - ElementName: Etat1
+          ObjectType: 10
+      - name: Etat2
+        guid: d2873e68fc35544cbfe000c68fe3094f
+        id: 2383369049
+        PathAndIcons:
+        - ElementName: Etat2
+          ObjectType: 10
+      - name: Etat3
+        guid: 1da14e6b8fe3774faa2638ddc95a4621
+        id: 2383369048
+        PathAndIcons:
+        - ElementName: Etat3
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
     - name: Aura_State
       guid: 21f5af6f3309e6498079c3cd2cbe9ecf
       id: 2139179158
@@ -395,6 +438,37 @@ MonoBehaviour:
         id: 2962930636
         PathAndIcons:
         - ElementName: Planete
+          ObjectType: 10
+      ValueGuids: []
+      ValueIcons: []
+      valuesInternal: []
+    - name: Hit_or_Lancer_or_Mort
+      guid: 4777f0883844a7438a12eddd23d49149
+      id: 3541859607
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Hit_or_Lancer_or_Mort
+        ObjectType: 11
+      Path: Default Work Unit\Hit_or_Lancer_or_Mort
+      values:
+      - name: Hit
+        guid: 75f7e68457311646a2de9022ed414c12
+        id: 1116398592
+        PathAndIcons:
+        - ElementName: Hit
+          ObjectType: 10
+      - name: Lancer
+        guid: a6370ac31af3b846bf41ca1ac19c25a4
+        id: 3386881968
+        PathAndIcons:
+        - ElementName: Lancer
+          ObjectType: 10
+      - name: Mort
+        guid: 4e25cd3c95e5294d8c70673ab102671f
+        id: 2944094207
+        PathAndIcons:
+        - ElementName: Mort
           ObjectType: 10
       ValueGuids: []
       ValueIcons: []
@@ -464,5 +538,12 @@ MonoBehaviour:
     List: []
   ExpandedItems:
   - /Joute_Celeste_WwiseProject
+  - /Joute_Celeste_WwiseProject/Events
+  - /Joute_Celeste_WwiseProject/Events/Default Work Unit
+  - /Joute_Celeste_WwiseProject/Switches
+  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit
+  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Aura_Etat
+  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Aura_State
+  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Hit_or_Lancer_or_Mort
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

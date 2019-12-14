@@ -692,7 +692,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &398078536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1174,7 +1174,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1286,8 +1286,8 @@ MonoBehaviour:
   cooldown: 0.5
   minSpawned: 1
   maxSpawned: 2
-  spawnedThreshold: 10
-  slowSpeed: 100
+  spawnedThreshold: 18
+  slowSpeed: 200
   fastSpeedProbability: 0.5
   secondToHighSpeed: 3
   fastSpeed: 150
@@ -1521,7 +1521,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1160084085
 GameObject:
@@ -1888,7 +1888,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2431,7 +2431,7 @@ PrefabInstance:
     - target: {fileID: 552627837783187440, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 552627837783187440, guid: 14c42148b838b1b489713c09516bc792,
         type: 3}
@@ -2693,8 +2693,8 @@ MonoBehaviour:
   cooldown: 0.5
   minSpawned: 1
   maxSpawned: 2
-  spawnedThreshold: 10
-  slowSpeed: 100
+  spawnedThreshold: 18
+  slowSpeed: 200
   fastSpeedProbability: 0.5
   secondToHighSpeed: 3
   fastSpeed: 150

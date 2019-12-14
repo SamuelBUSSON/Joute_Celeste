@@ -25,6 +25,7 @@ public class Projectile : MonoBehaviour
 
     public GameObject ExplosionFX;
     public GameObject healFx;
+    public TrailRenderer trail;
 
     public float size = 1.0f;
 

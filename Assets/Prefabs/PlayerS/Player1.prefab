@@ -205,6 +205,7 @@ MonoBehaviour:
   - health: 25
     speedMultiplier: 2
     damageMultiplier: 2
+  veryLowHealth: 10
   attractRange: 2
   AttractZone: {fileID: 2758839450924294534}
   deathRange: 0
@@ -258,7 +259,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 96e8c8b26a80fbc4ea7febb0f767fee7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -426,6 +427,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2758839452218953972}
     m_Modifications:
+    - target: {fileID: 1307525660, guid: 3ebad5be1c8cad5409c4d64c07630d7c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 1adc060b1b11c3b4289e7fd8ea29bdfe, type: 2}
     - target: {fileID: 1091391847767521841, guid: 3ebad5be1c8cad5409c4d64c07630d7c,
         type: 3}
       propertyPath: animator

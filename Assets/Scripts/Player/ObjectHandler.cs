@@ -132,7 +132,7 @@ public class ObjectHandler : MonoBehaviour
     private void OnDrainStar(InputAction.CallbackContext obj)
     {
         Projectile proj = handledObject?.GetComponent<Projectile>();
-        if (proj.type == EProjectileType.STAR && !isStarChargLv1)
+        if (proj && proj.type == EProjectileType.STAR && !isStarChargLv1)
         {
             GameObject healObject = Instantiate(proj.healFx, proj.transform.position, Quaternion.identity);
             DrainStar(proj, healObject);
@@ -305,74 +305,93 @@ public class ObjectHandler : MonoBehaviour
 
     private void FireObject(bool aimingToPlayer = false)
     {
+        Debug.Log("FireObject");
 
-        Projectile proj = handledObject.GetComponent<Projectile>();
+        Projectile proj = handledObject?.GetComponent<Projectile>();
 
-        bool canLaunch = true;
-
-        if (proj.type == EProjectileType.STAR && proj.thresholdIndex != 1)
+        if (handledObject)
         {
-            canLaunch = false;
+            bool canLaunch = true;
+
+            if (proj && proj.type == EProjectileType.STAR && proj.thresholdIndex != 1)
+            {
+                canLaunch = false;
+            }
+
+            if (canLaunch)
+            {
+                CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
+                //TODO: check findgamepad id
+
+                if (input.user.pairedDevices[0] is Gamepad pad)
+                {
+                    CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, pad);
+                }
+
+                handledObject.SetParent(null);
+
+                Projectile projectile = handledObject.GetComponent<Projectile>();
+                projectile.isLaunched = true;
+                projectile.tag = "Untagged";
+                projectile.currentDamage *= damageMultiplier;
+                projectile.playerIndex = controller.playerIndex;
+
+                handledObject.gameObject.layer = 10;
+
+                switch (projectile.type)
+                {
+                    case EProjectileType.ASTEROID:
+                        AkSoundEngine.PostEvent("Play_Move_Comete", gameObject);
+                        break;
+                    case EProjectileType.PLANET:
+                        AkSoundEngine.PostEvent("Play_Move_Planete", gameObject);
+                        break;
+                    case EProjectileType.STAR:
+                        AkSoundEngine.PostEvent("Play_Move_Etoile", gameObject);
+                        break;
+                    default:
+                        break;
+                }
+
+                AkSoundEngine.SetSwitch("Hit_or_Lancer_or_Mort", "Lancer", gameObject);
+                AkSoundEngine.PostEvent("Play_Palier_Voix", gameObject);
+
+                AkSoundEngine.SetSwitch("Choix_Astres", projectile.type == EProjectileType.PLANET ? "Planete" : projectile.type == EProjectileType.STAR ? "Etoile" : "Comete", gameObject);
+                AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
+                AkSoundEngine.StopPlayingID(playerCharge);
+
+                Vector3 heading = aimingToPlayer ? -(handledObject.transform.position - enemyPos.position).normalized : (handledObject.transform.position - transform.position).normalized;
+
+                handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
+
+                VisualEffect fx = handledObject.GetComponent<VisualEffect>();
+                fx.SetBool("SpawnRate", false);
+
+                if (handledObject.GetComponentsInChildren<VisualEffect>().Length > 1 &&  handledObject.GetComponentsInChildren<VisualEffect>()[1])
+                {
+                    handledObject.GetComponentsInChildren<VisualEffect>()[1].enabled = true;
+                }
+
+                if (handledObject.GetComponentInChildren<TrailRenderer>())
+                {
+                    handledObject.GetComponentInChildren<TrailRenderer>().enabled = true;
+                }
+
+                Vector2 v1 = transform.position;
+                Vector2 v2 = heading;
+
+                transform.DOMove(v1 - v2 * knockbackForce, 0.05f);
+
+                handledObject = null;
+
+                isHoldingStar = false;
+                isHoldingObject = false;
+                isStarChargLv1 = false;
+            }
         }
-
-        if (canLaunch)
+        else
         {
-            CameraManager.Instance.Shake(5.0f, 5.0f, 0.1f);
-            //TODO: check findgamepad id
-
-            if (input.user.pairedDevices[0] is Gamepad pad)
-            {
-                CameraManager.Instance.Vibrate(0.8f, 0.0f, 0.1f, pad);
-            }
-
-            handledObject.SetParent(null);
-
-            Projectile projectile = handledObject.GetComponent<Projectile>();
-            projectile.isLaunched = true;
-            projectile.tag = "Untagged";
-            projectile.currentDamage *= damageMultiplier;
-            projectile.playerIndex = controller.playerIndex;
-
-            handledObject.gameObject.layer = 10;
-
-            switch (projectile.type)
-            {
-                case EProjectileType.ASTEROID:
-                    AkSoundEngine.PostEvent("Play_Move_Comete", gameObject);
-                    break;
-                case EProjectileType.PLANET:
-                    AkSoundEngine.PostEvent("Play_Move_Planete", gameObject);
-                    break;
-                case EProjectileType.STAR:
-                    AkSoundEngine.PostEvent("Play_Move_Etoile", gameObject);
-                    break;
-                default:
-                    break;
-            }
-
-            AkSoundEngine.SetSwitch("Choix_Astres", projectile.type == EProjectileType.PLANET ? "Planete" : projectile.type == EProjectileType.STAR ? "Etoile" : "Comete", gameObject);
-            AkSoundEngine.PostEvent("Play_Player_Fire", gameObject);
-            AkSoundEngine.StopPlayingID(playerCharge);
-
-            Vector3 heading = aimingToPlayer ? -(handledObject.transform.position - enemyPos.position).normalized : (handledObject.transform.position - transform.position).normalized;
-
-            handledObject.GetComponent<Rigidbody2D>().velocity = projectile.speed * launchStrength * heading;
-
-            VisualEffect fx = handledObject.GetComponent<VisualEffect>();
-            fx.SetBool("SpawnRate", false);
-
-            handledObject.GetComponentsInChildren<VisualEffect>()[1].enabled = true;
-
-            Vector2 v1 = transform.position;
-            Vector2 v2 = heading;
-
-            transform.DOMove(v1 - v2 * knockbackForce, 0.05f);
-
             handledObject = null;
-
-            isHoldingStar = false;
-            isHoldingObject = false;
-            isStarChargLv1 = false;
         }
     }
 

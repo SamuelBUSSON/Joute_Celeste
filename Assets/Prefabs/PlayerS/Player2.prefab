@@ -10,7 +10,7 @@ Animator:
   m_GameObject: {fileID: 2758839450924294534}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1adc060b1b11c3b4289e7fd8ea29bdfe, type: 2}
+  m_Controller: {fileID: 22100000, guid: 9635ec1004b1106499356b451922184e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -224,12 +224,13 @@ MonoBehaviour:
   - health: 25
     speedMultiplier: 2
     damageMultiplier: 2
+  veryLowHealth: 10
   attractRange: 2
   AttractZone: {fileID: 2758839450924294534}
   deathRange: 0
   deathDamage: 0
   Health: 100
-  aura3Controller: {fileID: 22100000, guid: bb82e92e8eba9254581ab56df7a59f67, type: 2}
+  aura3Controller: {fileID: 22100000, guid: a7660ee3114f6ce4c902d7d8019c6014, type: 2}
 --- !u!114 &3428629715616182282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,7 +297,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 96e8c8b26a80fbc4ea7febb0f767fee7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

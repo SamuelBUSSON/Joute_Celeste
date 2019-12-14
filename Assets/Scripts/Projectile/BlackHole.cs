@@ -32,6 +32,8 @@ public class BlackHole : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         transform.DOScale(maxScaleSize, timeToScaleUp).SetEase(blackHoleEaseScale);
+        
+        AkSoundEngine.PostEvent("Play_Trou_Noir", gameObject);
 
         mat.DOFloat(maxBloomIntensity, "_PowerColor", timeToExplode).SetEase(blackHoleEaseColor);
     }
