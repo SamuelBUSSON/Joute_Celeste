@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using DG.Tweening;
-using UnityEditor.Animations;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -229,6 +228,7 @@ public class PlayerHealth : MonoBehaviour
         var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);        
 
         AkSoundEngine.SetSwitch("Hit_or_Lancer_or_Mort", "Mort", gameObject);
+        AkSoundEngine.PostEvent("Play_Palier_Voix", gameObject);
 
         if (hits.Length == 0)
         {

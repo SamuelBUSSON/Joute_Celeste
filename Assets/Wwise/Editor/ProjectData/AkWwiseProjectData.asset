@@ -47,7 +47,7 @@ MonoBehaviour:
     ParentPhysicalPath: 
     guid: d797f9769f5a1349bc7d8f150177038f
     GuidInternal: 
-    m_lastTime: -8586252870705034951
+    m_lastTime: -8586252721976247663
     List:
     - name: Play_Astral_Music_Menu
       guid: c28fd27f2308fe44ad758883e9d5a66b
@@ -253,18 +253,6 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
-    - name: Play_Player_Hit
-      guid: 11a15bec58cf0645872f4ea84ae032ae
-      id: 1864892471
-      PathAndIcons:
-      - ElementName: Default Work Unit
-        ObjectType: 12
-      - ElementName: Play_Player_Hit
-        ObjectType: 3
-      Path: Default Work Unit\Play_Player_Hit
-      maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
     - name: Play_Player_Move_Solo
       guid: 385fdb00f7aa5345b8d5bd2738266086
       id: 365655931
@@ -274,6 +262,42 @@ MonoBehaviour:
       - ElementName: Play_Player_Move_Solo
         ObjectType: 3
       Path: Default Work Unit\Play_Player_Move_Solo
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Round1
+      guid: a2235edb7cdefe45a752d1c8bd145360
+      id: 1012641279
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Round1
+        ObjectType: 3
+      Path: Default Work Unit\Play_Round1
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Round2
+      guid: 8399163cbf0ce642a76795bb9924cf83
+      id: 1012641276
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Round2
+        ObjectType: 3
+      Path: Default Work Unit\Play_Round2
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Round3
+      guid: eaf877b3024cf042bd3291ea18f8ffbc
+      id: 1012641277
+      PathAndIcons:
+      - ElementName: Default Work Unit
+        ObjectType: 12
+      - ElementName: Play_Round3
+        ObjectType: 3
+      Path: Default Work Unit\Play_Round3
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -544,6 +568,8 @@ MonoBehaviour:
   - /Joute_Celeste_WwiseProject/Switches/Default Work Unit
   - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Aura_Etat
   - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Aura_State
+  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Choix_Astres
   - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Hit_or_Lancer_or_Mort
+  - /Joute_Celeste_WwiseProject/Switches/Default Work Unit/Player_Move
   autoPopulateEnabled: 1
   CurrentPluginConfig: 

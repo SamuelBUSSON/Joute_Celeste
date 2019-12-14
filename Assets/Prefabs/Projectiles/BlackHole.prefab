@@ -93,6 +93,7 @@ MonoBehaviour:
   ExplosionFX: {fileID: 3951906006962416370, guid: 5a85f5bdcbe204a4fa48c9a16b7dcf94,
     type: 3}
   healFx: {fileID: 0}
+  trail: {fileID: 0}
   size: 3.1
   isChopable: 0
   startingDamage: 50
@@ -275,11 +276,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ce6a05b9dae4314eba53c98844ca24d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToExplode: 12
-  timeToScaleUp: 10
+  timeToExplode: 10
+  timeToScaleUp: 8
   maxScaleSize: 8
-  maxBloomIntensity: 1200
-  delay: 5
+  maxBloomIntensity: 1250
+  delay: 10
   blackHoleEaseColor:
     serializedVersion: 2
     m_Curve:

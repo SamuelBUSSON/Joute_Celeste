@@ -92,6 +92,7 @@ MonoBehaviour:
   ExplosionFX: {fileID: 3951906006962416370, guid: 5a85f5bdcbe204a4fa48c9a16b7dcf94,
     type: 3}
   healFx: {fileID: 0}
+  trail: {fileID: 0}
   size: 1.2
   isChopable: 1
   startingDamage: 1
@@ -368,6 +369,12 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4562040613720177668, guid: cf1edf800ebc9e84fba83bbda0327b5b,
+        type: 3}
+      propertyPath: m_Asset
+      value: 
+      objectReference: {fileID: 8926484042661614526, guid: 9f26bb7ffc8063649afe2f2bf9b82235,
+        type: 3}
     - target: {fileID: 4562040613720177671, guid: cf1edf800ebc9e84fba83bbda0327b5b,
         type: 3}
       propertyPath: m_LocalPosition.x

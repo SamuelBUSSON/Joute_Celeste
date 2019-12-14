@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject player2Prefab;
 
+    public GameObject explosionPrefab;
+
     private Vector3 player1StartPos;
     private Vector3 player2StartPos;
 
@@ -46,6 +48,8 @@ public class GameManager : MonoBehaviour
     public Animator explosionAnim;
     [Tooltip("Le temps de passer à 1 d'opacité")]
     public float respawnDuration;
+
+    public AnimationCurve easeOutCurve;
 
     public int roundTotal;
     private int roundCurrent;
@@ -104,14 +108,42 @@ public class GameManager : MonoBehaviour
         playerIndex++;
     }
 
+    private void PlaySound()
+    {
+        CameraManager.Instance.Shake(5.0f, 5.0f, 1f);
+        AkSoundEngine.PostEvent("Play_Explosion_Comete", gameObject);
+        Instantiate(explosionPrefab, Vector3.zero, Quaternion.identity);
+    }
+
     private void StartPhase()
     {
         Debug.Log("start phase");
-        player1.transform.DOMove(new Vector3(0.05f, 0.05f), moveToCenterDuration);
-        player2.transform.DOMove(new Vector3(0.05f, 0.05f), moveToCenterDuration);
+
+        Sequence mySequence = DOTween.Sequence();
+        mySequence.Append(player1.transform.DOMove(new Vector3(0.2f, 0.0f), moveToCenterDuration));
+        mySequence.Join(player2.transform.DOMove(new Vector3(-0.2f, 0.0f), moveToCenterDuration));
+        mySequence.Append(DOVirtual.DelayedCall(0, () => PlaySound()));
+        mySequence.Append(player1.transform.DOMove(new Vector3(5.0f, 0.0f), moveToCenterDuration)).SetEase(easeOutCurve);
+        mySequence.Join(player2.transform.DOMove(new Vector3(-5.0f, 0.0f), moveToCenterDuration)).SetEase(easeOutCurve);
+
 
         round.timer = 0;
         round.enabled = true;
+
+        switch (roundCurrent)
+        {
+            case 1:
+                AkSoundEngine.PostEvent("Play_Round1", gameObject);
+                break;
+
+            case 2:
+                AkSoundEngine.PostEvent("Play_Round2", gameObject);
+                break;
+
+            case 3:
+                AkSoundEngine.PostEvent("Play_Round3", gameObject);
+                break;
+        }
 
         if (roundCurrent != 1)
         {
@@ -230,7 +262,11 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < spawner.transform.childCount; i++)
             {
-                Destroy(spawner.transform.GetChild(i).gameObject);
+                if (!spawner.transform.GetChild(i).GetComponent<StarSpawner>())
+                {
+                    Destroy(spawner.transform.GetChild(i).gameObject);
+                }
+
             }
         }
 
@@ -246,10 +282,12 @@ public class GameManager : MonoBehaviour
     {
         if (roundPlayer1 > roundPlayer2)
         {
+            Destroy(player2.gameObject);
             Debug.Log("player 1 win !");
         }
         else if (roundPlayer2 > roundPlayer1)
         {
+            Destroy(player1.gameObject);
             Debug.Log("player 2 win");
         }
         else
