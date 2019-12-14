@@ -51,6 +51,9 @@ public class GameManager : MonoBehaviour
 
     public AnimationCurve easeOutCurve;
 
+    public GameObject victoryPlayer1;
+    public GameObject victoryPlayer2;
+
     public int roundTotal;
     private int roundCurrent;
 
@@ -178,18 +181,10 @@ public class GameManager : MonoBehaviour
     {
         var phealth = player.GetComponent<PlayerHealth>();        
 
-        // if (phealth.isDead)
-        //     phealth.GetComponent<Animator>().SetTrigger(Restart);
-
-        StartCoroutine(StartReset(phealth));
+         if (phealth.isDead)
+             phealth.GetComponent<Animator>().SetTrigger(Restart);         
 
         phealth.Reset();
-    }
-
-    private IEnumerator StartReset(PlayerHealth phealth)
-    {
-        yield return new WaitForFixedUpdate();
-        phealth.GetComponent<Animator>().SetTrigger(Restart);
     }
 
         private IEnumerator StartPhaseExplosion()
@@ -314,11 +309,13 @@ public class GameManager : MonoBehaviour
         if (roundPlayer1 > roundPlayer2)
         {
             Destroy(player2.gameObject);
+            victoryPlayer1.SetActive(true);
             Debug.Log("player 1 win !");
         }
         else if (roundPlayer2 > roundPlayer1)
         {
             Destroy(player1.gameObject);
+            victoryPlayer2.SetActive(true);
             Debug.Log("player 2 win");
         }
         else
