@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
 using UnityEngine.VFX;
+using UnityEngine.SceneManagement;
 
 public class Displacement : MonoBehaviour
 {
@@ -62,6 +63,13 @@ public class Displacement : MonoBehaviour
         input.currentActionMap["Movement"].canceled += context => OnMovementCancel(context);
 
         input.currentActionMap["Dash"].started += context => OnDash(context);
+
+        input.currentActionMap["GoBackToMenu"].started += context => OnEscape();
+    }
+
+    private void OnEscape()
+    {
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
     private void Start()

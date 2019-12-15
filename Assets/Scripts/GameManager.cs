@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
     {
         if (!Instance)
         {
+            AkSoundEngine.StopAll();
+
             Instance = this;
             GetComponent<PlayerInputManager>().onPlayerJoined += OnPlayerJoin;
             round = GetComponent<RoundManager>();
@@ -93,6 +95,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+
     }
 
     private void OnPlayerJoin(PlayerInput obj)
@@ -187,7 +191,7 @@ public class GameManager : MonoBehaviour
         phealth.Reset();
     }
 
-        private IEnumerator StartPhaseExplosion()
+    private IEnumerator StartPhaseExplosion()
     {
         yield return new WaitForSeconds(moveToCenterDuration);
         //play explosion
@@ -253,8 +257,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Player " + looserIndex + " looses !");
         state = EState.Ending;
 
-        NextRound();
-
         if (player1.playerIndex == looserIndex)
         {
             RespawnPlayer(player1, player1StartPos);
@@ -265,9 +267,12 @@ public class GameManager : MonoBehaviour
             RespawnPlayer(player2, player2StartPos);
             roundPlayer1++;
         }
-            
 
-        StartCoroutine(StartPhaseAfterTime(respawnDuration));
+        if (!EndGame())
+        {
+            NextRound();
+            StartCoroutine(StartPhaseAfterTime(respawnDuration));
+        }
     }
 
     private IEnumerator StartPhaseAfterTime(float f)
@@ -292,44 +297,25 @@ public class GameManager : MonoBehaviour
                 {
                     spawner.transform.GetChild(i).GetComponent<StarSpawner>().ResetTimer();
                 }
-
             }
-        }
-
-        Debug.Log("Round " + roundCurrent);
-        
-        if (roundCurrent == roundTotal)
-        {
-            EndGame();
         }
     }
 
-    private void EndGame()
+    private bool EndGame()
     {
-        if (roundPlayer1 > roundPlayer2)
+        if (roundPlayer1 == 2)
         {
             Destroy(player2.gameObject);
             victoryPlayer1.SetActive(true);
-            Debug.Log("player 1 win !");
+            return true;
         }
-        else if (roundPlayer2 > roundPlayer1)
+        else if (roundPlayer2 == 2)
         {
             Destroy(player1.gameObject);
             victoryPlayer2.SetActive(true);
-            Debug.Log("player 2 win");
+            return true;
         }
-        else
-        {
-            Debug.Log("Draw");
-        }
-        
-        
-        Debug.Log("End of the game !");
-        
-        RespawnPlayer(player1, player1StartPos);
-        RespawnPlayer(player2, player2StartPos);
-        
-        StartPhase();
+        return false;
     }
 
     private void RespawnPlayer(PlayerController player, Vector3 position)
@@ -356,6 +342,8 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        }     
     }
+
+
 }

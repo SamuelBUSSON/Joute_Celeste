@@ -11,10 +11,7 @@ public class MenuManager : MonoBehaviour
 {
     private int index;
     public List<ButtonSelector> buttons;
-
-
     
-
     private Vector3[] startV;
     private Vector3[] quitV;
     
@@ -44,7 +41,7 @@ public class MenuManager : MonoBehaviour
         }
         
         if(Gamepad.current.aButton.wasPressedThisFrame)
-            buttons[index].Interact();
+            buttons[index].Interact();        
     }
 
     public void LoadLevel(int level)

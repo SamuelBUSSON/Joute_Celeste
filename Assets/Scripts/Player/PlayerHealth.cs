@@ -41,6 +41,8 @@ public class PlayerHealth : MonoBehaviour
     [NonSerialized]
     public float maxHealth;
 
+    public bool isKaboom;
+
     private int indexThreshold = 0;
 
     private PlayerController playerController;
@@ -86,11 +88,12 @@ public class PlayerHealth : MonoBehaviour
     }
 
     public void Update()
-    {
+    {        
+        /*
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            TakeDamage(10.0f);
-        }
+            TakeDamage(90.0f);
+        }*/
     }
 
     public void GiveHealth(float amount)
@@ -214,8 +217,21 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     public void DieAnimator()
     {
-        print("Heyoo " + playerController.playerIndex);
-        
+        if (GameManager.Instance.player1.playerIndex != playerController.playerIndex)
+        {
+            if (GameManager.Instance.player1.GetComponent<PlayerHealth>().isDead && GameManager.Instance.player1.GetComponent<PlayerHealth>().isKaboom)
+                return;
+        }
+        else
+        {
+            if (GameManager.Instance.player2.GetComponent<PlayerHealth>().isDead && GameManager.Instance.player2.GetComponent<PlayerHealth>().isKaboom)
+                return;
+        }
+
+        isKaboom = true;
+
+        bool resolve = false;
+
         Vector2 position = transform.position;
         var hits = Physics2D.CircleCastAll(position, deathRange, Vector2.zero);        
 
@@ -224,6 +240,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (hits.Length == 0)
         {
+            resolve = true;
             GameManager.Instance.WinLoose(playerController.playerIndex);
         }
 
@@ -238,15 +255,22 @@ public class PlayerHealth : MonoBehaviour
                 {
                     if (playerHealth.Health - deathDamage <= 0)
                     {
+                        resolve = true;
                         playerHealth.isDead = true;
                         GameManager.Instance.Draw();
                     }
                     else
                     {
+                        resolve = true;
                         GameManager.Instance.WinLoose(playerController.playerIndex);
                     }
                 }
             }
+        }
+
+        if (!resolve)
+        {
+            GameManager.Instance.WinLoose(playerController.playerIndex);
         }
     }
 
@@ -269,6 +293,8 @@ public class PlayerHealth : MonoBehaviour
 
     public void Reset()
     {
+
+        isKaboom = false;
         if (isDead)
         {
             GetComponent<Animator>().SetTrigger(Restart);

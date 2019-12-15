@@ -89,6 +89,14 @@ public class @InputController : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=1)""
+                },
+                {
+                    ""name"": ""GoBackToMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""d0e58643-5ccb-42a5-9192-237cc94cf259"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=1)""
                 }
             ],
             ""bindings"": [
@@ -311,6 +319,39 @@ public class @InputController : IInputActionCollection, IDisposable
                     ""action"": ""CaugthLv1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86922e1c-fc30-43d1-88e3-14b5c472a663"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GoBackToMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6d46201-d789-4855-92e2-640a860a1463"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GoBackToMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a7c0d53d-30b9-418b-b399-09714a354cc4"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GoBackToMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -328,6 +369,7 @@ public class @InputController : IInputActionCollection, IDisposable
         m_Character_HoldLv2 = m_Character.FindAction("HoldLv2", throwIfNotFound: true);
         m_Character_CaugthLv1 = m_Character.FindAction("CaugthLv1", throwIfNotFound: true);
         m_Character_TestAction = m_Character.FindAction("TestAction", throwIfNotFound: true);
+        m_Character_GoBackToMenu = m_Character.FindAction("GoBackToMenu", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -386,6 +428,7 @@ public class @InputController : IInputActionCollection, IDisposable
     private readonly InputAction m_Character_HoldLv2;
     private readonly InputAction m_Character_CaugthLv1;
     private readonly InputAction m_Character_TestAction;
+    private readonly InputAction m_Character_GoBackToMenu;
     public struct CharacterActions
     {
         private @InputController m_Wrapper;
@@ -399,6 +442,7 @@ public class @InputController : IInputActionCollection, IDisposable
         public InputAction @HoldLv2 => m_Wrapper.m_Character_HoldLv2;
         public InputAction @CaugthLv1 => m_Wrapper.m_Character_CaugthLv1;
         public InputAction @TestAction => m_Wrapper.m_Character_TestAction;
+        public InputAction @GoBackToMenu => m_Wrapper.m_Character_GoBackToMenu;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -435,6 +479,9 @@ public class @InputController : IInputActionCollection, IDisposable
                 @TestAction.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnTestAction;
                 @TestAction.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnTestAction;
                 @TestAction.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnTestAction;
+                @GoBackToMenu.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnGoBackToMenu;
+                @GoBackToMenu.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnGoBackToMenu;
+                @GoBackToMenu.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnGoBackToMenu;
             }
             m_Wrapper.m_CharacterActionsCallbackInterface = instance;
             if (instance != null)
@@ -466,6 +513,9 @@ public class @InputController : IInputActionCollection, IDisposable
                 @TestAction.started += instance.OnTestAction;
                 @TestAction.performed += instance.OnTestAction;
                 @TestAction.canceled += instance.OnTestAction;
+                @GoBackToMenu.started += instance.OnGoBackToMenu;
+                @GoBackToMenu.performed += instance.OnGoBackToMenu;
+                @GoBackToMenu.canceled += instance.OnGoBackToMenu;
             }
         }
     }
@@ -481,5 +531,6 @@ public class @InputController : IInputActionCollection, IDisposable
         void OnHoldLv2(InputAction.CallbackContext context);
         void OnCaugthLv1(InputAction.CallbackContext context);
         void OnTestAction(InputAction.CallbackContext context);
+        void OnGoBackToMenu(InputAction.CallbackContext context);
     }
 }

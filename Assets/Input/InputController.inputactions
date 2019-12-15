@@ -76,6 +76,14 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "Hold(duration=1)"
+                },
+                {
+                    "name": "GoBackToMenu",
+                    "type": "Button",
+                    "id": "d0e58643-5ccb-42a5-9192-237cc94cf259",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold(duration=1)"
                 }
             ],
             "bindings": [
@@ -296,6 +304,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "CaugthLv1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86922e1c-fc30-43d1-88e3-14b5c472a663",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GoBackToMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c6d46201-d789-4855-92e2-640a860a1463",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GoBackToMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7c0d53d-30b9-418b-b399-09714a354cc4",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GoBackToMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
