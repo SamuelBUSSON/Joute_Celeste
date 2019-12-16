@@ -24,13 +24,15 @@ public class MenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Gamepad.current.leftStick.down.wasPressedThisFrame)
+        if (Gamepad.current.leftStick.down.wasPressedThisFrame || Keyboard.current.downArrowKey
+                .wasPressedThisFrame)
         {
             buttons[index].ToogleFocus();
             index = (index + 1) % buttons.Count;
             buttons[index].ToogleFocus();
         }
-        else if (Gamepad.current.leftStick.up.wasPressedThisFrame)
+        else if (Gamepad.current.leftStick.up.wasPressedThisFrame || Keyboard.current.upArrowKey
+                     .wasPressedThisFrame)
         {
             print("yes");
             buttons[index].ToogleFocus();
@@ -40,7 +42,8 @@ public class MenuManager : MonoBehaviour
             buttons[index].ToogleFocus();
         }
         
-        if(Gamepad.current.aButton.wasPressedThisFrame)
+        if(Gamepad.current.aButton.wasPressedThisFrame || Keyboard.current.enterKey
+               .wasPressedThisFrame)
             buttons[index].Interact();        
     }
 
